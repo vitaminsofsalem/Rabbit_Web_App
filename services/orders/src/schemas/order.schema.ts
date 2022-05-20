@@ -8,7 +8,7 @@ export class Orders {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   address: object;
 
   @Prop({ required: true })
