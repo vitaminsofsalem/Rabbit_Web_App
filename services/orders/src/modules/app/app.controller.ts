@@ -24,4 +24,6 @@ export class AppController {
   handleHelloMessage(@Payload("value") data: string) {
     console.log("RECEIVED", data);
   }
+
+  
 }
