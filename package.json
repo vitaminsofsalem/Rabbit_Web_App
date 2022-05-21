@@ -1,0 +1,29 @@
+{
+  "name": "rabbit_web_app",
+  "version": "1.0.0",
+  "description": "- Will Add more stuff here later 😺",
+  "scripts": {
+    "postinstall": "cd client && yarn install && cd .. && cd services && cd api_gateway && yarn install && cd .. && cd inventory && yarn install && cd .. && cd marketplace && yarn install && cd .. && cd notifications && yarn install && cd .. && cd orders && yarn install && cd .. && cd payments && yarn install && cd .. && cd shipping && yarn install && cd .. && cd users && yarn install",
+    "start:client": "cd client && yarn run dev",
+    "start:api": "cd services/api_gateway && yarn run start:dev",
+    "start:inventory": "cd services/inventory && yarn run start:dev",
+    "start:marketplace": "cd services/marketplace && yarn run start:dev",
+    "start:notifications": "cd services/notifications && yarn run start:dev",
+    "start:orders": "cd services/orders && yarn run start:dev",
+    "start:payments": "cd services/payments && yarn run start:dev",
+    "start:shipping": "cd services/shipping && yarn run start:dev",
+    "start:users": "cd services/users && yarn run start:dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitaminsofsalem/Rabbit_Web_App.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vitaminsofsalem/Rabbit_Web_App/issues"
+  },
+  "homepage": "https://github.com/vitaminsofsalem/Rabbit_Web_App#readme",
+  "devDependencies": {},
+  "dependencies": {}
+}
