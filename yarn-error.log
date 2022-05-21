@@ -1,0 +1,77 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js start
+
+PATH: 
+  C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Python39\Scripts\;C:\Python39\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\Java\jdk-15.0.2\bin;C:\Program Files (x86)\Certbot\bin;C:\Program Files\PuTTY\;C:\Caddy;C:\Users\Youssef\AppData\Local\Android\Sdk\platform-tools;C:\Users\Youssef\AppData\Local\Android\Sdk\tools;C:\Program Files\dotnet\;C:\Enhance Dlls;;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files (x86)\dotnet\;C:\Program Files\nodejs\;C:\Users\Youssef\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\Youssef\AppData\Local\Programs\Python\Python310\;C:\Users\Youssef\anaconda3;C:\Users\Youssef\anaconda3\Library\mingw-w64\bin;C:\Users\Youssef\anaconda3\Library\usr\bin;C:\Users\Youssef\anaconda3\Library\bin;C:\Users\Youssef\anaconda3\Scripts;C:\Users\Youssef\AppData\Local\Microsoft\WindowsApps;C:\Users\Youssef\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\Java\jdk-15.0.2\bin;C:\Program Files\heroku\bin;C:\Users\Youssef\AppData\Local\Android\Sdk\tools;C:\Users\Youssef\AppData\Local\Android\Sdk\platform-tools;C:\Enhance Dlls;C:\Users\Youssef\.dotnet\tools;C:\Users\Youssef\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin;C:\Users\Youssef\AppData\Roaming\npm
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.14.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Invariant Violation: Script must exist
+      at invariant (C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:2314:15)
+      at C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:62428:11
+      at Generator.next (<anonymous>)
+      at step (C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:328:14
+      at new Promise (<anonymous>)
+      at new F (C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:5301:28)
+      at C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:307:12
+      at realRunCommand (C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:62513:23)
+      at action.action (C:\Users\Youssef\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:62574:16)
+
+npm manifest: 
+  {
+    "name": "rabbit_web_app",
+    "version": "1.0.0",
+    "description": "- Will Add more stuff here later 😺",
+    "scripts": {
+      "preinstall:win32": "yarn add -g wttab",
+      "preinstall:linux:darwin": "yarn add -g ttab",
+      "postinstall": "cd client && yarn install && cd .. && cd services && cd api_gateway && yarn install && cd .. && cd inventory && yarn install && cd .. && cd marketplace && yarn install && cd .. && cd notifications && yarn install && cd .. && cd orders && yarn install && cd .. && cd payments && yarn install && cd .. && cd shipping && yarn install && cd .. && cd users && yarn install",
+      "start:client": "cd client && yarn run dev",
+      "start:api": "cd services/api_gateway && yarn run start:dev",
+      "start:inventory": "cd services/inventory && yarn run start:dev",
+      "start:marketplace": "cd services/marketplace && yarn run start:dev",
+      "start:notifications": "cd services/notifications && yarn run start:dev",
+      "start:orders": "cd services/orders && yarn run start:dev",
+      "start:payments": "cd services/payments && yarn run start:dev",
+      "start:shipping": "cd services/shipping && yarn run start:dev",
+      "start:users": "cd services/users && yarn run start:dev",
+      "start": "",
+      "start:linux:darwin": "ttab 'npm run start:client' && ttab 'npm run start:api' && ttab 'npm run start:inventory' && ttab 'npm run start:marketplace' && ttab 'npm run start:notifications' && ttab 'npm run start:orders' && ttab 'npm run start:payments' && ttab 'npm run start:shipping' && ttab 'npm run start:users'",
+      "start:win32": "wttab 'npm run start:client' && wttab 'npm run start:api' && wttab 'npm run start:inventory' && wttab 'npm run start:marketplace' && wttab 'npm run start:notifications' && wttab 'npm run start:orders' && wttab 'npm run start:payments' && wttab 'npm run start:shipping' && wttab 'npm run start:users'"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/vitaminsofsalem/Rabbit_Web_App.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/vitaminsofsalem/Rabbit_Web_App/issues"
+    },
+    "homepage": "https://github.com/vitaminsofsalem/Rabbit_Web_App#readme",
+    "devDependencies": {
+      "run-script-os": "^1.1.6"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  # THIS IS AN AUTOGENERATED FILE. DO NOT EDIT THIS FILE DIRECTLY.
+  # yarn lockfile v1
+  
+  
+  run-script-os@^1.1.6:
+    version "1.1.6"
+    resolved "https://registry.yarnpkg.com/run-script-os/-/run-script-os-1.1.6.tgz#8b0177fb1b54c99a670f95c7fdc54f18b9c72347"
+    integrity sha512-ql6P2LzhBTTDfzKts+Qo4H94VUKpxKDFz6QxxwaUZN0mwvi7L3lpOI7BqPCq7lgDh3XLl0dpeXwfcVIitlrYrw==

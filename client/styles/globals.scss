@@ -1,0 +1,19 @@
+$primary-green: #00573f;
+$primary-yellow: #dfff16;
+$primary-gray: #808080;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
