@@ -15,7 +15,7 @@ import { AppService } from "./services/app.service";
             brokers: ["localhost:9092"],
           },
           consumer: {
-            groupId: "orders-consumer",
+            groupId: "notifications-consumer",
           },
         },
       },
