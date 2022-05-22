@@ -1,3 +1,4 @@
+import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { AppModule } from "./modules/app/app.module";
@@ -5,6 +6,7 @@ import { AppModule } from "./modules/app/app.module";
 //Hybrid app, supports both HTTP & Kafka. Only Api gateway should be hybrid
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
