@@ -4,7 +4,6 @@ import { IsDate, MaxLength,IsEmail, IsNotEmpty, IsString, Length } from "class-v
 export class EventDto {
 
     @IsNotEmpty()
-
     eventType: string;
   
   }
