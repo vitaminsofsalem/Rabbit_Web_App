@@ -20,6 +20,7 @@ import {
   VerifyResponseEvent,
 } from "./dto/events/verify-event.dto";
 import { PendingRequestHolder } from "../PendingRequestHolder";
+import { SendCodeEvent } from "./dto/events/send-event.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -33,7 +34,14 @@ export class AuthController {
   ) {}
 
   @Post("send")
-  sendVerificationCode(@Body() body: SendCodeRequestDto) {}
+  sendVerificationCode(@Body() body: SendCodeRequestDto) {
+    const { email } = body;
+    const sendCodeEvent: SendCodeEvent = {
+      type: "AUTHENTICATE",
+      email,
+    };
+    this.client.emit("user", sendCodeEvent);
+  }
 
   @MessagePattern("user")
   handleUserEvents(@Payload("value") data: any) {
