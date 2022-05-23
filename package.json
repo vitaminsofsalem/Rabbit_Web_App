@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/vitaminsofsalem/Rabbit_Web_App#readme",
   "dependencies": {
-    "@nestjs/mapped-types": "^1.0.1"
+    "@nestjs/mapped-types": "^1.0.1",
+    "class-transformer": "^0.5.1"
   }
 }
