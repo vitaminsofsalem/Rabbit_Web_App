@@ -12,5 +12,5 @@ export class GetNameRequestEvent {
 export class GetNameResponseEvent {
   type: "GET_NAME_RESPONSE";
   email: string;
-  name: string;
+  name?: string;
 }
