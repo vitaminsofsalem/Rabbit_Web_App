@@ -19,7 +19,8 @@ import {
   GetAddressRequestEvent,
   GetAddressResponseEvent,
 } from "../dto/events/address-event.dto";
-import { PendingRequestHolder } from "src/modules/PendingRequestHolder";
+import { PendingRequestHolder } from "src/modules/util/PendingRequestHolder";
+import { RequestIdGenerator } from "src/modules/util/RequestIdGenerator";
 
 @Controller("address")
 export class AddressController {
@@ -33,7 +34,7 @@ export class AddressController {
   handleUserEvents(@Payload("value") data: any) {
     if (data.type === "GET_ADDRESS_RESPONSE") {
       const event = data as GetAddressResponseEvent;
-      const id = this.generateAddressRequestId(event.email);
+      const id = RequestIdGenerator.generateAddressRequestId(event.email);
       this.responseCache.set(id, event);
     }
   }
@@ -68,7 +69,7 @@ export class AddressController {
       type: "GET_ADDRESS_REQUEST",
       email: userEmail,
     };
-    const requestId = this.generateAddressRequestId(userEmail);
+    const requestId = RequestIdGenerator.generateAddressRequestId(userEmail);
     this.client.emit("user", requestEvent);
 
     return PendingRequestHolder.holdConnection((complete, abort) => {
@@ -80,9 +81,5 @@ export class AddressController {
         complete({ addresses: responseEvent.addresses });
       }
     });
-  }
-
-  private generateAddressRequestId(email: string) {
-    return `GET-ADDRESS-${email}`;
   }
 }

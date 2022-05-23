@@ -16,7 +16,8 @@ import {
   GetNameRequestEvent,
   GetNameResponseEvent,
 } from "../dto/events/name-event.dto";
-import { PendingRequestHolder } from "src/modules/PendingRequestHolder";
+import { PendingRequestHolder } from "src/modules/util/PendingRequestHolder";
+import { RequestIdGenerator } from "src/modules/util/RequestIdGenerator";
 
 @Controller("name")
 export class NameController {
@@ -30,7 +31,7 @@ export class NameController {
   handleUserEvents(@Payload("value") data: any) {
     if (data.type === "GET_NAME_RESPONSE") {
       const event = data as GetNameResponseEvent;
-      const id = this.generateNameRequestId(event.email);
+      const id = RequestIdGenerator.generateNameRequestId(event.email);
       this.responseCache.set(id, event);
     }
   }
@@ -59,7 +60,7 @@ export class NameController {
       type: "GET_NAME_REQUEST",
       email: userEmail,
     };
-    const requestId = this.generateNameRequestId(userEmail);
+    const requestId = RequestIdGenerator.generateNameRequestId(userEmail);
     this.client.emit("user", requestEvent);
 
     return PendingRequestHolder.holdConnection((complete, abort) => {
@@ -71,9 +72,5 @@ export class NameController {
         complete({ name: responseEvent.name || "Guest" });
       }
     });
-  }
-
-  private generateNameRequestId(email: string) {
-    return `GET-NAME-${email}`;
   }
 }

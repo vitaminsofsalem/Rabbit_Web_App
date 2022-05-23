@@ -5,31 +5,36 @@ import {
   Post,
   UseGuards,
   Request,
-  Delete,
   Get,
 } from "@nestjs/common";
 import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
+import * as NodeCache from "node-cache";
 import { JwtAuthGuard } from "src/modules/auth/jwt-auth.guard";
 import {
-  AddFavoriteEvent,
-  GetFavoritesRequestEvent,
-  GetFavoritesResponseEvent,
-  RemoveFavoriteEvent,
-} from "../dto/events/favorite-event.dto";
+  AddAddressRequestDto,
+  GetAddressResponseDto,
+} from "../dto/address.dto";
 import {
-  EditFavoriteRequestDto,
-  GetFavoriteResponseDto,
-} from "../dto/favorite.dto";
-import * as NodeCache from "node-cache";
+  AddAddressEvent,
+  GetAddressRequestEvent,
+  GetAddressResponseEvent,
+} from "../dto/events/address-event.dto";
 import { PendingRequestHolder } from "src/modules/util/PendingRequestHolder";
+import { GetCartResponseDto, UpdateCartRequestDto } from "../dto/cart.dto";
+import {
+  GetCartRequestEvent,
+  GetCartResponseEvent,
+  UpdateCartEvent,
+} from "../dto/events/cart-event.dto";
+import { RequestIdGenerator } from "src/modules/util/RequestIdGenerator";
 import {
   GetMetadataRequestEvent,
   GetMetadatResponseEvent,
 } from "../dto/events/metadata-event";
-import { RequestIdGenerator } from "src/modules/util/RequestIdGenerator";
+import { CartProduct } from "src/model/Cart";
 
-@Controller("favorite")
-export class FavoritesController {
+@Controller("cart")
+export class CartController {
   /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
    * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
   private responseCache = new NodeCache({ stdTTL: 15000 });
@@ -38,9 +43,9 @@ export class FavoritesController {
 
   @MessagePattern("user")
   handleUserEvents(@Payload("value") data: any) {
-    if (data.type === "GET_FAVORITES_RESPONSE") {
-      const event = data as GetFavoritesResponseEvent;
-      const id = RequestIdGenerator.generateFavoritesRequestId(event.email);
+    if (data.type === "GET_CART_RESPONSE") {
+      const event = data as GetCartResponseEvent;
+      const id = RequestIdGenerator.generateCartRequestId(event.email);
       this.responseCache.set(id, event);
     } else if (data.type === "GET_METADATA_RESPONSE") {
       const event = data as GetMetadatResponseEvent;
@@ -53,63 +58,52 @@ export class FavoritesController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  addFavorite(@Body() body: EditFavoriteRequestDto, @Request() req: any) {
+  updateCart(@Body() body: UpdateCartRequestDto, @Request() req: any) {
     const userEmail = req.user.email as string;
-    const { productId } = body;
+    const { cart } = body;
 
-    const addFavoriteEvent: AddFavoriteEvent = {
-      type: "ADD_FAVORITE",
+    const updateCartEvent: UpdateCartEvent = {
+      type: "UPDATE_CART",
       email: userEmail,
-      productId,
+      cart: cart.map((val) => ({ id: val.id, quantity: val.quantity })),
     };
 
-    this.client.emit("user", addFavoriteEvent);
-  }
-
-  @Delete()
-  @UseGuards(JwtAuthGuard)
-  removeFavorite(@Body() body: EditFavoriteRequestDto, @Request() req: any) {
-    const userEmail = req.user.email as string;
-    const { productId } = body;
-
-    const removeFavoriteEvent: RemoveFavoriteEvent = {
-      type: "REMOVE_FAVORITE",
-      email: userEmail,
-      productId,
-    };
-
-    this.client.emit("user", removeFavoriteEvent);
+    this.client.emit("user", updateCartEvent);
   }
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  getFavorites(@Request() req: any): Promise<GetFavoriteResponseDto> {
+  getCart(@Request() req: any): Promise<GetCartResponseDto> {
     const userEmail = req.user.email as string;
 
-    const requestEvent: GetFavoritesRequestEvent = {
-      type: "GET_FAVORITES_REQUEST",
+    const requestEvent: GetCartRequestEvent = {
+      type: "GET_CART_REQUEST",
       email: userEmail,
     };
     this.client.emit("user", requestEvent);
-    const requestId = RequestIdGenerator.generateFavoritesRequestId(userEmail);
+    const requestId = RequestIdGenerator.generateCartRequestId(userEmail);
 
     //Wait for result of products
-    return PendingRequestHolder.holdConnection<string[]>((complete, abort) => {
+    return PendingRequestHolder.holdConnection<
+      { id: string; quantity: number }[]
+    >((complete, abort) => {
       if (this.responseCache.has(requestId)) {
         const responseEvent = this.responseCache.get(
           requestId,
-        ) as GetFavoritesResponseEvent;
+        ) as GetCartResponseEvent;
         this.responseCache.del(requestId);
-        complete(responseEvent.favorites);
+        complete(responseEvent.cart);
       }
-    }).then((favorites) => {
+    }).then((cart) => {
+      const cartProducts = cart.map((val) => val.id);
       const metaDataRequestEvent: GetMetadataRequestEvent = {
         type: "GET_METADATA_REQUEST",
-        products: favorites,
+        products: cartProducts,
       };
       this.client.emit("user", metaDataRequestEvent);
       const metaDataRequestId =
-        RequestIdGenerator.generateMetaDataRequestId(favorites);
+        RequestIdGenerator.generateMetaDataRequestId(cartProducts);
+
       //Wait for result of metadata of products
       return PendingRequestHolder.holdConnection((complete, abort) => {
         if (this.responseCache.has(metaDataRequestId)) {
@@ -117,7 +111,16 @@ export class FavoritesController {
             metaDataRequestId,
           ) as GetMetadatResponseEvent;
           this.responseCache.del(metaDataRequestId);
-          complete({ favorites: responseEvent.products });
+
+          const finalItems: CartProduct[] = [];
+          for (const item of cart) {
+            const correspondingMetaData = responseEvent.products.find(
+              (meta) => meta.id === item.id,
+            );
+            finalItems.push({ ...item, ...correspondingMetaData });
+          }
+
+          complete({ cart: finalItems });
         }
       });
     });

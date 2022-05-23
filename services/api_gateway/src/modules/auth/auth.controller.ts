@@ -19,8 +19,9 @@ import {
   VerifyRequestEvent,
   VerifyResponseEvent,
 } from "./dto/events/verify-event.dto";
-import { PendingRequestHolder } from "../PendingRequestHolder";
+import { PendingRequestHolder } from "../util/PendingRequestHolder";
 import { SendCodeEvent } from "./dto/events/send-event.dto";
+import { RequestIdGenerator } from "../util/RequestIdGenerator";
 
 @Controller("auth")
 export class AuthController {
@@ -47,7 +48,10 @@ export class AuthController {
   handleUserEvents(@Payload("value") data: any) {
     if (data.type === "VERIFY_RESPONSE") {
       const event = data as VerifyResponseEvent;
-      const id = this.generateVerifyRequestId(event.email, event.code);
+      const id = RequestIdGenerator.generateVerifyRequestId(
+        event.email,
+        event.code,
+      );
       this.responseCache.set(id, event);
     }
   }
@@ -65,7 +69,7 @@ export class AuthController {
     };
     this.client.emit("user", requestEvent);
 
-    const requestId = this.generateVerifyRequestId(email, code);
+    const requestId = RequestIdGenerator.generateVerifyRequestId(email, code);
 
     return PendingRequestHolder.holdConnection((complete, abort) => {
       if (this.responseCache.has(requestId)) {
@@ -87,9 +91,5 @@ export class AuthController {
         }
       }
     });
-  }
-
-  private generateVerifyRequestId(email: string, code: string) {
-    return `VERIFY-${email}-${code}`;
   }
 }

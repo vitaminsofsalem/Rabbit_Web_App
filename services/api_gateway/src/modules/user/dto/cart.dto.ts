@@ -1,9 +1,11 @@
+import { IsArray } from "class-validator";
 import { CartProduct } from "src/model/Cart";
 
 export class UpdateCartRequestDto {
-  items: CartProduct[];
+  @IsArray()
+  cart: CartProduct[];
 }
 
 export class GetCartResponseDto {
-  items: CartProduct[];
+  cart: CartProduct[];
 }
