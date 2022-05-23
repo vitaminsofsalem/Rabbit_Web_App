@@ -1,7 +1,7 @@
 import { IsDate, IsEmail, IsNotEmpty, IsString, Length } from "class-validator";
 
 
-export class registerDto {
+export class EventDto {
 
     @IsNotEmpty()
     email: string;
@@ -14,5 +14,7 @@ export class registerDto {
   
     @IsNotEmpty()
     id: string ; 
+
+    eventType: string;
   
   }
