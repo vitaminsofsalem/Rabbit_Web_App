@@ -24,6 +24,7 @@
     "url": "https://github.com/vitaminsofsalem/Rabbit_Web_App/issues"
   },
   "homepage": "https://github.com/vitaminsofsalem/Rabbit_Web_App#readme",
-  "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "@nestjs/mapped-types": "^1.0.1"
+  }
 }
