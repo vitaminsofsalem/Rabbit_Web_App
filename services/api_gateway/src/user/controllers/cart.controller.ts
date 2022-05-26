@@ -19,14 +19,14 @@ import {
   GetAddressRequestEvent,
   GetAddressResponseEvent,
 } from "../dto/events/address-event.dto";
-import { PendingRequestHolder } from "src/modules/util/PendingRequestHolder";
+import { PendingRequestHolder } from "src/util/PendingRequestHolder";
 import { GetCartResponseDto, UpdateCartRequestDto } from "../dto/cart.dto";
 import {
   GetCartRequestEvent,
   GetCartResponseEvent,
   UpdateCartEvent,
 } from "../dto/events/cart-event.dto";
-import { RequestIdGenerator } from "src/modules/util/RequestIdGenerator";
+import { RequestIdGenerator } from "src/util/RequestIdGenerator";
 import {
   GetMetadataRequestEvent,
   GetMetadatResponseEvent,
@@ -47,7 +47,12 @@ export class CartController {
       const event = data as GetCartResponseEvent;
       const id = RequestIdGenerator.generateCartRequestId(event.email);
       this.responseCache.set(id, event);
-    } else if (data.type === "GET_METADATA_RESPONSE") {
+    }
+  }
+
+  @MessagePattern("products")
+  handleProductEvents(@Payload("value") data: any) {
+    if (data.type === "GET_METADATA_RESPONSE") {
       const event = data as GetMetadatResponseEvent;
       const id = RequestIdGenerator.generateMetaDataRequestId(
         event.products.map((val) => val.id),
@@ -100,7 +105,7 @@ export class CartController {
         type: "GET_METADATA_REQUEST",
         products: cartProducts,
       };
-      this.client.emit("user", metaDataRequestEvent);
+      this.client.emit("products", metaDataRequestEvent);
       const metaDataRequestId =
         RequestIdGenerator.generateMetaDataRequestId(cartProducts);
 

@@ -10,20 +10,17 @@ import {
 import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
 import * as NodeCache from "node-cache";
 import { JwtAuthGuard } from "src/modules/auth/jwt-auth.guard";
+import { GetNameResponseDto, SetNameRequestDto } from "../dto/name.dto";
 import {
-  AddAddressRequestDto,
-  GetAddressResponseDto,
-} from "../dto/address.dto";
-import {
-  AddAddressEvent,
-  GetAddressRequestEvent,
-  GetAddressResponseEvent,
-} from "../dto/events/address-event.dto";
-import { PendingRequestHolder } from "src/modules/util/PendingRequestHolder";
-import { RequestIdGenerator } from "src/modules/util/RequestIdGenerator";
+  UpdateNameEvent,
+  GetNameRequestEvent,
+  GetNameResponseEvent,
+} from "../dto/events/name-event.dto";
+import { PendingRequestHolder } from "src/util/PendingRequestHolder";
+import { RequestIdGenerator } from "src/util/RequestIdGenerator";
 
-@Controller("address")
-export class AddressController {
+@Controller("name")
+export class NameController {
   /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
    * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
   private responseCache = new NodeCache({ stdTTL: 15000 });
@@ -32,53 +29,47 @@ export class AddressController {
 
   @MessagePattern("user")
   handleUserEvents(@Payload("value") data: any) {
-    if (data.type === "GET_ADDRESS_RESPONSE") {
-      const event = data as GetAddressResponseEvent;
-      const id = RequestIdGenerator.generateAddressRequestId(event.email);
+    if (data.type === "GET_NAME_RESPONSE") {
+      const event = data as GetNameResponseEvent;
+      const id = RequestIdGenerator.generateNameRequestId(event.email);
       this.responseCache.set(id, event);
     }
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  addAddress(@Body() body: AddAddressRequestDto, @Request() req: any) {
+  setName(@Body() body: SetNameRequestDto, @Request() req: any) {
     const userEmail = req.user.email as string;
-    const { city, buildingNumber, neighbourhood, nickname, street } = body;
+    const { name } = body;
 
-    const addAddressEvent: AddAddressEvent = {
-      type: "ADD_ADDRESS",
+    const updateNameEvent: UpdateNameEvent = {
+      type: "UPDATE_NAME",
+      name: name,
       email: userEmail,
-      address: {
-        city,
-        buildingNumber,
-        neighbourhood,
-        nickname,
-        street,
-      },
     };
 
-    this.client.emit("user", addAddressEvent);
+    this.client.emit("user", updateNameEvent);
   }
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  getAddress(@Request() req: any): Promise<GetAddressResponseDto> {
+  getName(@Request() req: any): Promise<GetNameResponseDto> {
     const userEmail = req.user.email as string;
 
-    const requestEvent: GetAddressRequestEvent = {
-      type: "GET_ADDRESS_REQUEST",
+    const requestEvent: GetNameRequestEvent = {
+      type: "GET_NAME_REQUEST",
       email: userEmail,
     };
-    const requestId = RequestIdGenerator.generateAddressRequestId(userEmail);
+    const requestId = RequestIdGenerator.generateNameRequestId(userEmail);
     this.client.emit("user", requestEvent);
 
     return PendingRequestHolder.holdConnection((complete, abort) => {
       if (this.responseCache.has(requestId)) {
         const responseEvent = this.responseCache.get(
           requestId,
-        ) as GetAddressResponseEvent;
+        ) as GetNameResponseEvent;
         this.responseCache.del(requestId);
-        complete({ addresses: responseEvent.addresses });
+        complete({ name: responseEvent.name || "Guest" });
       }
     });
   }

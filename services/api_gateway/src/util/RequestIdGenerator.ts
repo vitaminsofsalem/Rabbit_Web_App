@@ -7,6 +7,14 @@ export class RequestIdGenerator {
     return `GET-ADDRESS-${email}`;
   }
 
+  static generateOrdersRequestId(email: string) {
+    return `GET-ORDERS-${email}`;
+  }
+
+  static generateOrderRequestId(email: string, orderId: string) {
+    return `GET-ORDER-${email}-${orderId}`;
+  }
+
   static generateNameRequestId(email: string) {
     return `GET-NAME-${email}`;
   }
@@ -29,6 +37,17 @@ export class RequestIdGenerator {
     const hash = ("" + sum).slice(0, 16);
 
     return `METADATA-${hash}`;
+  }
+
+  static generateOrderShipmentStatusRquestId(orders: string[]) {
+    let sum = 0;
+    for (let i = 0; i < orders.length; i++) {
+      const cs = this.charsum(orders[i]);
+      sum = sum + 65027 / cs;
+    }
+    const hash = ("" + sum).slice(0, 16);
+
+    return `SHIPMENT-STATUS-${hash}`;
   }
 
   private static charsum(s: string) {

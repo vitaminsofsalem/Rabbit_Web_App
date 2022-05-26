@@ -19,9 +19,9 @@ import {
   VerifyRequestEvent,
   VerifyResponseEvent,
 } from "./dto/events/verify-event.dto";
-import { PendingRequestHolder } from "../util/PendingRequestHolder";
+import { PendingRequestHolder } from "../../util/PendingRequestHolder";
 import { SendCodeEvent } from "./dto/events/send-event.dto";
-import { RequestIdGenerator } from "../util/RequestIdGenerator";
+import { RequestIdGenerator } from "../../util/RequestIdGenerator";
 
 @Controller("auth")
 export class AuthController {

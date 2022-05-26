@@ -21,12 +21,12 @@ import {
   GetFavoriteResponseDto,
 } from "../dto/favorite.dto";
 import * as NodeCache from "node-cache";
-import { PendingRequestHolder } from "src/modules/util/PendingRequestHolder";
+import { PendingRequestHolder } from "src/util/PendingRequestHolder";
 import {
   GetMetadataRequestEvent,
   GetMetadatResponseEvent,
 } from "../dto/events/metadata-event";
-import { RequestIdGenerator } from "src/modules/util/RequestIdGenerator";
+import { RequestIdGenerator } from "src/util/RequestIdGenerator";
 
 @Controller("favorite")
 export class FavoritesController {
@@ -42,7 +42,12 @@ export class FavoritesController {
       const event = data as GetFavoritesResponseEvent;
       const id = RequestIdGenerator.generateFavoritesRequestId(event.email);
       this.responseCache.set(id, event);
-    } else if (data.type === "GET_METADATA_RESPONSE") {
+    }
+  }
+
+  @MessagePattern("products")
+  handleProductEvents(@Payload("value") data: any) {
+    if (data.type === "GET_METADATA_RESPONSE") {
       const event = data as GetMetadatResponseEvent;
       const id = RequestIdGenerator.generateMetaDataRequestId(
         event.products.map((val) => val.id),
@@ -107,7 +112,7 @@ export class FavoritesController {
         type: "GET_METADATA_REQUEST",
         products: favorites,
       };
-      this.client.emit("user", metaDataRequestEvent);
+      this.client.emit("products", metaDataRequestEvent);
       const metaDataRequestId =
         RequestIdGenerator.generateMetaDataRequestId(favorites);
       //Wait for result of metadata of products

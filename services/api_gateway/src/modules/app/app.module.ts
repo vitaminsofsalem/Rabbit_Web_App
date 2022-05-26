@@ -4,11 +4,15 @@ import {
   ClientsModule,
   Transport,
 } from "@nestjs/microservices";
-import { AdminModule } from "../admin/admin.module";
-import { AuthModule } from "../auth/auth.module";
-import { PaymentsModule } from "../payments/payments.module";
-import { ProductsModule } from "../products/products.module";
-import { UserModule } from "../user/user.module";
+import { AuthModule } from "src/modules/auth/auth.module";
+import { OrdersController } from "src/orders/controllers/orders.controller";
+import { ShipmentsController } from "src/orders/controllers/shipment.controller";
+import { PaymentsController } from "src/payments/payments.controller";
+import { ProductsController } from "src/products/products.controller";
+import { AddressController } from "src/user/controllers/address.controller";
+import { CartController } from "src/user/controllers/cart.controller";
+import { FavoritesController } from "src/user/controllers/favorites.controller";
+import { NameController } from "src/user/controllers/name.controller";
 
 const kafkaClient: ClientProviderOptions = {
   name: "KAFKA_CLIENT",
@@ -26,14 +30,17 @@ const kafkaClient: ClientProviderOptions = {
 
 @Global()
 @Module({
-  imports: [
-    ClientsModule.register([kafkaClient]),
-    AdminModule,
-    AuthModule,
-    PaymentsModule,
-    ProductsModule,
-    UserModule,
-  ],
+  imports: [ClientsModule.register([kafkaClient]), AuthModule],
   exports: [ClientsModule.register([kafkaClient])],
+  controllers: [
+    AddressController,
+    CartController,
+    FavoritesController,
+    NameController,
+    ProductsController,
+    PaymentsController,
+    OrdersController,
+    ShipmentsController,
+  ],
 })
 export class AppModule {}
