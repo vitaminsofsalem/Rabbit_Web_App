@@ -1,4 +1,5 @@
 import { Global, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import {
   ClientProviderOptions,
@@ -35,6 +36,7 @@ const kafkaClient: ClientProviderOptions = {
 @Global()
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ClientsModule.register([kafkaClient]),
     PassportModule,
     JwtModule.register({

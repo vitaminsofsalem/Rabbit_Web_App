@@ -32,6 +32,7 @@ import {
   GetMetadatResponseEvent,
 } from "../dto/events/metadata-event";
 import { CartProduct } from "src/model/Cart";
+import { Product } from "src/model/Product";
 
 @Controller("cart")
 export class CartController {
@@ -78,7 +79,7 @@ export class CartController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  getCart(@Request() req: any): Promise<GetCartResponseDto> {
+  async getCart(@Request() req: any): Promise<GetCartResponseDto> {
     const userEmail = req.user.email as string;
 
     const requestEvent: GetCartRequestEvent = {
@@ -88,7 +89,27 @@ export class CartController {
     this.client.emit("user", requestEvent);
     const requestId = RequestIdGenerator.generateCartRequestId(userEmail);
 
-    //Wait for result of products
+    const cart = await this.waitForCartResponse(requestId);
+
+    const cartProductIds = cart.map((val) => val.id);
+    const metaDataRequestId = this.sendGetMetaDataRequestEvent(cartProductIds);
+
+    const metaData = await this.waitForMetaDataResponse(metaDataRequestId);
+
+    const finalCart: CartProduct[] = [];
+    for (const item of cart) {
+      const correspondingMetaData = metaData.find(
+        (meta) => meta.id === item.id,
+      );
+      finalCart.push({ ...item, ...correspondingMetaData });
+    }
+
+    return { cart: finalCart };
+  }
+
+  private waitForCartResponse(
+    requestId: string,
+  ): Promise<{ id: string; quantity: number }[]> {
     return PendingRequestHolder.holdConnection<
       { id: string; quantity: number }[]
     >((complete, abort) => {
@@ -99,35 +120,28 @@ export class CartController {
         this.responseCache.del(requestId);
         complete(responseEvent.cart);
       }
-    }).then((cart) => {
-      const cartProducts = cart.map((val) => val.id);
-      const metaDataRequestEvent: GetMetadataRequestEvent = {
-        type: "GET_METADATA_REQUEST",
-        products: cartProducts,
-      };
-      this.client.emit("products", metaDataRequestEvent);
-      const metaDataRequestId =
-        RequestIdGenerator.generateMetaDataRequestId(cartProducts);
+    });
+  }
 
-      //Wait for result of metadata of products
-      return PendingRequestHolder.holdConnection((complete, abort) => {
-        if (this.responseCache.has(metaDataRequestId)) {
-          const responseEvent = this.responseCache.get(
-            metaDataRequestId,
-          ) as GetMetadatResponseEvent;
-          this.responseCache.del(metaDataRequestId);
+  private sendGetMetaDataRequestEvent(productIds: string[]): string {
+    const metaDataRequestEvent: GetMetadataRequestEvent = {
+      type: "GET_METADATA_REQUEST",
+      products: productIds,
+    };
+    this.client.emit("products", metaDataRequestEvent);
+    return RequestIdGenerator.generateMetaDataRequestId(productIds);
+  }
 
-          const finalItems: CartProduct[] = [];
-          for (const item of cart) {
-            const correspondingMetaData = responseEvent.products.find(
-              (meta) => meta.id === item.id,
-            );
-            finalItems.push({ ...item, ...correspondingMetaData });
-          }
+  private waitForMetaDataResponse(requestId: string): Promise<Product[]> {
+    return PendingRequestHolder.holdConnection((complete, abort) => {
+      if (this.responseCache.has(requestId)) {
+        const responseEvent = this.responseCache.get(
+          requestId,
+        ) as GetMetadatResponseEvent;
+        this.responseCache.del(requestId);
 
-          complete({ cart: finalItems });
-        }
-      });
+        complete(responseEvent.products);
+      }
     });
   }
 }

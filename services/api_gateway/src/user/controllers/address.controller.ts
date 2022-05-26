@@ -21,6 +21,7 @@ import {
 } from "../dto/events/address-event.dto";
 import { PendingRequestHolder } from "src/util/PendingRequestHolder";
 import { RequestIdGenerator } from "src/util/RequestIdGenerator";
+import { Address } from "src/model/Address";
 
 @Controller("address")
 export class AddressController {
@@ -62,7 +63,7 @@ export class AddressController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  getAddress(@Request() req: any): Promise<GetAddressResponseDto> {
+  async getAddress(@Request() req: any): Promise<GetAddressResponseDto> {
     const userEmail = req.user.email as string;
 
     const requestEvent: GetAddressRequestEvent = {
@@ -71,14 +72,18 @@ export class AddressController {
     };
     const requestId = RequestIdGenerator.generateAddressRequestId(userEmail);
     this.client.emit("user", requestEvent);
+    const addresses = await this.waitForAddressResponse(requestId);
+    return { addresses };
+  }
 
+  private waitForAddressResponse(requestId: string): Promise<Address[]> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
       if (this.responseCache.has(requestId)) {
         const responseEvent = this.responseCache.get(
           requestId,
         ) as GetAddressResponseEvent;
         this.responseCache.del(requestId);
-        complete({ addresses: responseEvent.addresses });
+        complete(responseEvent.addresses);
       }
     });
   }

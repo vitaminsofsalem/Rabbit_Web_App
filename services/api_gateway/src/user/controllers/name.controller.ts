@@ -53,7 +53,7 @@ export class NameController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  getName(@Request() req: any): Promise<GetNameResponseDto> {
+  async getName(@Request() req: any): Promise<GetNameResponseDto> {
     const userEmail = req.user.email as string;
 
     const requestEvent: GetNameRequestEvent = {
@@ -63,13 +63,17 @@ export class NameController {
     const requestId = RequestIdGenerator.generateNameRequestId(userEmail);
     this.client.emit("user", requestEvent);
 
+    return { name: await this.waitForNameResponse(requestId) };
+  }
+
+  private waitForNameResponse(requestId: string): Promise<string> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
       if (this.responseCache.has(requestId)) {
         const responseEvent = this.responseCache.get(
           requestId,
         ) as GetNameResponseEvent;
         this.responseCache.del(requestId);
-        complete({ name: responseEvent.name || "Guest" });
+        complete(responseEvent.name || "Guest");
       }
     });
   }

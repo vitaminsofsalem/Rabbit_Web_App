@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
 import * as NodeCache from "node-cache";
-import { Order, OrderProductDetailed } from "src/model/Order";
+import { Order, OrderProductDetailed, ShipmentStatus } from "src/model/Order";
 import { AdminAuthGuard } from "src/auth/admin-auth.guard";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import {
@@ -37,6 +37,7 @@ import {
   OrderWithShipment,
 } from "../dto/get-order";
 import { UpdateOrderStatusRequestDto } from "../dto/order-status.dto";
+import { Product } from "src/model/Product";
 
 @Controller("orders")
 export class OrdersController {
@@ -116,62 +117,48 @@ export class OrdersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  getOrders(@Request() req: any): Promise<GetOrdersResponseDto> {
+  async getOrders(@Request() req: any): Promise<GetOrdersResponseDto> {
     const userEmail = req.user.email as string;
 
     const requestEvent: GetOrdersRequestEvent = {
       type: "GET_ORDERS_REQUEST",
       email: userEmail,
     };
-    const requestId = RequestIdGenerator.generateOrdersRequestId(userEmail);
     this.client.emit("order", requestEvent);
+    const requestId = RequestIdGenerator.generateOrdersRequestId(userEmail);
 
-    //Wait for result of orders
-    return PendingRequestHolder.holdConnection<Order[]>((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
-          requestId,
-        ) as GetOrdersResponseEvent;
-        this.responseCache.del(requestId);
-        complete(responseEvent.orders);
-      }
-    }).then((orders) => {
-      const orderIds = orders.map((item) => item.id);
-      const requestShipmentStatusEvent: GetShipmentStatusRequestEvent = {
-        type: "GET_STATUS_REQUEST",
-        orders: orderIds,
+    const orders = await this.waitForOrdersResponse(requestId);
+
+    const orderIds = orders.map((item) => item.id);
+    const requestShipmentStatusEvent: GetShipmentStatusRequestEvent = {
+      type: "GET_STATUS_REQUEST",
+      orders: orderIds,
+    };
+
+    this.client.emit("shipping", requestShipmentStatusEvent);
+    const shipmentStatusId =
+      RequestIdGenerator.generateOrderShipmentStatusRquestId(orderIds);
+
+    const shipmentStatuses = await this.waitForShipmentStatuses(
+      shipmentStatusId,
+    );
+
+    const ordersWithShipmentStatus = orders.map((order) => {
+      const statusItem = shipmentStatuses.find(
+        (item) => item.orderId === order.id,
+      );
+      return {
+        ...order,
+        shipmentStatus: statusItem.status,
       };
-
-      this.client.emit("shipping", requestShipmentStatusEvent);
-      const shipmentStatusId =
-        RequestIdGenerator.generateOrderShipmentStatusRquestId(orderIds);
-
-      //Wait for results of shipment status
-      return PendingRequestHolder.holdConnection((complete, abort) => {
-        if (this.responseCache.has(shipmentStatusId)) {
-          const responseEvent = this.responseCache.get(
-            shipmentStatusId,
-          ) as GetShipmentStatusResponseEvent;
-          this.responseCache.del(requestId);
-          complete({
-            orders: orders.map((order) => {
-              const statusItem = responseEvent.result.find(
-                (item) => item.orderId === order.id,
-              );
-              return {
-                ...order,
-                shipmentStatus: statusItem.status,
-              };
-            }),
-          });
-        }
-      });
     });
+
+    return { orders: ordersWithShipmentStatus };
   }
 
   @Get("/:id")
   @UseGuards(JwtAuthGuard)
-  getOrder(
+  async getOrder(
     @Request() req: any,
     @Param("id") id: string,
   ): Promise<GetOrderResponseDto> {
@@ -185,7 +172,49 @@ export class OrdersController {
     const requestId = RequestIdGenerator.generateOrderRequestId(userEmail, id);
     this.client.emit("order", requestEvent);
 
-    //Wait for result of orders
+    const order = await this.waitForOrderResponse(requestId);
+
+    const requestShipmentStatusEvent: GetShipmentStatusRequestEvent = {
+      type: "GET_STATUS_REQUEST",
+      orders: [order.id],
+    };
+
+    this.client.emit("shipping", requestShipmentStatusEvent);
+    const shipmentStatusId =
+      RequestIdGenerator.generateOrderShipmentStatusRquestId([order.id]);
+
+    const orderProducts = order.products.map((item) => item.id);
+    const metaDataRequestId = this.sendGetMetaDataRequestEvent(orderProducts);
+
+    const shipmentStatus = await this.waitForShipmentStatuses(
+      shipmentStatusId,
+    )[0];
+    const metaData = await this.waitForMetaDataResponse(metaDataRequestId);
+
+    const detailedProducts: OrderProductDetailed[] = [];
+    for (const item of order.products) {
+      const correspondingMetaData = metaData.find(
+        (meta) => meta.id === item.id,
+      );
+      detailedProducts.push({ ...item, ...correspondingMetaData });
+    }
+
+    return { order: { ...order, shipmentStatus, products: detailedProducts } };
+  }
+
+  private waitForOrdersResponse(requestId: string): Promise<Order[]> {
+    return PendingRequestHolder.holdConnection<Order[]>((complete, abort) => {
+      if (this.responseCache.has(requestId)) {
+        const responseEvent = this.responseCache.get(
+          requestId,
+        ) as GetOrdersResponseEvent;
+        this.responseCache.del(requestId);
+        complete(responseEvent.orders);
+      }
+    });
+  }
+
+  private waitForOrderResponse(requestId: string): Promise<Order> {
     return PendingRequestHolder.holdConnection<Order>((complete, abort) => {
       if (this.responseCache.has(requestId)) {
         const responseEvent = this.responseCache.get(
@@ -194,58 +223,36 @@ export class OrdersController {
         this.responseCache.del(requestId);
         complete(responseEvent.order);
       }
-    }).then((order) => {
-      const requestShipmentStatusEvent: GetShipmentStatusRequestEvent = {
-        type: "GET_STATUS_REQUEST",
-        orders: [order.id],
-      };
-
-      this.client.emit("shipping", requestShipmentStatusEvent);
-      const shipmentStatusId =
-        RequestIdGenerator.generateOrderShipmentStatusRquestId([order.id]);
-
-      const orderProducts = order.products.map((item) => item.id);
-      const metaDataRequestEvent: GetMetadataRequestEvent = {
-        type: "GET_METADATA_REQUEST",
-        products: orderProducts,
-      };
-      this.client.emit("products", metaDataRequestEvent);
-      const metaDataRequestId =
-        RequestIdGenerator.generateMetaDataRequestId(orderProducts);
-
-      return this.waitForOrderShipmentStatus(order, shipmentStatusId).then(
-        (orderWithStatus) => {
-          return this.waitForOrderProductsMetaData(
-            orderWithStatus,
-            metaDataRequestId,
-          );
-        },
-      );
     });
   }
 
-  private waitForOrderShipmentStatus(
-    order: Order,
-    requestId: string,
-  ): Promise<OrderWithShipment> {
+  private waitForShipmentStatuses(requestId: string): Promise<
+    {
+      orderId: string;
+      status: ShipmentStatus;
+    }[]
+  > {
     return PendingRequestHolder.holdConnection((complete, abort) => {
       if (this.responseCache.has(requestId)) {
         const responseEvent = this.responseCache.get(
           requestId,
         ) as GetShipmentStatusResponseEvent;
         this.responseCache.del(requestId);
-        complete({
-          ...order,
-          shipmentStatus: responseEvent.result[0].status,
-        });
+        complete(responseEvent.result);
       }
     });
   }
 
-  private waitForOrderProductsMetaData(
-    order: OrderWithShipment,
-    requestId: string,
-  ): Promise<GetOrderResponseDto> {
+  private sendGetMetaDataRequestEvent(productIds: string[]): string {
+    const metaDataRequestEvent: GetMetadataRequestEvent = {
+      type: "GET_METADATA_REQUEST",
+      products: productIds,
+    };
+    this.client.emit("products", metaDataRequestEvent);
+    return RequestIdGenerator.generateMetaDataRequestId(productIds);
+  }
+
+  private waitForMetaDataResponse(requestId: string): Promise<Product[]> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
       if (this.responseCache.has(requestId)) {
         const responseEvent = this.responseCache.get(
@@ -253,15 +260,7 @@ export class OrdersController {
         ) as GetMetadatResponseEvent;
         this.responseCache.del(requestId);
 
-        const detailedProducts: OrderProductDetailed[] = [];
-        for (const item of order.products) {
-          const correspondingMetaData = responseEvent.products.find(
-            (meta) => meta.id === item.id,
-          );
-          detailedProducts.push({ ...item, ...correspondingMetaData });
-        }
-
-        complete({ order: { ...order, products: detailedProducts } });
+        complete(responseEvent.products);
       }
     });
   }

@@ -71,24 +71,27 @@ export class AuthController {
 
     const requestId = RequestIdGenerator.generateVerifyRequestId(email, code);
 
+    const verified = await this.waitForVerifyResponse(requestId);
+    if (verified) {
+      const payload = { sub: email };
+      return {
+        verified: true,
+        access_token: this.jwtService.sign(payload),
+      };
+    } else {
+      return {
+        verified: false,
+      };
+    }
+  }
+  private waitForVerifyResponse(requestId: string): Promise<boolean> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
       if (this.responseCache.has(requestId)) {
         const responseEvent = this.responseCache.get(
           requestId,
         ) as VerifyResponseEvent;
         this.responseCache.del(requestId);
-
-        if (responseEvent.verified) {
-          const payload = { sub: email };
-          complete({
-            verified: true,
-            access_token: this.jwtService.sign(payload),
-          });
-        } else {
-          complete({
-            verified: false,
-          });
-        }
+        complete(responseEvent.verified);
       }
     });
   }
