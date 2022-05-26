@@ -1,10 +1,11 @@
 import { Global, Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
 import {
   ClientProviderOptions,
   ClientsModule,
   Transport,
 } from "@nestjs/microservices";
-import { AuthModule } from "src/modules/auth/auth.module";
+import { PassportModule } from "@nestjs/passport";
 import { OrdersController } from "src/orders/controllers/orders.controller";
 import { ShipmentsController } from "src/orders/controllers/shipment.controller";
 import { PaymentsController } from "src/payments/payments.controller";
@@ -13,6 +14,9 @@ import { AddressController } from "src/user/controllers/address.controller";
 import { CartController } from "src/user/controllers/cart.controller";
 import { FavoritesController } from "src/user/controllers/favorites.controller";
 import { NameController } from "src/user/controllers/name.controller";
+import { AdminAuthStrategy } from "../../auth/admin-auth.strategy";
+import { AuthController } from "../../auth/auth.controller";
+import { JwtStrategy } from "../../auth/jwt.strategy";
 
 const kafkaClient: ClientProviderOptions = {
   name: "KAFKA_CLIENT",
@@ -30,9 +34,17 @@ const kafkaClient: ClientProviderOptions = {
 
 @Global()
 @Module({
-  imports: [ClientsModule.register([kafkaClient]), AuthModule],
+  imports: [
+    ClientsModule.register([kafkaClient]),
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: "30d" },
+    }),
+  ],
   exports: [ClientsModule.register([kafkaClient])],
   controllers: [
+    AuthController,
     AddressController,
     CartController,
     FavoritesController,
@@ -42,5 +54,6 @@ const kafkaClient: ClientProviderOptions = {
     OrdersController,
     ShipmentsController,
   ],
+  providers: [JwtStrategy, AdminAuthStrategy],
 })
 export class AppModule {}

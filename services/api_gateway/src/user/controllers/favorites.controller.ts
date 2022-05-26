@@ -9,7 +9,7 @@ import {
   Get,
 } from "@nestjs/common";
 import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
-import { JwtAuthGuard } from "src/modules/auth/jwt-auth.guard";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import {
   AddFavoriteEvent,
   GetFavoritesRequestEvent,
