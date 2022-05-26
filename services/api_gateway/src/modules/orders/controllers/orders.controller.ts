@@ -11,8 +11,8 @@ import {
 import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
 import * as NodeCache from "node-cache";
 import { Order, OrderProductDetailed, ShipmentStatus } from "src/model/Order";
-import { AdminAuthGuard } from "src/auth/admin-auth.guard";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { AdminAuthGuard } from "src/modules/auth/admin-auth.guard";
+import { JwtAuthGuard } from "src/modules/auth/jwt-auth.guard";
 import {
   GetMetadataRequestEvent,
   GetMetadatResponseEvent,

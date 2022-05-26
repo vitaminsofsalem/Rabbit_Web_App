@@ -1,23 +1,14 @@
 import { Global, Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { JwtModule } from "@nestjs/jwt";
 import {
   ClientProviderOptions,
   ClientsModule,
   Transport,
 } from "@nestjs/microservices";
-import { PassportModule } from "@nestjs/passport";
-import { OrdersController } from "src/orders/controllers/orders.controller";
-import { ShipmentsController } from "src/orders/controllers/shipment.controller";
-import { PaymentsController } from "src/payments/payments.controller";
-import { ProductsController } from "src/products/products.controller";
-import { AddressController } from "src/user/controllers/address.controller";
-import { CartController } from "src/user/controllers/cart.controller";
-import { FavoritesController } from "src/user/controllers/favorites.controller";
-import { NameController } from "src/user/controllers/name.controller";
-import { AdminAuthStrategy } from "../../auth/admin-auth.strategy";
-import { AuthController } from "../../auth/auth.controller";
-import { JwtStrategy } from "../../auth/jwt.strategy";
+import { AuthModule } from "../auth/auth.module";
+import { OrdersModule } from "../orders/order.module";
+import { PaymentsModule } from "../payments/payments.module";
+import { ProductsModule } from "../products/products.module";
+import { UserModule } from "../user/user.module";
 
 const kafkaClient: ClientProviderOptions = {
   name: "KAFKA_CLIENT",
@@ -36,26 +27,13 @@ const kafkaClient: ClientProviderOptions = {
 @Global()
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     ClientsModule.register([kafkaClient]),
-    PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: "30d" },
-    }),
+    AuthModule,
+    OrdersModule,
+    PaymentsModule,
+    ProductsModule,
+    UserModule,
   ],
   exports: [ClientsModule.register([kafkaClient])],
-  controllers: [
-    AuthController,
-    AddressController,
-    CartController,
-    FavoritesController,
-    NameController,
-    ProductsController,
-    PaymentsController,
-    OrdersController,
-    ShipmentsController,
-  ],
-  providers: [JwtStrategy, AdminAuthStrategy],
 })
 export class AppModule {}

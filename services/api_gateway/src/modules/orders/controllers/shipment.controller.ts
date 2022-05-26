@@ -1,6 +1,6 @@
 import { Controller, Inject, UseGuards, Post, Body } from "@nestjs/common";
 import { ClientKafka } from "@nestjs/microservices";
-import { AdminAuthGuard } from "src/auth/admin-auth.guard";
+import { AdminAuthGuard } from "src/modules/auth/admin-auth.guard";
 import { UpdateShipmentStatusEvent } from "../dto/events/shipment.dto";
 import { UpdateShipmentStatusRequestDto } from "../dto/shipment-status.dto";
 
