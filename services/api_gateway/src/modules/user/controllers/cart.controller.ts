@@ -33,34 +33,11 @@ import {
 } from "../dto/events/metadata-event";
 import { CartProduct } from "src/model/Cart";
 import { Product } from "src/model/Product";
+import { CartEventHandler } from "../event-handlers/CartEventHandler";
 
 @Controller("cart")
 export class CartController {
-  /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
-   * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
-  private responseCache = new NodeCache({ stdTTL: 15000 });
-
   constructor(@Inject("KAFKA_CLIENT") private readonly client: ClientKafka) {}
-
-  @MessagePattern("user")
-  handleUserEvents(@Payload("value") data: any) {
-    if (data.type === "GET_CART_RESPONSE") {
-      const event = data as GetCartResponseEvent;
-      const id = RequestIdGenerator.generateCartRequestId(event.email);
-      this.responseCache.set(id, event);
-    }
-  }
-
-  @MessagePattern("products")
-  handleProductEvents(@Payload("value") data: any) {
-    if (data.type === "GET_METADATA_RESPONSE") {
-      const event = data as GetMetadatResponseEvent;
-      const id = RequestIdGenerator.generateMetaDataRequestId(
-        event.products.map((val) => val.id),
-      );
-      this.responseCache.set(id, event);
-    }
-  }
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -113,11 +90,11 @@ export class CartController {
     return PendingRequestHolder.holdConnection<
       { id: string; quantity: number }[]
     >((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (CartEventHandler.responseCache.has(requestId)) {
+        const responseEvent = CartEventHandler.responseCache.get(
           requestId,
         ) as GetCartResponseEvent;
-        this.responseCache.del(requestId);
+        CartEventHandler.responseCache.del(requestId);
         complete(responseEvent.cart);
       }
     });
@@ -134,11 +111,11 @@ export class CartController {
 
   private waitForMetaDataResponse(requestId: string): Promise<Product[]> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (CartEventHandler.responseCache.has(requestId)) {
+        const responseEvent = CartEventHandler.responseCache.get(
           requestId,
         ) as GetMetadatResponseEvent;
-        this.responseCache.del(requestId);
+        CartEventHandler.responseCache.del(requestId);
 
         complete(responseEvent.products);
       }

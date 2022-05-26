@@ -18,23 +18,11 @@ import {
 } from "../dto/events/name-event.dto";
 import { PendingRequestHolder } from "src/util/PendingRequestHolder";
 import { RequestIdGenerator } from "src/util/RequestIdGenerator";
+import { NameEventHandler } from "../event-handlers/NameEventHandler";
 
 @Controller("name")
 export class NameController {
-  /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
-   * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
-  private responseCache = new NodeCache({ stdTTL: 15000 });
-
   constructor(@Inject("KAFKA_CLIENT") private readonly client: ClientKafka) {}
-
-  @MessagePattern("user")
-  handleUserEvents(@Payload("value") data: any) {
-    if (data.type === "GET_NAME_RESPONSE") {
-      const event = data as GetNameResponseEvent;
-      const id = RequestIdGenerator.generateNameRequestId(event.email);
-      this.responseCache.set(id, event);
-    }
-  }
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -68,11 +56,11 @@ export class NameController {
 
   private waitForNameResponse(requestId: string): Promise<string> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (NameEventHandler.responseCache.has(requestId)) {
+        const responseEvent = NameEventHandler.responseCache.get(
           requestId,
         ) as GetNameResponseEvent;
-        this.responseCache.del(requestId);
+        NameEventHandler.responseCache.del(requestId);
         complete(responseEvent.name || "Guest");
       }
     });

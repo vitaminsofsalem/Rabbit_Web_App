@@ -38,52 +38,11 @@ import {
 } from "../dto/get-order";
 import { UpdateOrderStatusRequestDto } from "../dto/order-status.dto";
 import { Product } from "src/model/Product";
+import { OrdersEventHandler } from "../event_handlers/OrdersEventHandler";
 
 @Controller("orders")
 export class OrdersController {
-  /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
-   * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
-  private responseCache = new NodeCache({ stdTTL: 15000 });
-
   constructor(@Inject("KAFKA_CLIENT") private readonly client: ClientKafka) {}
-
-  @MessagePattern("order")
-  handleOrderEvents(@Payload("value") data: any) {
-    if (data.type === "GET_ORDERS_RESPONSE") {
-      const event = data as GetOrdersResponseEvent;
-      const id = RequestIdGenerator.generateOrdersRequestId(event.email);
-      this.responseCache.set(id, event);
-    } else if (data.type === "GET_ORDER_RESPONSE") {
-      const event = data as GetOrderResponseEvent;
-      const id = RequestIdGenerator.generateOrderRequestId(
-        event.email,
-        event.order.id,
-      );
-      this.responseCache.set(id, event);
-    }
-  }
-
-  @MessagePattern("shipping")
-  handleShippingEvents(@Payload("value") data: any) {
-    if (data.type === "GET_STATUS_RESPONSE") {
-      const event = data as GetShipmentStatusResponseEvent;
-      const id = RequestIdGenerator.generateOrderShipmentStatusRquestId(
-        event.result.map((item) => item.orderId),
-      );
-      this.responseCache.set(id, event);
-    }
-  }
-
-  @MessagePattern("products")
-  handleProductEvents(@Payload("value") data: any) {
-    if (data.type === "GET_METADATA_RESPONSE") {
-      const event = data as GetMetadatResponseEvent;
-      const id = RequestIdGenerator.generateMetaDataRequestId(
-        event.products.map((val) => val.id),
-      );
-      this.responseCache.set(id, event);
-    }
-  }
 
   @Post("/status")
   @UseGuards(AdminAuthGuard)
@@ -204,11 +163,11 @@ export class OrdersController {
 
   private waitForOrdersResponse(requestId: string): Promise<Order[]> {
     return PendingRequestHolder.holdConnection<Order[]>((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (OrdersEventHandler.responseCache.has(requestId)) {
+        const responseEvent = OrdersEventHandler.responseCache.get(
           requestId,
         ) as GetOrdersResponseEvent;
-        this.responseCache.del(requestId);
+        OrdersEventHandler.responseCache.del(requestId);
         complete(responseEvent.orders);
       }
     });
@@ -216,11 +175,11 @@ export class OrdersController {
 
   private waitForOrderResponse(requestId: string): Promise<Order> {
     return PendingRequestHolder.holdConnection<Order>((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (OrdersEventHandler.responseCache.has(requestId)) {
+        const responseEvent = OrdersEventHandler.responseCache.get(
           requestId,
         ) as GetOrderResponseEvent;
-        this.responseCache.del(requestId);
+        OrdersEventHandler.responseCache.del(requestId);
         complete(responseEvent.order);
       }
     });
@@ -233,11 +192,11 @@ export class OrdersController {
     }[]
   > {
     return PendingRequestHolder.holdConnection((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (OrdersEventHandler.responseCache.has(requestId)) {
+        const responseEvent = OrdersEventHandler.responseCache.get(
           requestId,
         ) as GetShipmentStatusResponseEvent;
-        this.responseCache.del(requestId);
+        OrdersEventHandler.responseCache.del(requestId);
         complete(responseEvent.result);
       }
     });
@@ -254,11 +213,11 @@ export class OrdersController {
 
   private waitForMetaDataResponse(requestId: string): Promise<Product[]> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (OrdersEventHandler.responseCache.has(requestId)) {
+        const responseEvent = OrdersEventHandler.responseCache.get(
           requestId,
         ) as GetMetadatResponseEvent;
-        this.responseCache.del(requestId);
+        OrdersEventHandler.responseCache.del(requestId);
 
         complete(responseEvent.products);
       }

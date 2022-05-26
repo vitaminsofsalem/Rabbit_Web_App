@@ -22,13 +22,10 @@ import {
 import { PendingRequestHolder } from "../../util/PendingRequestHolder";
 import { SendCodeEvent } from "./dto/events/send-event.dto";
 import { RequestIdGenerator } from "../../util/RequestIdGenerator";
+import { AuthEventHandler } from "./AuthEventHandler";
 
 @Controller("auth")
 export class AuthController {
-  /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
-   * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
-  private responseCache = new NodeCache({ stdTTL: 15000 });
-
   constructor(
     private jwtService: JwtService,
     @Inject("KAFKA_CLIENT") private readonly client: ClientKafka,
@@ -42,18 +39,6 @@ export class AuthController {
       email,
     };
     this.client.emit("user", sendCodeEvent);
-  }
-
-  @MessagePattern("user")
-  handleUserEvents(@Payload("value") data: any) {
-    if (data.type === "VERIFY_RESPONSE") {
-      const event = data as VerifyResponseEvent;
-      const id = RequestIdGenerator.generateVerifyRequestId(
-        event.email,
-        event.code,
-      );
-      this.responseCache.set(id, event);
-    }
   }
 
   @Post("verify")
@@ -86,11 +71,11 @@ export class AuthController {
   }
   private waitForVerifyResponse(requestId: string): Promise<boolean> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (AuthEventHandler.responseCache.has(requestId)) {
+        const responseEvent = AuthEventHandler.responseCache.get(
           requestId,
         ) as VerifyResponseEvent;
-        this.responseCache.del(requestId);
+        AuthEventHandler.responseCache.del(requestId);
         complete(responseEvent.verified);
       }
     });

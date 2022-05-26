@@ -22,23 +22,11 @@ import {
 import { PendingRequestHolder } from "src/util/PendingRequestHolder";
 import { RequestIdGenerator } from "src/util/RequestIdGenerator";
 import { Address } from "src/model/Address";
+import { AddressEventHandler } from "../event-handlers/AddressEventHandler";
 
 @Controller("address")
 export class AddressController {
-  /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
-   * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
-  private responseCache = new NodeCache({ stdTTL: 15000 });
-
   constructor(@Inject("KAFKA_CLIENT") private readonly client: ClientKafka) {}
-
-  @MessagePattern("user")
-  handleUserEvents(@Payload("value") data: any) {
-    if (data.type === "GET_ADDRESS_RESPONSE") {
-      const event = data as GetAddressResponseEvent;
-      const id = RequestIdGenerator.generateAddressRequestId(event.email);
-      this.responseCache.set(id, event);
-    }
-  }
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -78,11 +66,11 @@ export class AddressController {
 
   private waitForAddressResponse(requestId: string): Promise<Address[]> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (AddressEventHandler.responseCache.has(requestId)) {
+        const responseEvent = AddressEventHandler.responseCache.get(
           requestId,
         ) as GetAddressResponseEvent;
-        this.responseCache.del(requestId);
+        AddressEventHandler.responseCache.del(requestId);
         complete(responseEvent.addresses);
       }
     });

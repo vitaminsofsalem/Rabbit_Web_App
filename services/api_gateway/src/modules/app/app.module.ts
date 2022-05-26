@@ -9,6 +9,7 @@ import { OrdersModule } from "../orders/order.module";
 import { PaymentsModule } from "../payments/payments.module";
 import { ProductsModule } from "../products/products.module";
 import { UserModule } from "../user/user.module";
+import { AppController } from "./app.controller";
 
 const kafkaClient: ClientProviderOptions = {
   name: "KAFKA_CLIENT",
@@ -35,5 +36,6 @@ const kafkaClient: ClientProviderOptions = {
     UserModule,
   ],
   exports: [ClientsModule.register([kafkaClient])],
+  controllers: [AppController],
 })
 export class AppModule {}
