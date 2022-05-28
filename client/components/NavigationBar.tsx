@@ -4,7 +4,35 @@ import classes from "../styles/NavigationBar.module.scss";
 import logoArt from "../assets/Icons/rabbit_logo.png";
 import logoText from "../assets/Icons/rabbit_text_light.png";
 import Image from "next/image";
-import NavigationBarList from "./NavigationBarList";
+import { NavigationBarList, ListItem } from "./NavigationBarList";
+
+const navBarItems: ListItem[] = [
+  {
+    label: "Home",
+    iconName: "house",
+    onClick: () => console.log("home clicked"),
+  },
+  {
+    label: "Search",
+    iconName: "search",
+    onClick: () => console.log("account clicked"),
+  },
+  {
+    label: "Cart",
+    iconName: "shoppingCart",
+    onClick: () => console.log("cart clicked"),
+  },
+  {
+    label: "Favorites",
+    iconName: "heart",
+    onClick: () => console.log("favorites clicked"),
+  },
+  {
+    label: "Account",
+    iconName: "user",
+    onClick: () => console.log("account clicked"),
+  },
+];
 
 const Logo = () => (
   <>
@@ -36,7 +64,7 @@ const NavigationBar: React.FC = () => {
       <Logo />
       <br />
       <br />
-      <NavigationBarList />
+      <NavigationBarList items={navBarItems} />
     </div>
   );
 };

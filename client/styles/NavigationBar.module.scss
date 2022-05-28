@@ -1,7 +1,8 @@
 @import "./colors.scss";
+@import "./NavigationBarIcons.scss";
 
 $active-entry-color: rgba(223, 255, 22, 0.2);
-$inactive-text-color: rgba(255, 255, 255, 0.5);
+$inactive-color: rgba(255, 255, 255, 0.5);
 
 .navigationBar {
   display: flex;
@@ -11,6 +12,16 @@ $inactive-text-color: rgba(255, 255, 255, 0.5);
   background-color: $primary-green;
   width: 252px;
   height: 100vh;
+}
+
+.navigationBarIcon {
+  background-color: $inactive-color;
+  mask-size: 25px;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  padding: 35px;
 }
 
 .logo {
@@ -33,11 +44,11 @@ $inactive-text-color: rgba(255, 255, 255, 0.5);
   align-items: center;
   padding: auto;
 
-  text {
-    padding: 20px;
+  p {
+    padding: 3px;
     font-size: 13px;
     line-height: 20px;
-    color: $inactive-text-color;
+    color: $inactive-color;
   }
 }
 
@@ -45,9 +56,13 @@ $inactive-text-color: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
   background-color: $active-entry-color;
 
-  text {
+  p {
     font-style: normal;
     font-weight: 700;
     color: $primary-yellow;
+  }
+
+  .navigationBarIcon {
+    background-color: $primary-yellow;
   }
 }
