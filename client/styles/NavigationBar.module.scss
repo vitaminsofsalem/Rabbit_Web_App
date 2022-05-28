@@ -1,0 +1,16 @@
+@import "./colors.scss";
+.navigationBar {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  background-color: $primary-green;
+  width: 252px;
+  height: 100vh;
+}
+
+.logo {
+  display: flex;
+  padding: 8px;
+  justify-content: center;
+}

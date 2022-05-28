@@ -1,5 +1,9 @@
 import { useRouter } from "next/router";
 import React from "react";
+import classes from "../styles/NavigationBar.module.scss";
+import logo from "../assets/Icons/rabbit_logo.png";
+import logoText from "../assets/Icons/rabbit_text_light.png";
+import Image from "next/image";
 
 const NavigationBar: React.FC = () => {
   const router = useRouter();
@@ -15,7 +19,16 @@ const NavigationBar: React.FC = () => {
    * router.replace("/home") for changing the page based on click
    */
 
-  return <div />;
+  return (
+    <div className={classes.navigationBar}>
+      <div className={classes.logo}>
+        <Image src={logo} />
+      </div>
+      <div className={classes.logo}>
+        <Image src={logoText} />
+      </div>
+    </div>
+  );
 };
 
 export default NavigationBar;
