@@ -43,6 +43,14 @@ export class RequestIdGenerator {
     return `SEARCH-${query}`;
   }
 
+  static generateCreatePaymentRequestId(
+    email: string,
+    orderId: string,
+    total: number,
+  ) {
+    return `PAYMENT-${email}-${orderId}-${total}`;
+  }
+
   //Generates id based on hash of product ids
   static generateMetaDataRequestId(products: string[]) {
     let sum = 0;
