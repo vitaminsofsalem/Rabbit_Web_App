@@ -1,9 +1,13 @@
 @import "./colors.scss";
+
+$active-entry-color: rgba(223, 255, 22, 0.2);
+$inactive-text-color: rgba(255, 255, 255, 0.5);
+
 .navigationBar {
   display: flex;
-  padding: 20px;
-  flex-direction: column;
   align-items: center;
+  flex-direction: column;
+  padding: 20px;
   background-color: $primary-green;
   width: 252px;
   height: 100vh;
@@ -11,6 +15,39 @@
 
 .logo {
   display: flex;
-  padding: 8px;
   justify-content: center;
+  padding: 8px;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.entryContainer {
+  width: 232px;
+  margin: 5px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: auto;
+
+  text {
+    padding: 20px;
+    font-size: 13px;
+    line-height: 20px;
+    color: $inactive-text-color;
+  }
+}
+
+.activeEntry {
+  border-radius: 10px;
+  background-color: $active-entry-color;
+
+  text {
+    font-style: normal;
+    font-weight: 700;
+    color: $primary-yellow;
+  }
 }

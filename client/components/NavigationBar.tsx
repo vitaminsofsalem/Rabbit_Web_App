@@ -1,9 +1,21 @@
 import { useRouter } from "next/router";
 import React from "react";
 import classes from "../styles/NavigationBar.module.scss";
-import logo from "../assets/Icons/rabbit_logo.png";
+import logoArt from "../assets/Icons/rabbit_logo.png";
 import logoText from "../assets/Icons/rabbit_text_light.png";
 import Image from "next/image";
+import NavigationBarList from "./NavigationBarList";
+
+const Logo = () => (
+  <>
+    <div className={classes.logo}>
+      <Image src={logoArt} width="67px" height="67px" />
+    </div>
+    <div className={classes.logo}>
+      <Image src={logoText} width="121px" height="30px" />
+    </div>
+  </>
+);
 
 const NavigationBar: React.FC = () => {
   const router = useRouter();
@@ -21,12 +33,10 @@ const NavigationBar: React.FC = () => {
 
   return (
     <div className={classes.navigationBar}>
-      <div className={classes.logo}>
-        <Image src={logo} width="67px" height="67px" />
-      </div>
-      <div className={classes.logo}>
-        <Image src={logoText} width="121px" height="30px" />
-      </div>
+      <Logo />
+      <br />
+      <br />
+      <NavigationBarList />
     </div>
   );
 };
