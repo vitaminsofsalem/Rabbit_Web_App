@@ -8,6 +8,7 @@ import {
 } from "@nestjs/microservices";
 import { AuthEventHandler } from "../auth/AuthEventHandler";
 import { OrdersEventHandler } from "../orders/event_handlers/OrdersEventHandler";
+import { ProductsEventhandler } from "../products/event-handlers/ProductsEventHandler";
 import { AddressEventHandler } from "../user/event-handlers/AddressEventHandler";
 import { CartEventHandler } from "../user/event-handlers/CartEventHandler";
 import { FavoritesEventHandler } from "../user/event-handlers/FavoritesEventHandler";
@@ -40,6 +41,7 @@ export class AppController {
     CartEventHandler.handleProductsEvent(data);
     FavoritesEventHandler.handleProductsEvent(data);
     OrdersEventHandler.handleProductsEvents(data);
+    ProductsEventhandler.handleProductsEvents(data);
   }
 
   @MessagePattern("order")

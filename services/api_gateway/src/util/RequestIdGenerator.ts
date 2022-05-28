@@ -27,6 +27,22 @@ export class RequestIdGenerator {
     return `CART-${email}`;
   }
 
+  static generateGetCategoriesRequestId() {
+    return `CATEGORIES`;
+  }
+
+  static generateGetHomeRequestId() {
+    return `HOME`;
+  }
+
+  static generateGetProductsRequestId(filter: object) {
+    return `PRODUCTS-${JSON.stringify(filter)}`;
+  }
+
+  static generateSearchProductsRequestId(query: string) {
+    return `SEARCH-${query}`;
+  }
+
   //Generates id based on hash of product ids
   static generateMetaDataRequestId(products: string[]) {
     let sum = 0;
