@@ -4,5 +4,4 @@ export class OrderConfirmationEvent {
   email: string;
   total: number;
   deliveryFees: number;
-  orderItems: string[];
 }

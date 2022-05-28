@@ -1,4 +1,4 @@
-export type OrderStatus = "PROCESSING" | "FULFILLED" | "CANCELED";
+export type OrderStatus = "PROCESSING" | "FULFILLED" | "CANCELLED";
 
 export class OrderStatusUpdateEvent {
   type: "ORDER_STATUS_UPDATE";
