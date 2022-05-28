@@ -48,7 +48,7 @@ export class CartController {
     const updateCartEvent: UpdateCartEvent = {
       type: "UPDATE_CART",
       email: userEmail,
-      cart: cart.map((val) => ({ id: val.id, quantity: val.quantity })),
+      cart: cart,
     };
 
     this.client.emit("user", updateCartEvent);
@@ -84,20 +84,18 @@ export class CartController {
     return { cart: finalCart };
   }
 
-  private waitForCartResponse(
-    requestId: string,
-  ): Promise<{ id: string; quantity: number }[]> {
-    return PendingRequestHolder.holdConnection<
-      { id: string; quantity: number }[]
-    >((complete, abort) => {
-      if (CartEventHandler.responseCache.has(requestId)) {
-        const responseEvent = CartEventHandler.responseCache.get(
-          requestId,
-        ) as GetCartResponseEvent;
-        CartEventHandler.responseCache.del(requestId);
-        complete(responseEvent.cart);
-      }
-    });
+  private waitForCartResponse(requestId: string): Promise<CartProduct[]> {
+    return PendingRequestHolder.holdConnection<CartProduct[]>(
+      (complete, abort) => {
+        if (CartEventHandler.responseCache.has(requestId)) {
+          const responseEvent = CartEventHandler.responseCache.get(
+            requestId,
+          ) as GetCartResponseEvent;
+          CartEventHandler.responseCache.del(requestId);
+          complete(responseEvent.cart);
+        }
+      },
+    );
   }
 
   private sendGetMetaDataRequestEvent(productIds: string[]): string {
