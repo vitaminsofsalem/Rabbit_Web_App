@@ -3,7 +3,6 @@ import { OrderStatus } from "src/dto/order-status-update.dto";
 import { ShipmentStatus } from "src/dto/shipment-status-update.dto";
 import * as sendGridMail from "@sendgrid/mail";
 import { logo } from "templates/logo";
-import { Subject } from "rxjs";
 
 /*
 Messages have no types due to actual library having incorrect types that break the request
