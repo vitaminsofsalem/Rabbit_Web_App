@@ -22,10 +22,10 @@ const NavigationBar: React.FC = () => {
   return (
     <div className={classes.navigationBar}>
       <div className={classes.logo}>
-        <Image src={logo} />
+        <Image src={logo} width="67px" height="67px" />
       </div>
       <div className={classes.logo}>
-        <Image src={logoText} />
+        <Image src={logoText} width="121px" height="30px" />
       </div>
     </div>
   );
