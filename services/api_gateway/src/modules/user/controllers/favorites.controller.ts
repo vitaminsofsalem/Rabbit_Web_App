@@ -21,35 +21,18 @@ import {
   GetFavoriteResponseDto,
 } from "../dto/favorite.dto";
 import * as NodeCache from "node-cache";
-import { PendingRequestHolder } from "src/modules/util/PendingRequestHolder";
+import { PendingRequestHolder } from "src/util/PendingRequestHolder";
 import {
   GetMetadataRequestEvent,
   GetMetadatResponseEvent,
 } from "../dto/events/metadata-event";
-import { RequestIdGenerator } from "src/modules/util/RequestIdGenerator";
+import { RequestIdGenerator } from "src/util/RequestIdGenerator";
+import { Product } from "src/model/Product";
+import { FavoritesEventHandler } from "../event-handlers/FavoritesEventHandler";
 
 @Controller("favorite")
 export class FavoritesController {
-  /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
-   * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
-  private responseCache = new NodeCache({ stdTTL: 15000 });
-
   constructor(@Inject("KAFKA_CLIENT") private readonly client: ClientKafka) {}
-
-  @MessagePattern("user")
-  handleUserEvents(@Payload("value") data: any) {
-    if (data.type === "GET_FAVORITES_RESPONSE") {
-      const event = data as GetFavoritesResponseEvent;
-      const id = RequestIdGenerator.generateFavoritesRequestId(event.email);
-      this.responseCache.set(id, event);
-    } else if (data.type === "GET_METADATA_RESPONSE") {
-      const event = data as GetMetadatResponseEvent;
-      const id = RequestIdGenerator.generateMetaDataRequestId(
-        event.products.map((val) => val.id),
-      );
-      this.responseCache.set(id, event);
-    }
-  }
 
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -83,7 +66,7 @@ export class FavoritesController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  getFavorites(@Request() req: any): Promise<GetFavoriteResponseDto> {
+  async getFavorites(@Request() req: any): Promise<GetFavoriteResponseDto> {
     const userEmail = req.user.email as string;
 
     const requestEvent: GetFavoritesRequestEvent = {
@@ -93,33 +76,44 @@ export class FavoritesController {
     this.client.emit("user", requestEvent);
     const requestId = RequestIdGenerator.generateFavoritesRequestId(userEmail);
 
-    //Wait for result of products
+    const favorites = await this.waitForFavoritesResponse(requestId);
+    const metaDataRequestId = this.sendGetMetaDataRequestEvent(favorites);
+
+    const metaData = await this.waitForMetaDataResponse(metaDataRequestId);
+    return { favorites: metaData };
+  }
+
+  private waitForFavoritesResponse(requestId: string): Promise<string[]> {
     return PendingRequestHolder.holdConnection<string[]>((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (FavoritesEventHandler.responseCache.has(requestId)) {
+        const responseEvent = FavoritesEventHandler.responseCache.get(
           requestId,
         ) as GetFavoritesResponseEvent;
-        this.responseCache.del(requestId);
+        FavoritesEventHandler.responseCache.del(requestId);
         complete(responseEvent.favorites);
       }
-    }).then((favorites) => {
-      const metaDataRequestEvent: GetMetadataRequestEvent = {
-        type: "GET_METADATA_REQUEST",
-        products: favorites,
-      };
-      this.client.emit("user", metaDataRequestEvent);
-      const metaDataRequestId =
-        RequestIdGenerator.generateMetaDataRequestId(favorites);
-      //Wait for result of metadata of products
-      return PendingRequestHolder.holdConnection((complete, abort) => {
-        if (this.responseCache.has(metaDataRequestId)) {
-          const responseEvent = this.responseCache.get(
-            metaDataRequestId,
-          ) as GetMetadatResponseEvent;
-          this.responseCache.del(metaDataRequestId);
-          complete({ favorites: responseEvent.products });
-        }
-      });
+    });
+  }
+
+  private sendGetMetaDataRequestEvent(productIds: string[]): string {
+    const metaDataRequestEvent: GetMetadataRequestEvent = {
+      type: "GET_METADATA_REQUEST",
+      products: productIds,
+    };
+    this.client.emit("products", metaDataRequestEvent);
+    return RequestIdGenerator.generateMetaDataRequestId(productIds);
+  }
+
+  private waitForMetaDataResponse(requestId: string): Promise<Product[]> {
+    return PendingRequestHolder.holdConnection((complete, abort) => {
+      if (FavoritesEventHandler.responseCache.has(requestId)) {
+        const responseEvent = FavoritesEventHandler.responseCache.get(
+          requestId,
+        ) as GetMetadatResponseEvent;
+        FavoritesEventHandler.responseCache.del(requestId);
+
+        complete(responseEvent.products);
+      }
     });
   }
 }

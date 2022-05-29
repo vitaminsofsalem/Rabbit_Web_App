@@ -7,11 +7,10 @@ import { NameController } from "./controllers/name.controller";
 @Module({
   imports: [],
   controllers: [
-    FavoritesController,
-    NameController,
     AddressController,
     CartController,
+    FavoritesController,
+    NameController,
   ],
-  providers: [],
 })
 export class UserModule {}

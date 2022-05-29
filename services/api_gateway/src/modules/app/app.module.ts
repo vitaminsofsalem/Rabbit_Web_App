@@ -4,11 +4,12 @@ import {
   ClientsModule,
   Transport,
 } from "@nestjs/microservices";
-import { AdminModule } from "../admin/admin.module";
 import { AuthModule } from "../auth/auth.module";
+import { OrdersModule } from "../orders/order.module";
 import { PaymentsModule } from "../payments/payments.module";
 import { ProductsModule } from "../products/products.module";
 import { UserModule } from "../user/user.module";
+import { AppController } from "./app.controller";
 
 const kafkaClient: ClientProviderOptions = {
   name: "KAFKA_CLIENT",
@@ -28,12 +29,13 @@ const kafkaClient: ClientProviderOptions = {
 @Module({
   imports: [
     ClientsModule.register([kafkaClient]),
-    AdminModule,
     AuthModule,
+    OrdersModule,
     PaymentsModule,
     ProductsModule,
     UserModule,
   ],
   exports: [ClientsModule.register([kafkaClient])],
+  controllers: [AppController],
 })
 export class AppModule {}

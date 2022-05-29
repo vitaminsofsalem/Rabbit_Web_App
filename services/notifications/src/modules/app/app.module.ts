@@ -1,10 +1,12 @@
 import { Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { AppController } from "./app.controller";
-import { AppService } from "./services/app.service";
+import { EmailService } from "./services/email.service";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ClientsModule.register([
       {
         name: "KAFKA_CLIENT",
@@ -22,6 +24,6 @@ import { AppService } from "./services/app.service";
     ]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [EmailService],
 })
 export class AppModule {}

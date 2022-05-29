@@ -19,16 +19,13 @@ import {
   VerifyRequestEvent,
   VerifyResponseEvent,
 } from "./dto/events/verify-event.dto";
-import { PendingRequestHolder } from "../util/PendingRequestHolder";
+import { PendingRequestHolder } from "../../util/PendingRequestHolder";
 import { SendCodeEvent } from "./dto/events/send-event.dto";
-import { RequestIdGenerator } from "../util/RequestIdGenerator";
+import { RequestIdGenerator } from "../../util/RequestIdGenerator";
+import { AuthEventHandler } from "./AuthEventHandler";
 
 @Controller("auth")
 export class AuthController {
-  /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
-   * Expires after 15 seconds. In which case initiater HTTP connection probably expired or fulfilled*/
-  private responseCache = new NodeCache({ stdTTL: 15000 });
-
   constructor(
     private jwtService: JwtService,
     @Inject("KAFKA_CLIENT") private readonly client: ClientKafka,
@@ -42,18 +39,6 @@ export class AuthController {
       email,
     };
     this.client.emit("user", sendCodeEvent);
-  }
-
-  @MessagePattern("user")
-  handleUserEvents(@Payload("value") data: any) {
-    if (data.type === "VERIFY_RESPONSE") {
-      const event = data as VerifyResponseEvent;
-      const id = RequestIdGenerator.generateVerifyRequestId(
-        event.email,
-        event.code,
-      );
-      this.responseCache.set(id, event);
-    }
   }
 
   @Post("verify")
@@ -71,24 +56,27 @@ export class AuthController {
 
     const requestId = RequestIdGenerator.generateVerifyRequestId(email, code);
 
+    const verified = await this.waitForVerifyResponse(requestId);
+    if (verified) {
+      const payload = { sub: email };
+      return {
+        verified: true,
+        access_token: this.jwtService.sign(payload),
+      };
+    } else {
+      return {
+        verified: false,
+      };
+    }
+  }
+  private waitForVerifyResponse(requestId: string): Promise<boolean> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
-      if (this.responseCache.has(requestId)) {
-        const responseEvent = this.responseCache.get(
+      if (AuthEventHandler.responseCache.has(requestId)) {
+        const responseEvent = AuthEventHandler.responseCache.get(
           requestId,
         ) as VerifyResponseEvent;
-        this.responseCache.del(requestId);
-
-        if (responseEvent.verified) {
-          const payload = { sub: email };
-          complete({
-            verified: true,
-            access_token: this.jwtService.sign(payload),
-          });
-        } else {
-          complete({
-            verified: false,
-          });
-        }
+        AuthEventHandler.responseCache.del(requestId);
+        complete(responseEvent.verified);
       }
     });
   }

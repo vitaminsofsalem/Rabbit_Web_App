@@ -1,0 +1,68 @@
+@import "./colors.scss";
+@import "./NavigationBarIcons.scss";
+
+$active-entry-color: rgba(223, 255, 22, 0.2);
+$inactive-color: rgba(255, 255, 255, 0.5);
+
+.navigationBar {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  background-color: $primary-green;
+  width: 252px;
+  height: 100vh;
+}
+
+.navigationBarIcon {
+  background-color: $inactive-color;
+  mask-size: 25px;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+  padding: 35px;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.entryContainer {
+  width: 232px;
+  margin: 5px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: auto;
+
+  p {
+    padding: 3px;
+    font-size: 13px;
+    line-height: 20px;
+    color: $inactive-color;
+  }
+}
+
+.activeEntry {
+  border-radius: 10px;
+  background-color: $active-entry-color;
+
+  p {
+    font-style: normal;
+    font-weight: 700;
+    color: $primary-yellow;
+  }
+
+  .navigationBarIcon {
+    background-color: $primary-yellow;
+  }
+}
