@@ -6,12 +6,12 @@ import {
   NatsContext,
   Payload,
 } from "@nestjs/microservices";
-import { AppService } from "./services/app.service";
+import { OrdersService } from "./services/order.service";
 
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
+    private readonly appService: OrdersService,
     @Inject("KAFKA_CLIENT") private client: ClientKafka,
   ) {
     //Examples of emiting an event for the topic: messages
