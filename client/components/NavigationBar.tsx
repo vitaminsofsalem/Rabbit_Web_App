@@ -10,27 +10,22 @@ const navBarItems: ListItem[] = [
   {
     label: "Home",
     iconName: "house",
-    onClick: () => console.log("home clicked"),
   },
   {
     label: "Search",
     iconName: "search",
-    onClick: () => console.log("account clicked"),
   },
   {
     label: "Cart",
     iconName: "shoppingCart",
-    onClick: () => console.log("cart clicked"),
   },
   {
     label: "Favorites",
     iconName: "heart",
-    onClick: () => console.log("favorites clicked"),
   },
   {
     label: "Account",
     iconName: "user",
-    onClick: () => console.log("account clicked"),
   },
 ];
 
@@ -49,22 +44,43 @@ const NavigationBar: React.FC = () => {
   const router = useRouter();
   const currentPath = router.pathname;
 
-  /**
-   * Use the 'currentPath' to decide which item is selected.
-   * Ex: If it contains /home then home item should be selected. Should also match /home/auth, /home/category/new etc.
-   * Same for others /search, /cart, /account, /favorites
-   */
+  let activeLabel = "Home";
+  if (currentPath.includes("/home")) {
+    activeLabel = "Home";
+  } else if (currentPath.includes("/search")) {
+    activeLabel = "Search";
+  } else if (currentPath.includes("/cart")) {
+    activeLabel = "Cart";
+  } else if (currentPath.includes("/favorites")) {
+    activeLabel = "Favorites";
+  } else if (currentPath.includes("/account")) {
+    activeLabel = "Account";
+  }
 
-  /**
-   * router.replace("/home") for changing the page based on click
-   */
+  const onNavItemClick = (label: string) => {
+    if (label === "Home") {
+      router.replace("/home");
+    } else if (label === "Search") {
+      router.replace("/search");
+    } else if (label === "Cart") {
+      router.replace("/cart");
+    } else if (label === "Favorites") {
+      router.replace("/favorites");
+    } else if (label === "Account") {
+      router.replace("/account");
+    }
+  };
 
   return (
     <div className={classes.navigationBar}>
       <Logo />
       <br />
       <br />
-      <NavigationBarList items={navBarItems} />
+      <NavigationBarList
+        items={navBarItems}
+        activeLabel={activeLabel}
+        onItemClick={onNavItemClick}
+      />
     </div>
   );
 };

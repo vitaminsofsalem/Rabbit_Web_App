@@ -1,28 +1,26 @@
-import { useState } from "react";
 import classes from "../styles/NavigationBar.module.scss";
 
 export interface ListItem {
-  iconName: String;
-  label: String;
-  onClick: any;
+  iconName: string;
+  label: string;
 }
 
 export interface Props {
   items: ListItem[];
+  activeLabel: string;
+  onItemClick: (label: string) => void;
 }
 
 export const NavigationBarList = (props: Props) => {
-  const [activeLabel, setActiveLabel] = useState<String>("Home");
   return (
     <div className={classes.listContainer}>
       {props.items.map((item) => (
         <div
           onClick={() => {
-            setActiveLabel(item.label);
-            item.onClick();
+            props.onItemClick(item.label);
           }}
           className={
-            (item.label == activeLabel ? classes.activeEntry : "") +
+            (item.label == props.activeLabel ? classes.activeEntry : "") +
             " " +
             classes.entryContainer
           }
@@ -32,7 +30,8 @@ export const NavigationBarList = (props: Props) => {
               classes.navigationBarIcon +
               " " +
               classes[
-                item.iconName + (item.label == activeLabel ? "Opaque" : "")
+                item.iconName +
+                  (item.label == props.activeLabel ? "Opaque" : "")
               ]
             }
           ></div>
@@ -41,21 +40,4 @@ export const NavigationBarList = (props: Props) => {
       ))}
     </div>
   );
-
-  // return (
-  //   <div className={classes.listContainer}>
-  //     <div className={`${classes.activeEntry} ${classes.entryContainer}`}>
-  //       <div
-  //         className={`${classes.navigationBarIcon} ${classes.houseOpaque}`}
-  //       ></div>
-  //       <text>placeholder</text>
-  //     </div>
-  //     <div className={`${classes.activeEntry} ${classes.entryContainer}`}>
-  //       <text>placeholder</text>
-  //     </div>
-  //     <div className={` ${classes.entryContainer}`}>
-  //       <text>placeholder</text>
-  //     </div>
-  //   </div>
-  // );
 };
