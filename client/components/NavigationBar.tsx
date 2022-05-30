@@ -74,8 +74,6 @@ const NavigationBar: React.FC = () => {
   return (
     <div className={classes.navigationBar}>
       <Logo />
-      <br />
-      <br />
       <NavigationBarList
         items={navBarItems}
         activeLabel={activeLabel}
