@@ -1,13 +1,13 @@
 import type { NextPage } from "next";
-import NavigationBar from "../../components/NavigationBar";
+import { PageWithNavBar } from "../../components/page_containers/PageWithNavBar";
 
 //URL: /home
 
 const HomePage: NextPage = () => {
   return (
-    <div>
-      <NavigationBar />
-    </div>
+    <PageWithNavBar>
+      <div></div>
+    </PageWithNavBar>
   );
 };
 

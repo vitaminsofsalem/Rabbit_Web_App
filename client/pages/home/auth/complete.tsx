@@ -1,9 +1,14 @@
 import type { NextPage } from "next";
+import { BackablePageWithNavBar } from "../../../components/page_containers/BackablePageWithNavBar";
 
 //URL: /home/auth/complete
 
 const AuthCompleteProfilePage: NextPage = () => {
-  return <div />;
+  return (
+    <BackablePageWithNavBar title="Title Here">
+      <div></div>
+    </BackablePageWithNavBar>
+  );
 };
 
 export default AuthCompleteProfilePage;

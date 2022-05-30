@@ -43,6 +43,7 @@ $inactive-color: rgba(255, 255, 255, 0.5);
   flex-direction: row;
   align-items: center;
   padding: auto;
+  cursor: pointer;
 
   p {
     padding: 3px;
@@ -51,10 +52,20 @@ $inactive-color: rgba(255, 255, 255, 0.5);
     color: $inactive-color;
   }
 }
+.entryContainer:hover {
+  p {
+    color: $primary-yellow;
+  }
+
+  .navigationBarIcon {
+    background-color: $primary-yellow;
+  }
+}
 
 .activeEntry {
   border-radius: 10px;
   background-color: $active-entry-color;
+  cursor: pointer;
 
   p {
     font-style: normal;
