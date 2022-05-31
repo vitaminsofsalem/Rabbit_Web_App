@@ -10,6 +10,14 @@ $category-box-default-bg: #d4ede7;
   transform: rotate($orientation);
 }
 
+@mixin specialCategoriesBox() {
+  margin: 10px;
+  padding: 3px 6px;
+  width: 118px;
+  height: 133px;
+  border-radius: 10px;
+}
+
 @mixin categoryPagerIcon() {
   display: flex;
   justify-content: center;
@@ -18,6 +26,35 @@ $category-box-default-bg: #d4ede7;
   height: 37px;
   border-radius: 18px;
   background-color: $primary-green;
+}
+
+@keyframes loadingAnimation {
+  0% {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}
+
+.itemLoading {
+  background: rgb(200, 200, 200);
+  background-position: 0%;
+  background: linear-gradient(
+    70deg,
+    rgba(200, 200, 200, 1) 0%,
+    rgba(200, 200, 200, 1) 30%,
+    rgba(220, 220, 220, 0.5) 50%,
+    rgba(200, 200, 200, 1) 70%,
+    rgba(200, 200, 200, 1) 100%
+  );
+  background-size: 500%;
+  animation-name: loadingAnimation;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
 }
 
 .categoryPagerPrevIcon {
@@ -44,9 +81,28 @@ $category-box-default-bg: #d4ede7;
   }
 
   .categoryPagerEntriesContainer {
+    display: flex;
+    flex-direction: row;
     flex-grow: 0.8;
     width: 100%;
     height: 100%;
+
+    .itemLoading {
+      @include specialCategoriesBox();
+    }
+
+    .item {
+      @include specialCategoriesBox();
+      background-color: $category-box-default-bg;
+      color: $primary-green;
+      p {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 22px;
+        text-align: center;
+      }
+    }
   }
 
   display: flex;
