@@ -1,0 +1,38 @@
+@import "./colors.scss";
+
+$category-box-default-bg: #d4ede7;
+
+@mixin categoryBoxArrow($orientation) {
+  width: 16px;
+  height: 16px;
+  background-image: url("../assets/Icons/HomeIcons/arrow.png");
+  background-size: contain;
+  transform: rotate($orientation);
+}
+
+@mixin categoryBoxIcon() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 37px;
+  height: 37px;
+  border-radius: 18px;
+  background-color: $primary-green;
+}
+
+.categoryBoxPrevIcon {
+  @include categoryBoxIcon();
+  .arrow {
+    @include categoryBoxArrow(0deg);
+  }
+}
+
+.categoryBoxNextIcon {
+  @include categoryBoxIcon();
+  .arrow {
+    @include categoryBoxArrow(180deg);
+  }
+}
+
+.categoryBoxContainer {
+}

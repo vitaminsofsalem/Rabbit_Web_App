@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
-import classes from "../styles/NavigationBar.module.scss";
+import styles from "../styles/NavigationBar.module.scss";
 import logoArt from "../assets/Icons/rabbit_logo.png";
 import logoText from "../assets/Icons/rabbit_text_light.png";
 import Image from "next/image";
@@ -31,10 +31,10 @@ const navBarItems: ListItem[] = [
 
 const Logo = () => (
   <>
-    <div className={classes.logo}>
+    <div className={styles.logo}>
       <Image src={logoArt} width="67px" height="67px" />
     </div>
-    <div className={classes.logo}>
+    <div className={styles.logo}>
       <Image src={logoText} width="121px" height="30px" />
     </div>
   </>
@@ -72,7 +72,7 @@ const NavigationBar: React.FC = () => {
   };
 
   return (
-    <div className={classes.navigationBar}>
+    <div className={styles.navigationBar}>
       <Logo />
       <NavigationBarList
         items={navBarItems}
