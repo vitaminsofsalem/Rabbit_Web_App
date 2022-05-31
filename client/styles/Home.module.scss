@@ -2,7 +2,7 @@
 
 $category-box-default-bg: #d4ede7;
 
-@mixin categoryBoxArrow($orientation) {
+@mixin categoryPagerArrow($orientation) {
   width: 16px;
   height: 16px;
   background-image: url("../assets/Icons/HomeIcons/arrow.png");
@@ -10,7 +10,7 @@ $category-box-default-bg: #d4ede7;
   transform: rotate($orientation);
 }
 
-@mixin categoryBoxIcon() {
+@mixin categoryPagerIcon() {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,19 +20,38 @@ $category-box-default-bg: #d4ede7;
   background-color: $primary-green;
 }
 
-.categoryBoxPrevIcon {
-  @include categoryBoxIcon();
+.categoryPagerPrevIcon {
+  @include categoryPagerIcon();
   .arrow {
-    @include categoryBoxArrow(0deg);
+    @include categoryPagerArrow(0deg);
   }
 }
 
-.categoryBoxNextIcon {
-  @include categoryBoxIcon();
+.categoryPagerNextIcon {
+  @include categoryPagerIcon();
   .arrow {
-    @include categoryBoxArrow(180deg);
+    @include categoryPagerArrow(180deg);
   }
 }
 
-.categoryBoxContainer {
+.specialCategories {
+  .buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0.1;
+    padding: 20px;
+  }
+
+  .categoryPagerEntriesContainer {
+    flex-grow: 0.8;
+    width: 100%;
+    height: 100%;
+  }
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 150px;
 }

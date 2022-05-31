@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import SpecialCategories from "../../components/home_components/SpecialCategories";
 import { PageWithNavBar } from "../../components/page_containers/PageWithNavBar";
 import styles from "../../styles/Home.module.scss";
 
@@ -7,15 +8,7 @@ import styles from "../../styles/Home.module.scss";
 const HomePage: NextPage = () => {
   return (
     <PageWithNavBar>
-      <div className={styles.categoryBoxContainer}>
-        <div className={styles.categoryBoxPrevIcon}>
-          <div className={styles.arrow}> </div>
-        </div>
-
-        <div className={styles.categoryBoxNextIcon}>
-          <div className={styles.arrow}> </div>
-        </div>
-      </div>
+      <SpecialCategories />
     </PageWithNavBar>
   );
 };
