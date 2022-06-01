@@ -111,6 +111,75 @@ $inactive-color: rgba(255, 255, 255, 0.5);
   }
 }
 
+.addressInfoContainer {
+  width: 232px;
+  height: 70px;
+  border-radius: 10px;
+  background-color: $primary-yellow;
+
+  .addressBoard {
+    display: flex;
+    align-content: center;
+    border-radius: 10px;
+    width: 232px;
+    height: 40px;
+    background-color: white;
+    .pinIcon {
+      background-image: url("../assets/Icons/icon_location.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+    }
+
+    p {
+      flex-grow: 2;
+      position: relative;
+      padding-left: 10px;
+      top: -4px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: $primary-green;
+    }
+
+    .arrowIcon {
+      margin: auto;
+
+      flex-grow: 1;
+      background-image: url("../assets/Icons/arrow-down.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 14px;
+      height: 14px;
+    }
+  }
+  .timeBoard {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    .clockIcon {
+      background-image: url("../assets/Icons/NavigationBarIcons/clock.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+    }
+    p {
+      margin: 5px 10px;
+      color: $primary-green;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+    }
+  }
+}
+
 @media screen and (max-width: 650px) {
   .logo {
     display: none;
@@ -147,7 +216,8 @@ $inactive-color: rgba(255, 255, 255, 0.5);
   .activeEntry {
     background-color: transparent;
   }
-  .greeterContainer {
+  .greeterContainer,
+  .addressInfoContainer {
     display: none;
   }
 }
