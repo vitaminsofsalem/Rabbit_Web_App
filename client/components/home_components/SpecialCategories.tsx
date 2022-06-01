@@ -17,6 +17,19 @@ interface ArrowComponentProps {
   action?: () => void;
 }
 
+const loadDummyData: () => Promise<CategoryItem[]> = async () => {
+  let items: CategoryItem[] = [];
+
+  for (const item of dummyData) {
+    const res = await fetch(item.imageUrl);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    items.push({ title: item.title, imageUrl: url });
+  }
+
+  return items;
+};
+
 const SpecialCategoriesPager = (props: SpecialCategoriesProps) => {
   if (props.items.length == 0) {
     return (
@@ -31,9 +44,11 @@ const SpecialCategoriesPager = (props: SpecialCategoriesProps) => {
   return (
     <div className={styles.categoryPagerEntriesContainer}>
       {props.items.map((item) => (
-        <div className={styles.item}>
+        <div
+          className={styles.item}
+          style={{ backgroundImage: `url(${item.imageUrl})` }}
+        >
           <p>{item.title}</p>
-          <img src={item.imageUrl as string} />
         </div>
       ))}
     </div>
@@ -58,10 +73,8 @@ const SpecialCategories = () => {
   const [items, setItems] = useState<CategoryItem[]>([]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setItems(dummyData as CategoryItem[]); //simulate loading process, for UI Testing only
-    }, 2000);
-  });
+    loadDummyData().then((item) => setItems(item)); //simulate loading process, for UI Testing only
+  }, []);
   return (
     <div className={styles.specialCategories}>
       <CategoryPagerButton direction="prev" />

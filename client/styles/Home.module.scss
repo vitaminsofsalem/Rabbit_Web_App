@@ -93,7 +93,9 @@ $category-box-default-bg: #d4ede7;
 
     .item {
       @include specialCategoriesBox();
+      overflow: hidden;
       background-color: $category-box-default-bg;
+      background-size: cover;
       color: $primary-green;
       p {
         font-style: normal;
