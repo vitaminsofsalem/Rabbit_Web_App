@@ -1,0 +1,111 @@
+@import "./colors.scss";
+
+.parentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ordersAddressButtonContainer {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 10px;
+  flex-direction: row;
+  align-items: center;
+  min-width: 200px;
+  max-width: 350px;
+  width: 95%;
+  display: flex;
+  margin-top: 25px;
+  cursor: pointer;
+}
+
+.ordersAddressButtonContainer:hover {
+  border-color: $primary-green;
+}
+
+.ordersAddressButtonIconContainer {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: rgba($primary-green, 0.2);
+  display: flex;
+}
+
+.ordersAddressButtonIcon {
+  flex: 1;
+  mask-size: 17px;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  background-color: $primary-green;
+}
+
+.ordersIcon {
+  mask-size: 25px;
+  mask-image: url("../assets/Icons/icon_orders.png");
+}
+.locationIcon {
+  mask-image: url("../assets/Icons/icon_location.png");
+}
+
+.ordersAddressButtonText {
+  color: $primary-green;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.topItemContainer {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  flex-direction: row;
+  align-items: center;
+  min-width: 200px;
+  max-width: 350px;
+  width: 95%;
+  display: flex;
+  background-color: rgba($primary-green, 0.2);
+  border-radius: 10px;
+}
+
+.topItemTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 20px;
+  justify-content: center;
+}
+
+.nameText {
+  font-size: 24px;
+  color: $primary-green;
+  font-weight: bold;
+  margin: 0;
+}
+
+.editProfileText {
+  font-size: 14px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  color: $primary-green;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0;
+}
+
+.editProfileText:hover {
+  color: $primary-yellow;
+}
+
+@media screen and (max-width: 650px) {
+  .parentContainer {
+    align-items: center;
+  }
+}
