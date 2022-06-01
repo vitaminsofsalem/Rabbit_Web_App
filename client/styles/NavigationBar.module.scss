@@ -11,7 +11,7 @@ $inactive-color: rgba(255, 255, 255, 0.5);
   padding: 20px;
   background-color: $primary-green;
   width: 252px;
-  height: 100vh;
+  height: 100%;
 }
 
 .navigationBarIcon {
@@ -103,5 +103,43 @@ $inactive-color: rgba(255, 255, 255, 0.5);
 
   .navigationBarIcon {
     background-color: $primary-yellow;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .logo {
+    display: none;
+    justify-content: center;
+    padding: 8px;
+  }
+  .navigationBar {
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    flex-direction: row;
+  }
+
+  .listContainer {
+    flex-direction: row;
+    margin-top: 0px;
+    align-items: center;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .entryContainer {
+    width: auto;
+    height: auto;
+    padding: 10px;
+    p {
+      display: none;
+    }
+  }
+  .navigationBarIcon {
+    padding: 0px;
+  }
+
+  .activeEntry {
+    background-color: transparent;
   }
 }
