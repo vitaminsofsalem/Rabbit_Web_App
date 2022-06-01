@@ -1,0 +1,14 @@
+@import "./colors.scss";
+
+.parentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+@media screen and (max-width: 650px) {
+  .parentContainer {
+    align-items: center;
+  }
+}
