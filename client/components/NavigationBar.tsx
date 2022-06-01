@@ -6,6 +6,13 @@ import logoText from "../assets/Icons/rabbit_text_light.png";
 import Image from "next/image";
 import { NavigationBarList, ListItem } from "./NavigationBarList";
 
+const Greeter = (props: { name: String }) => (
+  <div className={styles.greeterContainer}>
+    <h1 className={styles.greet}> HELLO! </h1>
+    <h1 className={styles.name}> {props.name} </h1>
+  </div>
+);
+
 const navBarItems: ListItem[] = [
   {
     label: "Home",
@@ -79,6 +86,7 @@ const NavigationBar: React.FC = () => {
         activeLabel={activeLabel}
         onItemClick={onNavItemClick}
       />
+      <Greeter name="Smith" />
     </div>
   );
 };
