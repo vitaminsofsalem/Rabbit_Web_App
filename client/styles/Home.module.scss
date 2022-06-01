@@ -19,6 +19,7 @@ $category-box-default-bg: #d4ede7;
 }
 
 @mixin categoryPagerIcon() {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
