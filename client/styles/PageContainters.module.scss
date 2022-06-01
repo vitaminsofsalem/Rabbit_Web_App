@@ -3,6 +3,8 @@
 .parentContainer {
   display: flex;
   flex-direction: row;
+  flex: 1;
+  height: 100%;
 }
 
 .besideNavBarContainer {
@@ -45,4 +47,10 @@
 .underBackContainer {
   display: flex;
   flex: 1;
+}
+
+@media screen and (max-width: 650px) {
+  .parentContainer {
+    flex-direction: column-reverse;
+  }
 }
