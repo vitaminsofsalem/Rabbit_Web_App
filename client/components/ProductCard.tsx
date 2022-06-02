@@ -6,34 +6,63 @@ export interface ProductCardProps {
   priceEgp: number;
   physicalDescription: string;
   imageUrl?: string;
+  maxQuantity: number;
+  onQuantityChange: (quantity: number) => any;
 }
 
 const ProductCard = (props: ProductCardProps) => {
-  const [quantity, setQuanitty] = useState(0);
+  const [quantity, setQuanitty] = useState<number>(0);
+
+  const quantityChangeDispatch = (
+    parentCallback: (quantity: number) => any
+  ) => {
+    parentCallback(quantity); //useful for letting the parent component know the selected quantities
+  };
+
+  const decreaseQuantity = () => {
+    setQuanitty(quantity - 1);
+    quantityChangeDispatch(props.onQuantityChange);
+  };
+
+  const increaseQuantity = () => {
+    if (quantity == props.maxQuantity) return;
+    setQuanitty(quantity + 1);
+    quantityChangeDispatch(props.onQuantityChange);
+  };
+
   const priceEgp = props.priceEgp.toFixed(2); //rounds to 2 decimal places
   //
   //
-  const addButton = (
-    <div className={styles.addButton} onClick={() => setQuanitty(1)}></div>
-  );
 
-  const addRemoveButton = (
-    <div className={styles.addRemoveButton}>
-      <div
-        className={styles.removeButton}
-        onClick={() => setQuanitty(quantity - 1)}
-      >
-        <div className={styles.quantity}>
-          <p>{quantity}</p>
+  let currentButton;
+
+  if (quantity == 0) {
+    currentButton = (
+      <div className={styles.addButton} onClick={increaseQuantity}></div>
+    );
+  } else if (quantity < props.maxQuantity) {
+    currentButton = (
+      <div className={styles.addRemoveButton}>
+        <div className={styles.removeButton} onClick={decreaseQuantity}>
+          <div className={styles.quantity}>
+            <p>{quantity}</p>
+          </div>
         </div>
+        <div className={styles.addButton2} onClick={increaseQuantity}></div>
       </div>
-      <div
-        className={styles.addButton2}
-        onClick={() => setQuanitty(quantity + 1)}
-      ></div>
-    </div>
-  );
-  const currentButton = quantity ? addRemoveButton : addButton;
+    );
+  } else {
+    currentButton = (
+      <div className={styles.addRemoveButton}>
+        <div className={styles.removeButton} onClick={decreaseQuantity}>
+          <div className={styles.quantity}>
+            <p>{quantity}</p>
+          </div>
+        </div>
+        <div className={styles.addButtonDisabled}></div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.productCard}>

@@ -202,6 +202,20 @@ $category-box-default-bg: #d4ede7;
         height: 30px;
         cursor: pointer;
       }
+
+      .addButtonDisabled {
+        margin: auto;
+        grid-row: 1;
+        grid-column: 3;
+        mask-image: url("../assets/Icons/plus.png");
+        mask-size: 40%;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        background-color: #808080;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
     }
     .addButton {
       position: fixed;

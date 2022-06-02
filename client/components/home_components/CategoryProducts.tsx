@@ -13,11 +13,15 @@ const CategoryProducts = () => {
         name="Nutella Jar"
         physicalDescription="500g"
         priceEgp={70}
+        maxQuantity={6}
+        onQuantityChange={(q) => q} //does nothing for now
       />
       <ProductCard
         name="Pril Diswahsing Soap Liquid Green for kitchen"
         physicalDescription="220ml"
         priceEgp={30}
+        maxQuantity={3}
+        onQuantityChange={(q) => q}
       />
     </div>
   );
