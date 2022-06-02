@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from "@nestjs/common";
 import { OrderStatus } from "src/dto/order-status-update.dto";
 import { ShipmentStatus } from "src/dto/shipment-status-update.dto";
