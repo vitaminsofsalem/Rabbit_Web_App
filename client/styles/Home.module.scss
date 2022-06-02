@@ -143,6 +143,80 @@ $category-box-default-bg: #d4ede7;
       background-repeat: no-repeat;
     }
 
+    .addRemoveButton {
+      display: grid;
+      position: fixed;
+      transform: translate(10px, 100px);
+      background-color: $primary-green;
+      border-radius: 17px;
+      width: 94px;
+      height: 35px;
+
+      .removeButton {
+        margin: auto;
+        grid-row: 1;
+        grid-column: 1;
+        background-image: url("../assets/Icons/minus.png");
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 40%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+
+      .quantity {
+        grid-row: 1;
+        grid-column: 2;
+        display: flex;
+        position: relative;
+
+        left: 25px;
+        width: 30px;
+        height: 30px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin: auto;
+        p {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 24px;
+          text-align: center;
+          color: white;
+        }
+      }
+
+      .addButton2 {
+        margin: auto;
+        grid-row: 1;
+        grid-column: 3;
+        mask-image: url("../assets/Icons/plus.png");
+        mask-size: 40%;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        background-color: $primary-yellow;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+    }
+    .addButton {
+      position: fixed;
+      transform: translate(35px, 100px);
+      background-color: $primary-yellow;
+      border-radius: 18px;
+      width: 37px;
+      height: 37px;
+      background-image: url("../assets/Icons/plus.png");
+      background-size: 50%;
+      background-position: center;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+
     .descriptions {
       width: 100%;
       position: relative;

@@ -1,31 +1,5 @@
 import styles from "../../styles/Home.module.scss";
-
-interface ProductCardProps {
-  name: string;
-  priceEgp: number;
-  physicalDescription: string;
-  imageUrl?: string;
-}
-
-const ProductCard = (props: ProductCardProps) => {
-  const priceEgp = props.priceEgp.toFixed(2); //rounds to 2 decimal places
-  //
-  return (
-    <div className={styles.productCard}>
-      <div className={styles.image}></div>
-      <div className={styles.descriptions}>
-        <p className={styles.price}>
-          {priceEgp}
-          <div className={styles.currency}>EGP</div>
-        </p>
-        <p className={styles.name}>{props.name}</p>
-        <p className={styles.physicalDescription}>
-          {props.physicalDescription}
-        </p>
-      </div>
-    </div>
-  );
-};
+import ProductCard from "../ProductCard";
 
 const CategoryProducts = () => {
   return (
