@@ -12,7 +12,7 @@ export class Orders {
   address: object;
 
   @Prop({ required: true })
-  items: string[];
+  items: [];
 
 }
 
