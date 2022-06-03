@@ -6,6 +6,6 @@ export default class OrderConfirmationDto  {
   type: "ORDER_CONFIRMATION";
   total: number;    //id of items
   deliveryFees : number ;
-  orderID : number
+  orderID : string
 
 }
