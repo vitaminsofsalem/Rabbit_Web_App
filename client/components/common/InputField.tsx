@@ -6,6 +6,7 @@ interface InputFieldProps {
   onValueChange: (value: string) => void;
   label: string;
   disabled?: boolean;
+  placeholder: string;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -25,6 +26,7 @@ const InputField: React.FC<InputFieldProps> = ({
         type={type}
         value={props.value}
         onChange={(e) => props.onValueChange(e.target.value)}
+        placeholder={props.placeholder}
       />
     </div>
   );

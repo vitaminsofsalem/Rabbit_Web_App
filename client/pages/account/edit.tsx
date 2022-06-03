@@ -3,7 +3,7 @@ import { useState } from "react";
 import Button from "../../components/common/Button";
 import InputField from "../../components/common/InputField";
 import { BackablePageWithNavBar } from "../../components/page_containers/BackablePageWithNavBar";
-import styles from "../../styles/EditProfile.module.scss";
+import styles from "../../styles/FormPage.module.scss";
 import commonStyles from "../../styles/Common.module.scss";
 
 //URL: /account/edit
@@ -19,11 +19,13 @@ const EditAccountPage: NextPage = () => {
           label="First Name"
           value={firstName}
           onValueChange={setFirstName}
+          placeholder="Enter first name"
         />
         <InputField
           label="Last Name"
           value={lastName}
           onValueChange={setLastName}
+          placeholder="Enter last name"
         />
 
         <InputField
@@ -31,6 +33,7 @@ const EditAccountPage: NextPage = () => {
           value={"youssef.hisham14@gmail.com"}
           onValueChange={() => {}}
           disabled
+          placeholder=""
         />
 
         <Button
