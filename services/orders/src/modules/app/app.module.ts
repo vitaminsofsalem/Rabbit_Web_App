@@ -2,7 +2,8 @@ import { Module } from "@nestjs/common";
 import { ClientsModule, Transport } from "@nestjs/microservices";
 import { AppController } from "./app.controller";
 import { OrdersService } from "./services/order.service";
-
+import { MongooseModule } from "@nestjs/mongoose";
+import { Orders, OrdersSchema } from "src/schemas/order.schema";
 @Module({
   imports: [
     ClientsModule.register([
@@ -19,6 +20,12 @@ import { OrdersService } from "./services/order.service";
           },
         },
       },
+    ]),
+     MongooseModule.forRoot(
+      "mongodb+srv://root:c61bRi1t5l57P3ea@rabbitcluster.kcscswy.mongodb.net/rabbit-orders?retryWrites=true&w=majority",
+    ),
+    MongooseModule.forFeature([
+      { name: Orders.name, schema: OrdersSchema },
     ]),
   ],
   controllers: [AppController],
