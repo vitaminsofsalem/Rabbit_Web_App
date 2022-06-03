@@ -16,6 +16,7 @@ export const NavigationBarList = (props: Props) => {
     <div className={classes.listContainer}>
       {props.items.map((item) => (
         <div
+          key={item.label}
           onClick={() => {
             props.onItemClick(item.label);
           }}

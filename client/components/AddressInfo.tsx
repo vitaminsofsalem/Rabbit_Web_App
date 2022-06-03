@@ -3,16 +3,16 @@ const AddressInfo = () => {
   return (
     <div className={styles.addressInfoContainer}>
       <div className={styles.addressBoard}>
-        <p>
+        <div className={styles.divText}>
           Delivers to <div className={styles.pinIcon}></div> <b> Home </b>
-        </p>
+        </div>
         <div className={styles.arrowIcon}></div>
       </div>
 
       <div className={styles.timeBoard}>
-        <p>
+        <div className={styles.divText}>
           <div className={styles.clockIcon}></div> 17 mins
-        </p>
+        </div>
       </div>
     </div>
   );
