@@ -15,7 +15,7 @@ export class Orders {
   items: [];
 
   @Prop()
-  orderID : string
+  orderID : any
 
 }
 
