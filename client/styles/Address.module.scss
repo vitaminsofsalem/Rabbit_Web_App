@@ -1,0 +1,150 @@
+@import "./colors.scss";
+
+.parentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.addressItemContainer {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 10px;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 200px;
+  max-width: 350px;
+  width: 95%;
+  display: flex;
+}
+
+.addressItemTitlesContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.addressItemTitle {
+  font-weight: bold;
+  font-size: 15px;
+  color: black;
+  margin: 0;
+  padding: 0;
+}
+
+.addressItemSubtitle {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0;
+}
+
+.addressItemBottomContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selectAddressButton {
+  padding: 8px;
+  padding-left: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 20px;
+  cursor: pointer;
+}
+
+.selectAddressButton:hover {
+  .selectAddressButtonText {
+    color: $primary-green;
+  }
+}
+
+.selectAddressButtonIcon {
+  display: none;
+  width: 13px;
+  height: 13px;
+  mask-size: 13px;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-image: url("../assets/Icons/icon_selected_check.png");
+  background-color: $primary-green;
+  margin-right: 6px;
+}
+
+.selectAddressButtonText {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0;
+}
+
+.deleteButton {
+  padding: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  .deleteButtonIcon {
+    background-color: $primary-green;
+  }
+  .deleteButtonText {
+    color: $primary-green;
+  }
+}
+
+.deleteButtonIcon {
+  width: 15px;
+  height: 15px;
+  mask-size: 15px;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-image: url("../assets/Icons/icon_trash.png");
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-right: 6px;
+}
+
+.deleteButtonText {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0;
+}
+
+.addressItemContainerSelected {
+  background-color: rgba($primary-green, 0.2);
+
+  .selectAddressButton {
+    background-color: $primary-yellow;
+    border-radius: 10px;
+    cursor: default;
+  }
+
+  .selectAddressButtonIcon {
+    display: block;
+  }
+
+  .selectAddressButtonText {
+    color: $primary-green;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .parentContainer {
+    align-items: center;
+  }
+}
