@@ -23,6 +23,7 @@ const CategoryProducts = (props: CategoryProductsProps) => {
           physicalDescription={p.physicalDescription}
           priceEgp={p.priceEgp}
           maxQuantity={p.maxQuantity}
+          imageUrl={p.imageUrl}
           onQuantityChange={(q) => q} //does nothing for now
         />
       ))}

@@ -5,7 +5,7 @@ export interface ProductCardProps {
   name: string;
   priceEgp: number;
   physicalDescription: string;
-  imageUrl?: string;
+  imageUrl: string;
   maxQuantity: number;
   onQuantityChange: (quantity: number) => any;
 }
@@ -66,7 +66,10 @@ const ProductCard = (props: ProductCardProps) => {
 
   return (
     <div className={styles.productCard}>
-      <div className={styles.image}></div>
+      <div
+        className={styles.image}
+        style={{ backgroundImage: `url(${props.imageUrl})` }}
+      ></div>
       {currentButton}
       <div className={styles.descriptions}>
         <p className={styles.price}>
