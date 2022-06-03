@@ -7,6 +7,11 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Poppins", sans-serif;
+  height: 100%;
+}
+
+#__next {
+  height: 100%;
 }
 
 a {
@@ -16,4 +21,14 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: $primary-yellow;
+  color: $primary-green;
+}
+
+::-moz-selection {
+  background: $primary-yellow;
+  color: $primary-green;
 }

@@ -11,7 +11,7 @@ $inactive-color: rgba(255, 255, 255, 0.5);
   padding: 20px;
   background-color: $primary-green;
   width: 252px;
-  height: 100vh;
+  height: 100%;
 }
 
 .navigationBarIcon {
@@ -33,6 +33,39 @@ $inactive-color: rgba(255, 255, 255, 0.5);
 .listContainer {
   display: flex;
   flex-direction: column;
+  margin-top: 40px;
+  flex-grow: 15;
+}
+
+.greeterContainer {
+  flex-grow: 1;
+  display: grid;
+  align-items: baseline;
+  height: 60px;
+  .greet {
+    grid-column: 1;
+    grid-row: 1;
+    color: white;
+    opacity: 0.1;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 64px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .name {
+    grid-column: 1;
+    grid-row: 1;
+    color: $primary-yellow;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 32px;
+    transform: translateY(-5px) translateX(5px);
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .entryContainer {
@@ -43,6 +76,7 @@ $inactive-color: rgba(255, 255, 255, 0.5);
   flex-direction: row;
   align-items: center;
   padding: auto;
+  cursor: pointer;
 
   p {
     padding: 3px;
@@ -51,10 +85,20 @@ $inactive-color: rgba(255, 255, 255, 0.5);
     color: $inactive-color;
   }
 }
+.entryContainer:hover {
+  p {
+    color: $primary-yellow;
+  }
+
+  .navigationBarIcon {
+    background-color: $primary-yellow;
+  }
+}
 
 .activeEntry {
   border-radius: 10px;
   background-color: $active-entry-color;
+  cursor: pointer;
 
   p {
     font-style: normal;
@@ -64,5 +108,116 @@ $inactive-color: rgba(255, 255, 255, 0.5);
 
   .navigationBarIcon {
     background-color: $primary-yellow;
+  }
+}
+
+.addressInfoContainer {
+  width: 232px;
+  height: 70px;
+  border-radius: 10px;
+  background-color: $primary-yellow;
+
+  .addressBoard {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    border-radius: 10px;
+    width: 232px;
+    height: 40px;
+    background-color: white;
+    .pinIcon {
+      background-image: url("../assets/Icons/icon_location.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+    }
+
+    .divText {
+      flex-grow: 2;
+      position: relative;
+      padding-left: 10px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      color: $primary-green;
+    }
+
+    .arrowIcon {
+      margin: auto;
+
+      flex-grow: 1;
+      background-image: url("../assets/Icons/arrow-down.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 14px;
+      height: 14px;
+    }
+  }
+  .timeBoard {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    .clockIcon {
+      background-image: url("../assets/Icons/NavigationBarIcons/clock.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+    }
+    .divText {
+      margin: 5px 10px;
+      color: $primary-green;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+    }
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .logo {
+    display: none;
+    justify-content: center;
+    padding: 8px;
+  }
+  .navigationBar {
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    flex-direction: row;
+  }
+
+  .listContainer {
+    flex-direction: row;
+    margin-top: 0px;
+    align-items: center;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .entryContainer {
+    width: auto;
+    height: auto;
+    padding: 10px;
+    p {
+      display: none;
+    }
+  }
+  .navigationBarIcon {
+    padding: 0px;
+  }
+
+  .activeEntry {
+    background-color: transparent;
+  }
+  .greeterContainer,
+  .addressInfoContainer {
+    display: none;
   }
 }

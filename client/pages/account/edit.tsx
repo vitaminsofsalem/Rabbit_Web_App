@@ -1,9 +1,47 @@
 import type { NextPage } from "next";
+import { useState } from "react";
+import Button from "../../components/common/Button";
+import InputField from "../../components/common/InputField";
+import { BackablePageWithNavBar } from "../../components/page_containers/BackablePageWithNavBar";
+import styles from "../../styles/EditProfile.module.scss";
+import commonStyles from "../../styles/Common.module.scss";
 
 //URL: /account/edit
 
 const EditAccountPage: NextPage = () => {
-  return <div />;
+  const [firstName, setFirstName] = useState("Youssef");
+  const [lastName, setLastName] = useState("Henna");
+
+  return (
+    <BackablePageWithNavBar title="Edit Profile">
+      <div className={styles.parentContainer}>
+        <InputField
+          label="First Name"
+          value={firstName}
+          onValueChange={setFirstName}
+        />
+        <InputField
+          label="Last Name"
+          value={lastName}
+          onValueChange={setLastName}
+        />
+
+        <InputField
+          label="Email"
+          value={"youssef.hisham14@gmail.com"}
+          onValueChange={() => {}}
+          disabled
+        />
+
+        <Button
+          onClick={() => {}}
+          additionalClassName={commonStyles.maxWidthButton}
+        >
+          Update profile
+        </Button>
+      </div>
+    </BackablePageWithNavBar>
+  );
 };
 
 export default EditAccountPage;

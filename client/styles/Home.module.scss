@@ -1,0 +1,332 @@
+@import "./colors.scss";
+
+$category-box-default-bg: #d4ede7;
+
+@mixin categoryPagerArrow($orientation) {
+  width: 16px;
+  height: 16px;
+  background-image: url("../assets/Icons/HomeIcons/arrow.png");
+  background-size: contain;
+  transform: rotate($orientation);
+}
+
+@mixin specialCategoriesBox() {
+  margin: 10px;
+  padding: 3px 6px;
+  width: 118px;
+  height: 133px;
+  border-radius: 10px;
+}
+
+@mixin categoryPagerIcon() {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 37px;
+  height: 37px;
+  border-radius: 18px;
+  background-color: $primary-green;
+}
+
+@keyframes loadingAnimation {
+  0% {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}
+
+.itemLoading {
+  background: rgb(200, 200, 200);
+  background-position: 0%;
+  background: linear-gradient(
+    70deg,
+    rgba(200, 200, 200, 1) 0%,
+    rgba(200, 200, 200, 1) 30%,
+    rgba(220, 220, 220, 0.5) 50%,
+    rgba(200, 200, 200, 1) 70%,
+    rgba(200, 200, 200, 1) 100%
+  );
+  background-size: 500%;
+  animation-name: loadingAnimation;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.categoryPagerPrevIcon {
+  @include categoryPagerIcon();
+  .arrow {
+    @include categoryPagerArrow(0deg);
+  }
+}
+
+.categoryPagerNextIcon {
+  @include categoryPagerIcon();
+  .arrow {
+    @include categoryPagerArrow(180deg);
+  }
+}
+
+.specialCategories {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 150px;
+  margin: 30px 0px;
+
+  .buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .categoryPagerEntriesContainer {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0.8;
+    width: 100%;
+    height: 100%;
+
+    .itemLoading {
+      @include specialCategoriesBox();
+    }
+
+    .item {
+      @include specialCategoriesBox();
+      overflow: hidden;
+      background-color: $category-box-default-bg;
+      background-size: cover;
+      color: $primary-green;
+      p {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 22px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.categoryProducts {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  height: 245px;
+
+  .productCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 131px;
+    height: 100%;
+    background-color: white;
+    border-radius: 10px;
+    margin: 0 20px;
+    padding: 10px;
+
+    .image {
+      padding: 10px;
+      border-radius: 8px;
+      width: 100%;
+      height: 130px;
+      background-image: url("../dummyData/product_image_placeholder.png");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .addRemoveButton {
+      display: grid;
+      position: fixed;
+      transform: translate(10px, 100px);
+      background-color: $primary-green;
+      border-radius: 17px;
+      width: 94px;
+      height: 35px;
+
+      .removeButton {
+        margin: auto;
+        grid-row: 1;
+        grid-column: 1;
+        background-image: url("../assets/Icons/minus.png");
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 40%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+
+      .quantity {
+        grid-row: 1;
+        grid-column: 2;
+        display: flex;
+        position: relative;
+
+        left: 25px;
+        width: 30px;
+        height: 30px;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin: auto;
+        p {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 24px;
+          text-align: center;
+          color: white;
+        }
+      }
+
+      .addButton2 {
+        margin: auto;
+        grid-row: 1;
+        grid-column: 3;
+        mask-image: url("../assets/Icons/plus.png");
+        mask-size: 40%;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        background-color: $primary-yellow;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+
+      .addButtonDisabled {
+        margin: auto;
+        grid-row: 1;
+        grid-column: 3;
+        mask-image: url("../assets/Icons/plus.png");
+        mask-size: 40%;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        background-color: #808080;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+    }
+    .addButton {
+      position: fixed;
+      transform: translate(35px, 100px);
+      background-color: $primary-yellow;
+      border-radius: 18px;
+      width: 37px;
+      height: 37px;
+      background-image: url("../assets/Icons/plus.png");
+      background-size: 50%;
+      background-position: center;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+
+    .descriptions {
+      width: 100%;
+      position: relative;
+      padding: 5px;
+      margin: 0;
+
+      p {
+        text-align: start;
+        padding: 0;
+        margin: 0;
+      }
+
+      .outOfStockMsg {
+        background-color: rgba(255, 200, 200, 0.3);
+        border-radius: 10px;
+        p {
+          font-size: 10px;
+          color: red;
+          text-align: center;
+          padding: 0;
+          matextrgin: 0;
+        }
+      }
+
+      .price {
+        color: $primary-green;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 17px;
+        .currency {
+          font-size: 10px;
+          display: inline;
+        }
+      }
+
+      .name {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 10px;
+      }
+
+      .physicalDescription {
+        color: #808080;
+        font-style: italic;
+        font-weight: 400;
+        font-size: 10px;
+      }
+    }
+  }
+
+  .categoryCard {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+    height: 100%;
+    background-color: #208f5c;
+    border-radius: 10px;
+
+    h2 {
+      padding: 10px;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 26px;
+      text-align: center;
+      color: white;
+    }
+
+    .arrow {
+      mask: url("../assets/Icons/HomeIcons/card-arrow.png");
+      mask-size: contain;
+      mask-position: center;
+      background-color: white;
+      width: 28px;
+      height: 28px;
+      margin: auto;
+    }
+
+    .categoryImage {
+      flex-grow: 0.5;
+      background-image: url("../dummyData/product_category_image_placeholder.png");
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 120px;
+      height: 30%;
+    }
+  }
+}
+
+.homeContainer {
+  padding: 10px;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,74 @@
+@import "./colors.scss";
+
+.inputFieldContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 350px;
+  width: 95%;
+}
+
+.inputFieldContainerDisabled {
+  pointer-events: none;
+
+  .input {
+    color: rgba(0, 0, 0, 0.5);
+    background-color: transparent;
+  }
+}
+
+.inputLabel {
+  font-weight: bold;
+  color: black;
+  font-size: 14px;
+}
+
+.input {
+  border-color: rgba(0, 0, 0, 0.1);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 8px;
+  padding: 13px;
+  background-color: white;
+  color: black;
+  font-weight: normal;
+  margin-top: 7px;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.input:focus {
+  outline-color: $primary-green;
+}
+
+.button {
+  padding: 10px;
+  padding-right: 14px;
+  padding-left: 14px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.buttonGreen {
+  background-color: $primary-green;
+  color: $primary-yellow;
+}
+
+.buttonYellow {
+  background-color: $primary-yellow;
+  color: $primary-green;
+}
+
+.button:hover {
+  background-color: transparent;
+  color: $primary-green;
+  border-color: $primary-green;
+  border-width: 1;
+  border-style: solid;
+}
+
+.maxWidthButton {
+  max-width: 350px;
+  width: 95%;
+}

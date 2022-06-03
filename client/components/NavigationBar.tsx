@@ -1,45 +1,48 @@
 import { useRouter } from "next/router";
 import React from "react";
-import classes from "../styles/NavigationBar.module.scss";
+import styles from "../styles/NavigationBar.module.scss";
 import logoArt from "../assets/Icons/rabbit_logo.png";
 import logoText from "../assets/Icons/rabbit_text_light.png";
 import Image from "next/image";
 import { NavigationBarList, ListItem } from "./NavigationBarList";
+import AddressInfo from "./AddressInfo";
+
+const Greeter = (props: { name: String }) => (
+  <div className={styles.greeterContainer}>
+    <h1 className={styles.greet}> HELLO! </h1>
+    <h1 className={styles.name}> {props.name} </h1>
+  </div>
+);
 
 const navBarItems: ListItem[] = [
   {
     label: "Home",
     iconName: "house",
-    onClick: () => console.log("home clicked"),
   },
   {
     label: "Search",
     iconName: "search",
-    onClick: () => console.log("account clicked"),
   },
   {
     label: "Cart",
     iconName: "shoppingCart",
-    onClick: () => console.log("cart clicked"),
   },
   {
     label: "Favorites",
     iconName: "heart",
-    onClick: () => console.log("favorites clicked"),
   },
   {
     label: "Account",
     iconName: "user",
-    onClick: () => console.log("account clicked"),
   },
 ];
 
 const Logo = () => (
   <>
-    <div className={classes.logo}>
+    <div className={styles.logo}>
       <Image src={logoArt} width="67px" height="67px" />
     </div>
-    <div className={classes.logo}>
+    <div className={styles.logo}>
       <Image src={logoText} width="121px" height="30px" />
     </div>
   </>
@@ -49,22 +52,43 @@ const NavigationBar: React.FC = () => {
   const router = useRouter();
   const currentPath = router.pathname;
 
-  /**
-   * Use the 'currentPath' to decide which item is selected.
-   * Ex: If it contains /home then home item should be selected. Should also match /home/auth, /home/category/new etc.
-   * Same for others /search, /cart, /account, /favorites
-   */
+  let activeLabel = "Home";
+  if (currentPath.includes("/home")) {
+    activeLabel = "Home";
+  } else if (currentPath.includes("/search")) {
+    activeLabel = "Search";
+  } else if (currentPath.includes("/cart")) {
+    activeLabel = "Cart";
+  } else if (currentPath.includes("/favorites")) {
+    activeLabel = "Favorites";
+  } else if (currentPath.includes("/account")) {
+    activeLabel = "Account";
+  }
 
-  /**
-   * router.replace("/home") for changing the page based on click
-   */
+  const onNavItemClick = (label: string) => {
+    if (label === "Home") {
+      router.replace("/home");
+    } else if (label === "Search") {
+      router.replace("/search");
+    } else if (label === "Cart") {
+      router.replace("/cart");
+    } else if (label === "Favorites") {
+      router.replace("/favorites");
+    } else if (label === "Account") {
+      router.replace("/account");
+    }
+  };
 
   return (
-    <div className={classes.navigationBar}>
+    <div className={styles.navigationBar}>
       <Logo />
-      <br />
-      <br />
-      <NavigationBarList items={navBarItems} />
+      <NavigationBarList
+        items={navBarItems}
+        activeLabel={activeLabel}
+        onItemClick={onNavItemClick}
+      />
+      <AddressInfo />
+      <Greeter name="Smith" />
     </div>
   );
 };
