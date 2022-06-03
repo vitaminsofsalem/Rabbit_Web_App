@@ -9,7 +9,7 @@ const OrderDetailsPage: NextPage = () => {
   const { id } = router.query;
 
   return (
-    <BackablePageWithNavBar title="Title Here">
+    <BackablePageWithNavBar title={`Order #${id}`}>
       <div></div>
     </BackablePageWithNavBar>
   );

@@ -8,6 +8,7 @@ export interface Order {
   grandTotal: number;
   dateTime: number; //in millis
   status: OrderStatus;
+  shipmentStatus: ShipmentStatus;
   products: OrderCartProduct[];
   deliveryAddress: Address;
 }

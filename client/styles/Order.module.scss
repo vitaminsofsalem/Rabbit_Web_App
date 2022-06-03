@@ -1,0 +1,84 @@
+@import "./colors.scss";
+
+.parentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.orderItemContainer {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 200px;
+  max-width: 350px;
+  width: 95%;
+  display: flex;
+  cursor: pointer;
+}
+
+.orderItemContainer:hover {
+  border-color: $primary-green;
+}
+
+.orderItemTitlesContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.orderItemTitle {
+  color: $primary-green;
+  font-weight: bold;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+.orderItemSubtitle {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 0;
+}
+
+.orderStatus {
+  color: $primary-green;
+  background-color: rgba($primary-green, 0.2);
+  padding: 12px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 30px;
+  border-radius: 15px;
+  margin: 0;
+}
+
+.orderPrice {
+  color: black;
+  font-weight: bold;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (max-width: 650px) {
+  .parentContainer {
+    align-items: center;
+  }
+}
