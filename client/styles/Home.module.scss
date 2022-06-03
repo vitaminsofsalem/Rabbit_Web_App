@@ -243,6 +243,18 @@ $category-box-default-bg: #d4ede7;
         margin: 0;
       }
 
+      .outOfStockMsg {
+        background-color: rgba(255, 200, 200, 0.3);
+        border-radius: 10px;
+        p {
+          font-size: 10px;
+          color: red;
+          text-align: center;
+          padding: 0;
+          matextrgin: 0;
+        }
+      }
+
       .price {
         color: $primary-green;
         font-style: normal;

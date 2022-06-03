@@ -1,10 +1,11 @@
 import styles from "../../styles/Home.module.scss";
 import ProductCard from "../ProductCard";
+import { Product } from "../../model/Product";
 
 interface CategoryProductsProps {
   title: string;
   color: string;
-  products?: any; //kept 'any' until we agree on a common product objec structure
+  products: Product[]; //kept 'any' until we agree on a common product objec structure
 }
 const CategoryProducts = (props: CategoryProductsProps) => {
   return (
@@ -17,12 +18,13 @@ const CategoryProducts = (props: CategoryProductsProps) => {
         <div className={styles.arrow}></div>
         <div className={styles.categoryImage}></div>
       </div>
-      {props.products.map((p: any) => (
+      {props.products.map((p: Product) => (
         <ProductCard
+          id={p.id}
           name={p.name}
-          physicalDescription={p.physicalDescription}
-          priceEgp={p.priceEgp}
-          maxQuantity={p.maxQuantity}
+          subtext={p.subtext}
+          price={p.price}
+          currentQuantity={p.currentQuantity}
           imageUrl={p.imageUrl}
           onQuantityChange={(q) => q} //does nothing for now
         />
