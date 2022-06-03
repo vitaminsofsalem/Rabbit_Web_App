@@ -1,16 +1,26 @@
 [
   {
+    "id": "1",
     "name": "Nutella Jar",
-    "physicalDescription": "500g",
-    "priceEgp": 70,
-    "maxQuantity": 3,
-    "imageUrl": "http://fhtrpi4.ddns.net:8821/e4f2f072b3821e7e004d80d6e469962d09c4c01a_356882_01.png"
+    "subtext": "500g",
+    "price": 70,
+    "imageUrl": "http://fhtrpi4.ddns.net:8821/e4f2f072b3821e7e004d80d6e469962d09c4c01a_356882_01.png",
+    "currentQuantity": 3
   },
   {
+    "id": "2",
     "name": "Pril Diswahsing Soap Liquid Green for kitchen",
-    "physicalDescription": "220ml",
-    "priceEgp": 30,
-    "maxQuantity": 3,
-    "imageUrl": "http://fhtrpi4.ddns.net:8821/322638_1-20201031-234422.png"
+    "subtext": "220ml",
+    "price": 30,
+    "imageUrl": "http://fhtrpi4.ddns.net:8821/322638_1-20201031-234422.png",
+    "currentQuantity": 3
+  },
+  {
+    "id": "3",
+    "name": "Nestle’s Kitkat Pops Milk Chocolate",
+    "subtext": "220ml",
+    "price": 30,
+    "imageUrl": "http://fhtrpi4.ddns.net:8821/kitkat-pops-milk-462.png",
+    "currentQuantity": 0
   }
 ]
