@@ -14,8 +14,11 @@ export class Orders {
   @Prop({ required: true })
   items: [];
 
-  @Prop()
+  @Prop({ required: true })
   orderID : any
+
+  @Prop({ required: false })
+  status : string
 
 }
 
