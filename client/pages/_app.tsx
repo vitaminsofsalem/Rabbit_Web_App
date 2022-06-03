@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <GlobalStateContext.Provider value={[globalState, setGlobalState]}>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </GlobalStateContext.Provider>
   );
 }
