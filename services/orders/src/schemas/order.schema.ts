@@ -14,9 +14,6 @@ export class Orders {
   @Prop({ required: true })
   items: string[];
 
-  @Prop({ required: true })
-  id: number;
-
 }
 
 export const OrdersSchema = SchemaFactory.createForClass(Orders);
