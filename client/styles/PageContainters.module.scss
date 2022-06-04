@@ -75,6 +75,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  align-items: stretch;
 }
 
 .addressSelectorTop {
@@ -107,7 +108,7 @@
   background-color: transparent;
   color: white;
   border-color: white;
-  border-width: 1;
+  border-width: 1px;
   border-style: solid;
 }
 
@@ -115,7 +116,7 @@
   background-color: transparent;
   color: $primary-yellow;
   border-color: $primary-yellow;
-  border-width: 1;
+  border-width: 1px;
   border-style: solid;
 }
 
