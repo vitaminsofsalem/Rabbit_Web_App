@@ -12,6 +12,8 @@ const EditAccountPage: NextPage = () => {
   const [firstName, setFirstName] = useState("Youssef");
   const [lastName, setLastName] = useState("Henna");
 
+  const namesValid = firstName.length >= 2 && lastName.length >= 2;
+
   return (
     <BackablePageWithNavBar title="Edit Profile">
       <div className={styles.parentContainer}>
@@ -37,6 +39,7 @@ const EditAccountPage: NextPage = () => {
         />
 
         <Button
+          disabled={!namesValid}
           onClick={() => {}}
           additionalClassName={commonStyles.maxWidthButton}
         >

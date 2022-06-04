@@ -15,6 +15,13 @@ const AddAddressPage: NextPage = () => {
   const [buildingNumber, setBuildingNumber] = useState("");
   const [nickname, setNickname] = useState("");
 
+  const addressValid =
+    city.length > 0 &&
+    neighbourhood.length > 0 &&
+    street.length > 0 &&
+    buildingNumber.length > 0 &&
+    nickname.length > 0;
+
   return (
     <BackablePageWithNavBar title="Add New Address">
       <div className={styles.parentContainer}>
@@ -49,6 +56,7 @@ const AddAddressPage: NextPage = () => {
           placeholder="Home, Office, Club, etc"
         />
         <Button
+          disabled={!addressValid}
           onClick={() => {}}
           additionalClassName={commonStyles.maxWidthButton}
         >
