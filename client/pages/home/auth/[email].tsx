@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Button from "../../../components/common/Button";
 import InputField from "../../../components/common/InputField";
 import { BackablePageWithNavBar } from "../../../components/page_containers/BackablePageWithNavBar";
@@ -11,6 +11,7 @@ import {
 import styles from "../../../styles/Authentication.module.scss";
 import commonStyles from "../../../styles/Common.module.scss";
 import { toast } from "react-toastify";
+import { GlobalStateContext } from "../../../model/GlobalState";
 
 //URL: /home/auth/{email}
 
@@ -20,7 +21,8 @@ const AuthVerifyCodePage: NextPage = () => {
   const [code, setCode] = useState("");
   const codeValid = code.length === 6;
   const [isLoading, setIsLoading] = useState(false);
-  const [isResendingEmail, setIsResendingEmail] = useState(false);
+
+  const [globalState, setGlobalState] = useContext(GlobalStateContext);
 
   const verifyCode = () => {
     setIsLoading(true);
@@ -32,6 +34,7 @@ const AuthVerifyCodePage: NextPage = () => {
       .then((res) => {
         if (res.verified && res.access_token) {
           localStorage.setItem("token", res.access_token);
+          setGlobalState({ ...globalState, isLoggedIn: true });
           router.replace("/home/auth/complete");
         } else {
           toast.error("Incorrect verification code");
@@ -41,20 +44,6 @@ const AuthVerifyCodePage: NextPage = () => {
       .catch(() => {
         setIsLoading(false);
       });
-  };
-
-  const sendEmail = () => {
-    if (!isResendingEmail) {
-      setIsResendingEmail(true);
-      toast
-        .promise(sendVerificationEmail(email as string), {
-          pending: "Sending verification email",
-          error: "Failed to send verfication email, please try again",
-          success: "Verfication code resent",
-        })
-        .then(() => setIsResendingEmail(false))
-        .catch(() => setIsResendingEmail(false));
-    }
   };
 
   return (
@@ -78,12 +67,6 @@ const AuthVerifyCodePage: NextPage = () => {
         >
           Verify
         </Button>
-        <p className={styles.resendText}>
-          Didn't receive a code?{" "}
-          <span onClick={sendEmail} className={styles.resendButton}>
-            Resend it
-          </span>
-        </p>
       </div>
     </BackablePageWithNavBar>
   );

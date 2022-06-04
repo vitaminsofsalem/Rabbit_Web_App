@@ -4,14 +4,14 @@ export function sendVerificationEmail(email: string): Promise<void> {
   return axios.post("/auth/send", { email });
 }
 
-export function verifyVerificationCode(
+export async function verifyVerificationCode(
   email: string,
   code: string
 ): Promise<{
   access_token?: string;
   verified: boolean;
 }> {
-  return axios.post("/auth/verify", { email, code });
+  return (await axios.post("/auth/verify", { email, code })).data;
 }
 
 export function updateName(name: string): Promise<void> {
