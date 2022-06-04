@@ -9,7 +9,7 @@ const CategoryDetailsPage: NextPage = () => {
   const { category } = router.query;
 
   return (
-    <BackablePageWithNavBar title="Title Here">
+    <BackablePageWithNavBar isLoginProtected={false} title="Title Here">
       <div></div>
     </BackablePageWithNavBar>
   );

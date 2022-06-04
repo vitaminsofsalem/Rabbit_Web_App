@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 interface BackablePageWithNavBarProps {
   children: ReactNode;
   title: string;
+  isLoginProtected?: boolean;
 }
 
 export const BackablePageWithNavBar: React.FC<BackablePageWithNavBarProps> = (
@@ -14,7 +15,7 @@ export const BackablePageWithNavBar: React.FC<BackablePageWithNavBarProps> = (
   const router = useRouter();
 
   return (
-    <PageWithNavBar>
+    <PageWithNavBar isLoginProtected={props.isLoginProtected}>
       <div className={styles.backableParentContainer}>
         <div className={styles.backableTopContainer}>
           <div onClick={() => router.back()} className={styles.backIcon} />

@@ -7,48 +7,44 @@ import { BackablePageWithNavBar } from "../../../components/page_containers/Back
 import styles from "../../../styles/Authentication.module.scss";
 import commonStyles from "../../../styles/Common.module.scss";
 
-//URL: /home/auth/send
+//URL: /home/auth/{email}
 
-const AuthSendVerificationPage: NextPage = () => {
-  const [email, setEmail] = useState("");
+const AuthVerifyCodePage: NextPage = () => {
   const router = useRouter();
-
-  const validateEmail = (email: string) => {
-    return String(email)
-      .toLowerCase()
-      .match(
-        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-  };
-
-  const emailValid = validateEmail(email);
+  const { email } = router.query;
+  const [code, setCode] = useState("");
+  const codeValid = code.length === 6;
 
   return (
     <BackablePageWithNavBar isLoginProtected={false} title="Authentication">
       <div className={styles.parentContainer}>
         <p className={styles.descriptionText}>
-          You will recieve an email with a verification code. If this is your
-          first time, an account will be automatically created. Otherwise, you
-          will be logged in to your previous account.
+          A 6 digit code has been sent to your email address. Please enter it
+          below to verify your email.
         </p>
+        <p className={styles.emailText}>{email}</p>
         <InputField
-          label="Email"
-          value={email}
-          onValueChange={setEmail}
-          placeholder="Enter email"
+          label="Security code"
+          value={code}
+          onValueChange={setCode}
+          placeholder="Enter your code"
         />
         <Button
-          disabled={!emailValid}
+          disabled={!codeValid}
           onClick={() => {
-            router.push("/home/auth/" + email);
+            router.replace("/home/auth/complete");
           }}
           additionalClassName={commonStyles.maxWidthButton}
         >
-          Send code
+          Verify
         </Button>
+        <p className={styles.resendText}>
+          Didn't receive a code?{" "}
+          <span className={styles.resendButton}>Resend it</span>
+        </p>
       </div>
     </BackablePageWithNavBar>
   );
 };
 
-export default AuthSendVerificationPage;
+export default AuthVerifyCodePage;

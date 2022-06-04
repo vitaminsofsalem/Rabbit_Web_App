@@ -9,11 +9,27 @@ function MyApp({ Component, pageProps }: AppProps) {
     isLoggedIn: false,
     selectedAddress: undefined,
     loggedInUserName: undefined,
+    addresses: [
+      {
+        buildingNumber: "227",
+        city: "Cairo",
+        neighbourhood: "Yasmine 5",
+        nickname: "Home",
+        street: "Youssef St",
+      },
+      {
+        buildingNumber: "M.212",
+        city: "Cairo",
+        neighbourhood: "New Adminstrtive Capital",
+        nickname: "Work",
+        street: "GIU St",
+      },
+    ],
   });
 
   return (
     <GlobalStateContext.Provider value={[globalState, setGlobalState]}>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </GlobalStateContext.Provider>
   );
 }

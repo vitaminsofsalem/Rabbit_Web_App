@@ -9,7 +9,7 @@ import styles from "../../styles/Home.module.scss";
 import mockProducts from "../../dummyData/mockProducts.json";
 const HomePage: NextPage = () => {
   return (
-    <PageWithNavBar>
+    <PageWithNavBar isLoginProtected={false}>
       <div className={styles.homeContainer}>
         <SpecialCategories />
         <CategoryProducts
