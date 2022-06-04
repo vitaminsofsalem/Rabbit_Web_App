@@ -1,10 +1,10 @@
 import React, { ReactNode, useContext, useState } from "react";
 import NavigationBar from "../NavigationBar";
-import styles from "../../styles/PageContainters.module.scss";
 import Button from "../common/Button";
 import { Address } from "../../model/Address";
 import { GlobalStateContext } from "../../model/GlobalState";
 import AddressItem from "../address/AddressItem";
+import styles from "../../styles/PageContainters.module.scss";
 
 interface PageWithNavBarProps {
   children: ReactNode;

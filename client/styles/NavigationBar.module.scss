@@ -111,6 +111,10 @@ $inactive-color: rgba(255, 255, 255, 0.5);
   }
 }
 
+.addressInfoContainerNoSelection {
+  background-color: transparent !important;
+}
+
 .addressInfoContainer {
   width: 232px;
   height: 70px;
