@@ -13,4 +13,7 @@ export default class CreateOrderDto  {
   @IsNotEmpty()
   address : object
 
+   @IsNotEmpty()
+  total : number
+
 }
