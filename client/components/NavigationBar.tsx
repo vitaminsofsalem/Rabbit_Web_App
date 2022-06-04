@@ -48,7 +48,11 @@ const Logo = () => (
   </>
 );
 
-const NavigationBar: React.FC = () => {
+interface NavigationBarProps {
+  onAddressClick: () => void;
+}
+
+const NavigationBar: React.FC<NavigationBarProps> = (props) => {
   const router = useRouter();
   const currentPath = router.pathname;
 
@@ -87,7 +91,7 @@ const NavigationBar: React.FC = () => {
         activeLabel={activeLabel}
         onItemClick={onNavItemClick}
       />
-      <AddressInfo />
+      <AddressInfo onClick={props.onAddressClick} />
       <Greeter name="Smith" />
     </div>
   );

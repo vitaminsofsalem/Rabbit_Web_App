@@ -24,6 +24,25 @@
   max-width: 350px;
   width: 95%;
   display: flex;
+  min-height: 110px;
+}
+
+.addressItemContainerSecondaryColors {
+  border-color: white;
+  .addressItemTitle {
+    color: white;
+  }
+  .addressItemSubtitle {
+    color: rgba(white, 0.5);
+  }
+  .selectAddressButtonText {
+    color: rgba(white, 0.5);
+  }
+  .selectAddressButton:hover {
+    .selectAddressButtonText {
+      color: $primary-yellow;
+    }
+  }
 }
 
 .addressItemTitlesContainer {
@@ -142,6 +161,39 @@
 
   .selectAddressButtonText {
     color: $primary-green;
+  }
+}
+
+.addressItemContainerSelectedSecondary {
+  background-color: white;
+
+  .selectAddressButton {
+    background-color: $primary-yellow;
+    border-radius: 10px;
+    cursor: default;
+  }
+
+  .selectAddressButtonIcon {
+    display: block;
+  }
+
+  .selectAddressButtonText {
+    color: $primary-green;
+  }
+
+  .addressItemTitle {
+    color: $primary-green;
+  }
+  .addressItemSubtitle {
+    color: $primary-green;
+  }
+  .selectAddressButtonText {
+    color: $primary-green;
+  }
+  .selectAddressButton:hover {
+    .selectAddressButtonText {
+      color: $primary-green;
+    }
   }
 }
 

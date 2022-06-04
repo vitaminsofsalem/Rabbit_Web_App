@@ -1,7 +1,13 @@
+import React from "react";
 import styles from "../styles/NavigationBar.module.scss";
-const AddressInfo = () => {
+
+interface AddressInfoProps {
+  onClick: () => void;
+}
+
+const AddressInfo: React.FC<AddressInfoProps> = (props) => {
   return (
-    <div className={styles.addressInfoContainer}>
+    <div onClick={props.onClick} className={styles.addressInfoContainer}>
       <div className={styles.addressBoard}>
         <div className={styles.divText}>
           Delivers to <div className={styles.pinIcon}></div> <b> Home </b>

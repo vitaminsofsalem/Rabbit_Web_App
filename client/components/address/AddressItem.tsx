@@ -5,14 +5,23 @@ interface AddressItemProps {
   address: Address;
   isSelected: boolean;
   onSelectAddressClick: () => void;
-  onDeleteClick: () => void;
+  onDeleteClick?: () => void;
+  useSecondaryColors?: boolean;
 }
 
 const AddressItem: React.FC<AddressItemProps> = (props) => {
+  const selectedStyle = props.useSecondaryColors
+    ? styles.addressItemContainerSelectedSecondary
+    : styles.addressItemContainerSelected;
+
   return (
     <div
       className={`${styles.addressItemContainer} ${
-        props.isSelected ? styles.addressItemContainerSelected : ""
+        props.isSelected ? selectedStyle : ""
+      } ${
+        props.useSecondaryColors
+          ? styles.addressItemContainerSecondaryColors
+          : ""
       }`}
     >
       <div className={styles.addressItemTitlesContainer}>
@@ -32,10 +41,12 @@ const AddressItem: React.FC<AddressItemProps> = (props) => {
             {props.isSelected ? "Selected address" : "Select address"}
           </p>
         </div>
-        <div onClick={props.onDeleteClick} className={styles.deleteButton}>
-          <div className={styles.deleteButtonIcon} />
-          <p className={styles.deleteButtonText}>Delete</p>
-        </div>
+        {props.onDeleteClick && (
+          <div onClick={props.onDeleteClick} className={styles.deleteButton}>
+            <div className={styles.deleteButtonIcon} />
+            <p className={styles.deleteButtonText}>Delete</p>
+          </div>
+        )}
       </div>
     </div>
   );
