@@ -5,6 +5,7 @@ import { Address } from "../../model/Address";
 import { GlobalStateContext } from "../../model/GlobalState";
 import AddressItem from "../address/AddressItem";
 import styles from "../../styles/PageContainters.module.scss";
+import { useRouter } from "next/router";
 
 interface PageWithNavBarProps {
   children: ReactNode;
@@ -34,6 +35,7 @@ interface AddressSelectorProps {
 }
 
 const AddressSelector: React.FC<AddressSelectorProps> = (props) => {
+  const router = useRouter();
   const [globalState, setGlobalState] = useContext(GlobalStateContext);
 
   const onSelectAddressClick = (address: Address) => {
@@ -79,7 +81,10 @@ const AddressSelector: React.FC<AddressSelectorProps> = (props) => {
           />
         ))}
         <Button
-          onClick={() => {}}
+          onClick={() => {
+            router.push("/account/address/add");
+            props.onDismissRequest();
+          }}
           color="yellow"
           additionalClassName={styles.button}
         >
@@ -87,7 +92,10 @@ const AddressSelector: React.FC<AddressSelectorProps> = (props) => {
         </Button>
 
         <Button
-          onClick={() => {}}
+          onClick={() => {
+            router.push("/account/address");
+            props.onDismissRequest();
+          }}
           additionalClassName={`${styles.button} ${styles.buttonSecondary}`}
         >
           Manage addresses
