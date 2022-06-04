@@ -60,6 +60,13 @@
   color: $primary-green;
 }
 
+.buttonDisabled {
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: default;
+  color: rgba(white, 0.5);
+}
+
 .button:hover {
   background-color: transparent;
   color: $primary-green;

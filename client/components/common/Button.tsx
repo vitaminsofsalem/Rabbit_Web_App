@@ -6,15 +6,22 @@ interface ButtonProps {
   color?: "green" | "yellow";
   additionalClassName?: string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ color = "green", ...props }) => {
+const Button: React.FC<ButtonProps> = ({
+  color = "green",
+  disabled = false,
+  ...props
+}) => {
   const colorClass =
     color === "green" ? styles.buttonGreen : styles.buttonYellow;
   return (
     <div
       onClick={props.onClick}
-      className={`${styles.button} ${colorClass} ${props.additionalClassName}`}
+      className={`${styles.button} ${colorClass} ${props.additionalClassName} ${
+        disabled ? styles.buttonDisabled : ""
+      }`}
     >
       {props.children}
     </div>
