@@ -4,6 +4,6 @@ export default class UpdateStatusDto  {
 
   type: "UPDATE_STATUS";
   orderID : any ;
-  status: "CREATED" | "PROCESSING" | "FULFILLED" | "CANCELED"
+  status: string
 
 }

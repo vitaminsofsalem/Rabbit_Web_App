@@ -1,10 +1,10 @@
 import { IsNotEmpty, IsString} from "class-validator";
 
-export default class UpdateStatusDto  {
+export default class OrderStatusUpdateDto  {
 
   type: "ORDER_STATUS_UPDATE";
   orderID : any ;
   email : string;
-  newStatus: "PROCESSING" | "FULFILLED" | "CANCELED"
+  newStatus: string
 
 }
