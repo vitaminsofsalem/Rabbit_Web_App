@@ -4,13 +4,16 @@ import { useState } from "react";
 import Button from "../../../components/common/Button";
 import InputField from "../../../components/common/InputField";
 import { BackablePageWithNavBar } from "../../../components/page_containers/BackablePageWithNavBar";
+import { sendVerificationEmail } from "../../../remote/auth";
 import styles from "../../../styles/Authentication.module.scss";
 import commonStyles from "../../../styles/Common.module.scss";
+import { toast } from "react-toastify";
 
 //URL: /home/auth/send
 
 const AuthSendVerificationPage: NextPage = () => {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const validateEmail = (email: string) => {
@@ -22,6 +25,21 @@ const AuthSendVerificationPage: NextPage = () => {
   };
 
   const emailValid = validateEmail(email);
+
+  const sendEmail = () => {
+    setIsLoading(true);
+    toast
+      .promise(sendVerificationEmail(email), {
+        pending: "Sending verification email",
+        error: "Failed to send verfication email, please try again",
+      })
+      .then(() => {
+        router.push("/home/auth/" + email);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <BackablePageWithNavBar isLoginProtected={false} title="Authentication">
@@ -38,10 +56,8 @@ const AuthSendVerificationPage: NextPage = () => {
           placeholder="Enter email"
         />
         <Button
-          disabled={!emailValid}
-          onClick={() => {
-            router.push("/home/auth/" + email);
-          }}
+          disabled={!emailValid || isLoading}
+          onClick={sendEmail}
           additionalClassName={commonStyles.maxWidthButton}
         >
           Send code

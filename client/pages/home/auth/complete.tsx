@@ -6,14 +6,32 @@ import InputField from "../../../components/common/InputField";
 import { BackablePageWithNavBar } from "../../../components/page_containers/BackablePageWithNavBar";
 import styles from "../../../styles/Authentication.module.scss";
 import commonStyles from "../../../styles/Common.module.scss";
+import { toast } from "react-toastify";
+import { updateName } from "../../../remote/auth";
 
 //URL: /home/auth/complete
 
 const AuthCompleteProfilePage: NextPage = () => {
   const [firstName, setFirstname] = useState("");
   const [lastName, setLastname] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const namesValid = firstName.length >= 2 && lastName.length >= 2;
+
+  const setName = () => {
+    setIsLoading(true);
+    toast
+      .promise(updateName(`${firstName} ${lastName}`), {
+        pending: "Updating name",
+        error: "Failed to update name, please try again",
+      })
+      .then(() => {
+        router.replace("/home");
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <BackablePageWithNavBar title="Complete your profile">
@@ -32,10 +50,8 @@ const AuthCompleteProfilePage: NextPage = () => {
           placeholder="Enter last name"
         />
         <Button
-          disabled={!namesValid}
-          onClick={() => {
-            router.replace("/home");
-          }}
+          disabled={!namesValid || isLoading}
+          onClick={setName}
           additionalClassName={commonStyles.maxWidthButton}
         >
           Continue

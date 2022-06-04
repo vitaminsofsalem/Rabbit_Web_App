@@ -1,7 +1,9 @@
 import "../styles/globals.scss";
+import "react-toastify/dist/ReactToastify.css";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 import { GlobalState, GlobalStateContext } from "../model/GlobalState";
+import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [globalState, setGlobalState] = useState<GlobalState>({
@@ -30,6 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <GlobalStateContext.Provider value={[globalState, setGlobalState]}>
       <Component {...pageProps} />
+      <ToastContainer position="bottom-right" />
     </GlobalStateContext.Provider>
   );
 }

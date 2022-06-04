@@ -37,7 +37,7 @@ export class UsersController {
 
   //Example of handling an event on the topic: messages
   //data can be any type, as long as same as what is being sent above
-  @MessagePattern("users")
+  @MessagePattern("user")
   async handleUserMessages(@Payload("value") data: any) {
     if (data.type === "AUTHENTICATE") {
       const event = data as UserAuthenticationEvent;
@@ -64,7 +64,7 @@ export class UsersController {
         verified: returnData,
       };
 
-      this.client.emit("users", newEvent);
+      this.client.emit("user", newEvent);
     } else if (data.type === "UPDATE_NAME") {
       const event = data as UserUpdateNameEvent;
       await this.usersService.updateUserName(event.email, event.name);
@@ -78,7 +78,7 @@ export class UsersController {
         name: returnData,
       };
 
-      this.client.emit("users", newEvent);
+      this.client.emit("user", newEvent);
     } else if (data.type === "ADD_ADDRESS") {
       const event = data as UserAddAddressEvent;
       await this.usersService.updateUserAddress(event.email, event.address);
@@ -92,7 +92,7 @@ export class UsersController {
         addresses: returnData,
       };
 
-      this.client.emit("users", newEvent);
+      this.client.emit("user", newEvent);
     } else if (data.type === "UPDATE_CART") {
       const event = data as UserUpdateCartEvent;
       await this.usersService.updateCart(event.email, event.cart);
@@ -106,7 +106,7 @@ export class UsersController {
         cart: returnData,
       };
 
-      this.client.emit("users", newEvent);
+      this.client.emit("user", newEvent);
     } else if (data.type === "ADD_FAVORITE") {
       const event = data as UserAddFavoriteProductEvent;
       await this.usersService.addFavoriteProduct(event.email, event.productId);
@@ -128,7 +128,7 @@ export class UsersController {
         favorites: returnData,
       };
 
-      this.client.emit("users", newEvent);
+      this.client.emit("user", newEvent);
     }
   }
 }
