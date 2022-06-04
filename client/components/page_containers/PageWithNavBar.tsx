@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import NavigationBar from "../NavigationBar";
 import Button from "../common/Button";
 import { Address } from "../../model/Address";
@@ -9,10 +9,22 @@ import { useRouter } from "next/router";
 
 interface PageWithNavBarProps {
   children: ReactNode;
+  isLoginProtected?: boolean;
 }
 
-export const PageWithNavBar: React.FC<PageWithNavBarProps> = (props) => {
+export const PageWithNavBar: React.FC<PageWithNavBarProps> = ({
+  isLoginProtected = true,
+  children,
+}) => {
   const [addressSelectorVisible, setAddressSelectorVisible] = useState(false);
+  const [globalState, setGlobalState] = useContext(GlobalStateContext);
+  const router = useRouter();
+  useEffect(() => {
+    if (!globalState.isLoggedIn && isLoginProtected) {
+      router.replace("/home/auth/send");
+    }
+  }, [globalState.isLoggedIn]);
+
   return (
     <div className={styles.parentContainer}>
       <NavigationBar
@@ -20,7 +32,7 @@ export const PageWithNavBar: React.FC<PageWithNavBarProps> = (props) => {
           setAddressSelectorVisible(true);
         }}
       />
-      <div className={styles.besideNavBarContainer}>{props.children}</div>
+      <div className={styles.besideNavBarContainer}>{children}</div>
       <AddressSelector
         visible={addressSelectorVisible}
         onDismissRequest={() => setAddressSelectorVisible(false)}

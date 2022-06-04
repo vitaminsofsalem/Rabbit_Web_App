@@ -16,7 +16,7 @@ const AuthVerifyCodePage: NextPage = () => {
   const codeValid = code.length === 6;
 
   return (
-    <BackablePageWithNavBar title="Authentication">
+    <BackablePageWithNavBar isLoginProtected={false} title="Authentication">
       <div className={styles.parentContainer}>
         <p className={styles.descriptionText}>
           A 6 digit code has been sent to your email address. Please enter it

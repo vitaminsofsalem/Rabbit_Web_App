@@ -9,7 +9,7 @@ const HomeProductDetailsPage: NextPage = () => {
   const { id } = router.query;
 
   return (
-    <BackablePageWithNavBar title="Title Here">
+    <BackablePageWithNavBar isLoginProtected={false} title="Title Here">
       <div></div>
     </BackablePageWithNavBar>
   );

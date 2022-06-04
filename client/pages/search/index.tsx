@@ -5,7 +5,7 @@ import { PageWithNavBar } from "../../components/page_containers/PageWithNavBar"
 
 const SearchPage: NextPage = () => {
   return (
-    <PageWithNavBar>
+    <PageWithNavBar isLoginProtected={false}>
       <div></div>
     </PageWithNavBar>
   );

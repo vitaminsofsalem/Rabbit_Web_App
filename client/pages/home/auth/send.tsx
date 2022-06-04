@@ -24,7 +24,7 @@ const AuthSendVerificationPage: NextPage = () => {
   const emailValid = validateEmail(email);
 
   return (
-    <BackablePageWithNavBar title="Authentication">
+    <BackablePageWithNavBar isLoginProtected={false} title="Authentication">
       <div className={styles.parentContainer}>
         <p className={styles.descriptionText}>
           You will recieve an email with a verification code. If this is your
