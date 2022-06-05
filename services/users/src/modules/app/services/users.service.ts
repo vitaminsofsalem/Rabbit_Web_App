@@ -39,6 +39,10 @@ export class UsersService {
     const user = await this.userModel.findOne({ email });
 
     if (code == user.codes.slice(-1).toString()) {
+      await this.userModel
+        .updateOne({ email }, { $unset: { codes: "" } })
+        .then(() => console.log("Codes cleared"))
+        .catch((err) => console.error(err));
       return true;
     }
     return false;
