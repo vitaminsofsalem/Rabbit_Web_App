@@ -35,6 +35,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         loggedInUserName: name || "",
         cart: cart ? cart.cart : [],
         addresses: addresses ? addresses.addresses : [],
+        selectedAddress:
+          addresses && addresses.addresses ? addresses.addresses[0] : undefined,
       });
     } else {
       setGlobalState({
