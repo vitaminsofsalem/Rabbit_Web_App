@@ -1,37 +1,39 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import AddressItem from "../../../components/address/AddressItem";
 import Button from "../../../components/common/Button";
 import { BackablePageWithNavBar } from "../../../components/page_containers/BackablePageWithNavBar";
 import { Address } from "../../../model/Address";
 import { GlobalStateContext } from "../../../model/GlobalState";
+import { getAddresses } from "../../../remote/user";
 import styles from "../../../styles/Address.module.scss";
 import commonStyles from "../../../styles/Common.module.scss";
 
 //URL: /account/address
 
-//TODO: Remove placeholder addreses and implment using API endpoint
-const addresses: Address[] = [
-  {
-    buildingNumber: "227",
-    city: "Cairo",
-    neighbourhood: "Yasmine 5",
-    nickname: "Home",
-    street: "Youssef St",
-  },
-  {
-    buildingNumber: "M.212",
-    city: "Cairo",
-    neighbourhood: "New Adminstrtive Capital",
-    nickname: "Work",
-    street: "GIU St",
-  },
-];
-
 const AddressPage: NextPage = () => {
   const router = useRouter();
   const [globalState, setGlobalState] = useContext(GlobalStateContext);
+  const addresses = globalState.addresses;
+
+  useEffect(() => {
+    toast
+      .promise(getAddresses(), {
+        pending: "Getting addresses",
+        error: "Failed to get addresses",
+      })
+      .then((addressResult) => {
+        setGlobalState({
+          ...globalState,
+          addresses: addressResult.addresses,
+          selectedAddress: addressResult.addresses
+            ? addressResult.addresses[0]
+            : undefined,
+        });
+      });
+  }, []);
 
   const onAddressDeleteClick = (address: Address) => {};
 
