@@ -2,7 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: "http://localhost:3001",
-  timeout: 20000,
+  timeout: 10000,
 });
 
 instance.interceptors.request.use(function (config) {
@@ -18,7 +18,7 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       localStorage.removeItem("token");
     }
     return Promise.reject(error);

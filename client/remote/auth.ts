@@ -13,7 +13,3 @@ export async function verifyVerificationCode(
 }> {
   return (await axios.post("/auth/verify", { email, code })).data;
 }
-
-export function updateName(name: string): Promise<void> {
-  return axios.post("/name", { name });
-}

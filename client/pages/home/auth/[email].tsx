@@ -12,7 +12,7 @@ import styles from "../../../styles/Authentication.module.scss";
 import commonStyles from "../../../styles/Common.module.scss";
 import { toast } from "react-toastify";
 import { GlobalStateContext } from "../../../model/GlobalState";
-import { getName } from "../../../remote/account";
+import { getName } from "../../../remote/user";
 
 //URL: /home/auth/{email}
 
@@ -35,9 +35,14 @@ const AuthVerifyCodePage: NextPage = () => {
       .then(async (res) => {
         if (res.verified && res.access_token) {
           localStorage.setItem("token", res.access_token);
-          setGlobalState({ ...globalState, isLoggedIn: true });
 
           const name = await getName();
+          setGlobalState({
+            ...globalState,
+            isLoggedIn: true,
+            loggedInUserName: name,
+          });
+
           if (name === "Guest") {
             router.replace("/home/auth/complete");
           } else {

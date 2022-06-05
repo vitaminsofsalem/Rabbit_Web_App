@@ -73,7 +73,7 @@ export class CartController {
 
     const metaData = await this.waitForMetaDataResponse(metaDataRequestId);
 
-    const finalCart: CartProduct[] = [];
+    const finalCart: any[] = [];
     for (const item of cart) {
       const correspondingMetaData = metaData.find(
         (meta) => meta.id === item.id,

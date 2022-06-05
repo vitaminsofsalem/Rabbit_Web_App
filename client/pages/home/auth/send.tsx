@@ -8,6 +8,7 @@ import { sendVerificationEmail } from "../../../remote/auth";
 import styles from "../../../styles/Authentication.module.scss";
 import commonStyles from "../../../styles/Common.module.scss";
 import { toast } from "react-toastify";
+import { PageWithNavBar } from "../../../components/page_containers/PageWithNavBar";
 
 //URL: /home/auth/send
 
@@ -42,7 +43,7 @@ const AuthSendVerificationPage: NextPage = () => {
   };
 
   return (
-    <BackablePageWithNavBar isLoginProtected={false} title="Authentication">
+    <PageWithNavBar isLoginProtected={false}>
       <div className={styles.parentContainer}>
         <p className={styles.descriptionText}>
           You will recieve an email with a verification code. If this is your
@@ -63,7 +64,7 @@ const AuthSendVerificationPage: NextPage = () => {
           Send code
         </Button>
       </div>
-    </BackablePageWithNavBar>
+    </PageWithNavBar>
   );
 };
 

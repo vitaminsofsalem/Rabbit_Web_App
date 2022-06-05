@@ -10,7 +10,7 @@ const AddressInfo: React.FC<AddressInfoProps> = (props) => {
   const [globalState, setGlobalState] = useContext(GlobalStateContext);
   const address = globalState.selectedAddress;
 
-  return (
+  return globalState.isLoggedIn ? (
     <div
       onClick={props.onClick}
       className={`${styles.addressInfoContainer} ${
@@ -38,6 +38,8 @@ const AddressInfo: React.FC<AddressInfoProps> = (props) => {
         </div>
       )}
     </div>
+  ) : (
+    <div />
   );
 };
 

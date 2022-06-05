@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
 import styles from "../styles/NavigationBar.module.scss";
 import logoArt from "../assets/Icons/rabbit_logo.png";
 import logoText from "../assets/Icons/rabbit_text_light.png";
 import Image from "next/image";
 import { NavigationBarList, ListItem } from "./NavigationBarList";
 import AddressInfo from "./AddressInfo";
+import { GlobalStateContext } from "../model/GlobalState";
 
 const Greeter = (props: { name: String }) => (
   <div className={styles.greeterContainer}>
@@ -53,6 +54,7 @@ interface NavigationBarProps {
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = (props) => {
+  const [globalState, setGlobalState] = useContext(GlobalStateContext);
   const router = useRouter();
   const currentPath = router.pathname;
 
@@ -92,7 +94,7 @@ const NavigationBar: React.FC<NavigationBarProps> = (props) => {
         onItemClick={onNavItemClick}
       />
       <AddressInfo onClick={props.onAddressClick} />
-      <Greeter name="Smith" />
+      <Greeter name={globalState.loggedInUserName?.split(" ")[0] || ""} />
     </div>
   );
 };

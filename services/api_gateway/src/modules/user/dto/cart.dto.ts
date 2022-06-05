@@ -7,5 +7,5 @@ export class UpdateCartRequestDto {
 }
 
 export class GetCartResponseDto {
-  cart: CartProduct[];
+  cart: any[];
 }

@@ -1,9 +1,10 @@
 import "../styles/globals.scss";
 import "react-toastify/dist/ReactToastify.css";
 import type { AppProps } from "next/app";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GlobalState, GlobalStateContext } from "../model/GlobalState";
 import { ToastContainer } from "react-toastify";
+import { getAddresses, getCart, getName } from "../remote/user";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [globalState, setGlobalState] = useState<GlobalState>({
@@ -11,23 +12,41 @@ function MyApp({ Component, pageProps }: AppProps) {
     isLoggedIn: false,
     selectedAddress: undefined,
     loggedInUserName: undefined,
-    addresses: [
-      {
-        buildingNumber: "227",
-        city: "Cairo",
-        neighbourhood: "Yasmine 5",
-        nickname: "Home",
-        street: "Youssef St",
-      },
-      {
-        buildingNumber: "M.212",
-        city: "Cairo",
-        neighbourhood: "New Adminstrtive Capital",
-        nickname: "Work",
-        street: "GIU St",
-      },
-    ],
+    addresses: [],
   });
+
+  const fillInitialData = async () => {
+    const isLoggedIn = !!localStorage.getItem("token");
+
+    if (isLoggedIn) {
+      const name = await getName().catch((e) =>
+        console.error("Name failed to get")
+      );
+      const cart = await getCart().catch((e) =>
+        console.error("Cart failed to get")
+      );
+
+      const addresses = await getAddresses().catch((e) =>
+        console.error("Address failed to get")
+      );
+      setGlobalState({
+        ...globalState,
+        isLoggedIn,
+        loggedInUserName: name || "",
+        cart: cart ? cart.cart : [],
+        addresses: addresses ? addresses.addresses : [],
+      });
+    } else {
+      setGlobalState({
+        ...globalState,
+        isLoggedIn,
+      });
+    }
+  };
+
+  useEffect(() => {
+    fillInitialData();
+  }, []);
 
   return (
     <GlobalStateContext.Provider value={[globalState, setGlobalState]}>
