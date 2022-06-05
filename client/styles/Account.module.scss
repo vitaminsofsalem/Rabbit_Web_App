@@ -60,6 +60,23 @@
   margin-left: 20px;
 }
 
+.signOutButtonContainer:hover {
+  border-color: #8a0303;
+  background-color: #8a0303;
+  .signOutText {
+    color: white;
+  }
+}
+
+.signOutButtonContainer {
+  border-color: #8a0303;
+}
+
+.signOutText {
+  color: #8a0303;
+  margin-left: 0px;
+}
+
 .topItemContainer {
   padding-left: 15px;
   padding-right: 15px;
