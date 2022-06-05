@@ -16,7 +16,7 @@ const AccountPage: NextPage = () => {
     <PageWithNavBar>
       <div className={styles.parentContainer}>
         <AccountTopItem
-          name="Youssef Henna"
+          name={globalState.loggedInUserName || "Guest"}
           onEditClicked={() => {
             router.push("/account/edit");
           }}
