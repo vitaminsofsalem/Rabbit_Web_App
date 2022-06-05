@@ -35,4 +35,7 @@ export class CreateOrderRequestDto {
   @ValidateNested()
   @Type(() => OrderProductDto)
   orderItems: OrderProductDto[];
+
+  @Min(1)
+  total: number;
 }

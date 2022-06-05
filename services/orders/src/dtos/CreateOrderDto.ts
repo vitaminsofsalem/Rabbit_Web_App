@@ -1,19 +1,17 @@
-import { IsNotEmpty, IsString} from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
-export default class CreateOrderDto  {
-
+export default class CreateOrderDto {
   @IsString()
-  email : string;
+  email: string;
 
   type: "NEW_ORDER";
 
   @IsNotEmpty()
-  items: [];    //id of items
+  orderItems: []; //id of items
 
   @IsNotEmpty()
-  address : object
+  address: object;
 
-   @IsNotEmpty()
-  total : number
-
+  @IsNotEmpty()
+  total: number;
 }

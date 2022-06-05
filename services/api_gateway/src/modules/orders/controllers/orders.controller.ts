@@ -62,13 +62,14 @@ export class OrdersController {
   @UseGuards(JwtAuthGuard)
   createOrder(@Body() body: CreateOrderRequestDto, @Request() req: any) {
     const userEmail = req.user.email as string;
-    const { address, orderItems } = body;
+    const { address, orderItems, total } = body;
 
     const newOrderEvent: NewOrderEvent = {
       type: "NEW_ORDER",
       email: userEmail,
       address,
       orderItems,
+      total,
     };
 
     this.client.emit("order", newOrderEvent);

@@ -6,6 +6,7 @@ export class NewOrderEvent {
   email: string;
   address: Address;
   orderItems: OrderProduct[];
+  total: number;
 }
 
 export class UpdateOrderStatusEvent {

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document} from "mongoose";
+import { Document } from "mongoose";
 
 export type OrdersDocument = Orders & Document;
 
@@ -15,11 +15,10 @@ export class Orders {
   items: [];
 
   @Prop({ required: true })
-  orderID : any
+  orderId: any;
 
   @Prop({ required: false })
-  status : string
-
+  status: string;
 }
 
 export const OrdersSchema = SchemaFactory.createForClass(Orders);

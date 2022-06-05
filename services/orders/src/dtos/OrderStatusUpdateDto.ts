@@ -1,10 +1,8 @@
-import { IsNotEmpty, IsString} from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
-export default class OrderStatusUpdateDto  {
-
+export default class OrderStatusUpdateDto {
   type: "ORDER_STATUS_UPDATE";
-  orderID : any ;
-  email : string;
-  newStatus: string
-
+  orderId: any;
+  email: string;
+  newStatus: string;
 }
