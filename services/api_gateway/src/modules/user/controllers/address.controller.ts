@@ -6,16 +6,19 @@ import {
   UseGuards,
   Request,
   Get,
+  Delete,
 } from "@nestjs/common";
 import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
 import * as NodeCache from "node-cache";
 import { JwtAuthGuard } from "src/modules/auth/jwt-auth.guard";
 import {
   AddAddressRequestDto,
+  DeleteAddressRequestDto,
   GetAddressResponseDto,
 } from "../dto/address.dto";
 import {
   AddAddressEvent,
+  DeleteAddressEvent,
   GetAddressRequestEvent,
   GetAddressResponseEvent,
 } from "../dto/events/address-event.dto";
@@ -47,6 +50,21 @@ export class AddressController {
     };
 
     this.client.emit("user", addAddressEvent);
+  }
+
+  @Delete()
+  @UseGuards(JwtAuthGuard)
+  deleteAddress(@Body() body: DeleteAddressRequestDto, @Request() req: any) {
+    const userEmail = req.user.email as string;
+    const { address } = body;
+
+    const deleteAddressEvent: DeleteAddressEvent = {
+      type: "DELETE_ADDRESS",
+      email: userEmail,
+      address,
+    };
+
+    this.client.emit("user", deleteAddressEvent);
   }
 
   @Get()

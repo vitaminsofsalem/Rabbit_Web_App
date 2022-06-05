@@ -7,6 +7,7 @@ import {
   Payload,
 } from "@nestjs/microservices";
 import UserAddAddressEvent from "src/dto/address/user-add-address.dto";
+import { UserDeleteAddressEvent } from "src/dto/address/user-delete-address.dto";
 import UserGetAddressRequestEvent from "src/dto/address/user-get-address-request.dto";
 import UserGetAddressResponseEvent from "src/dto/address/user-get-address-response.dto";
 import UserGetCartRequestEvent from "src/dto/cart/user-get-cart-request.dto";
@@ -82,6 +83,9 @@ export class UsersController {
     } else if (data.type === "ADD_ADDRESS") {
       const event = data as UserAddAddressEvent;
       await this.usersService.updateUserAddress(event.email, event.address);
+    } else if (data.type === "DELETE_ADDRESS") {
+      const event = data as UserDeleteAddressEvent;
+      await this.usersService.deleteUserAddress(event.email, event.address);
     } else if (data.type === "GET_ADDRESS_REQUEST") {
       const event = data as UserGetAddressRequestEvent;
       const returnData = await this.usersService.getUserAddresses(event.email);

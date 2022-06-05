@@ -77,6 +77,22 @@ export class UsersService {
       .catch((err) => console.error(err));
   }
 
+  async deleteUserAddress(email: string, address: object) {
+    await this.userModel
+      .updateOne(
+        { email },
+        {
+          $pull: {
+            addresses: address,
+          },
+        },
+      )
+      .then(() => {
+        console.log("Address Deleted");
+      })
+      .catch((err) => console.error(err));
+  }
+
   async getUserAddresses(email: string) {
     const user = await this.userModel.findOne({ email });
     return user.addresses;

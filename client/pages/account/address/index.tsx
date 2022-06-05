@@ -7,7 +7,7 @@ import Button from "../../../components/common/Button";
 import { BackablePageWithNavBar } from "../../../components/page_containers/BackablePageWithNavBar";
 import { Address } from "../../../model/Address";
 import { GlobalStateContext } from "../../../model/GlobalState";
-import { getAddresses } from "../../../remote/user";
+import { deleteAddress, getAddresses } from "../../../remote/user";
 import styles from "../../../styles/Address.module.scss";
 import commonStyles from "../../../styles/Common.module.scss";
 
@@ -17,6 +17,7 @@ const AddressPage: NextPage = () => {
   const router = useRouter();
   const [globalState, setGlobalState] = useContext(GlobalStateContext);
   const addresses = globalState.addresses;
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     toast
@@ -35,7 +36,27 @@ const AddressPage: NextPage = () => {
       });
   }, []);
 
-  const onAddressDeleteClick = (address: Address) => {};
+  const deleteAddressFun = (address: Address) => {
+    setIsLoading(true);
+    toast
+      .promise(deleteAddress(address), {
+        pending: "Deleting adress",
+        error: "Failed to delete address, please try again",
+        success: "Address deleted",
+      })
+      .then(() => {
+        router.reload();
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const onAddressDeleteClick = (address: Address) => {
+    if (!isLoading) {
+      deleteAddressFun(address);
+    }
+  };
 
   const onSelectAddressClick = (address: Address) => {
     setGlobalState({ ...globalState, selectedAddress: address });

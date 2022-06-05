@@ -18,6 +18,10 @@ export async function addAddress(address: Address): Promise<void> {
   return await axios.post("/address", address);
 }
 
+export async function deleteAddress(address: Address): Promise<void> {
+  return await axios.delete("/address", { data: { address } });
+}
+
 export async function getCart(): Promise<{
   cart: OrderCartProduct[];
 }> {

@@ -21,3 +21,7 @@ export class AddAddressRequestDto {
 export class GetAddressResponseDto {
   addresses: Address[];
 }
+
+export class DeleteAddressRequestDto {
+  address: Address;
+}

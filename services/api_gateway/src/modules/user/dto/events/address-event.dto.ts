@@ -6,6 +6,12 @@ export class AddAddressEvent {
   address: Address;
 }
 
+export class DeleteAddressEvent {
+  type: "DELETE_ADDRESS";
+  email: string;
+  address: Address;
+}
+
 export class GetAddressRequestEvent {
   type: "GET_ADDRESS_REQUEST";
   email: string;
