@@ -1,11 +1,5 @@
 import { Controller, Inject } from "@nestjs/common";
-import {
-  ClientKafka,
-  Ctx,
-  MessagePattern,
-  NatsContext,
-  Payload,
-} from "@nestjs/microservices";
+import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
 import { OrdersService } from "./services/order.service";
 import CreateOrderDto from "src/dtos/CreateOrderDto";
 import OrderConfirmationDto from "src/dtos/OrderConfirmationDto";
@@ -15,8 +9,9 @@ import UpdateStatusDto from "src/dtos/UpdateStatusDto";
 import OrderStatusUpdateDto from "src/dtos/OrderStatusUpdateDto";
 import UserOrdersDto from "src/dtos/UserOrdersDto";
 import UserOrdersRespDto from "src/dtos/UserOrdersRespDto";
+
 @Controller()
-export class AppController {
+export class OrdersController {
   constructor(
     private readonly OrdersService: OrdersService,
     @Inject("KAFKA_CLIENT") private client: ClientKafka,

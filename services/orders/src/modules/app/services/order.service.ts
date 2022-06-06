@@ -1,11 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { Order, OrderDocument, OrderSchema } from "src/schemas/order.schema";
+import { Order, OrderDocument } from "src/schemas/order.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import CreateOrderDto from "src/dtos/CreateOrderDto";
 import { v4 as uuidv4 } from "uuid";
-
-import { BadRequestException } from "@nestjs/common";
 
 @Injectable()
 export class OrdersService {
