@@ -37,6 +37,20 @@ export class OrdersController {
         deliveryFees: DELIVERY_FEES,
       };
       this.client.emit("notification", newEvent);
+    } else if (data.type === "UPDATE_STATUS") {
+      const event = data as UpdateStatusDto;
+      const returnData = await this.ordersService.updateStatus(
+        event.orderId,
+        event.status,
+      );
+
+      const newEvent: OrderStatusUpdateDto = {
+        type: "ORDER_STATUS_UPDATE",
+        orderId: event.orderId,
+        email: returnData,
+        newStatus: event.status,
+      };
+      this.client.emit("notification", newEvent);
     } else if (data.type === "GET_ORDER_REQUEST") {
       const event = data as UserOrderDto;
       const returnData = await this.ordersService.getUserOrder(
@@ -58,19 +72,6 @@ export class OrdersController {
         orders: returnData as [],
       };
       this.client.emit("orders", newEvent);
-    } else if (data.type === "UPDATE_STATUS") {
-      const event = data as UpdateStatusDto;
-      const returnData = await this.ordersService.updateStatus(
-        event.status,
-        event.orderId,
-      );
-      const newEvent: OrderStatusUpdateDto = {
-        orderId: event.orderId,
-        newStatus: event.status,
-        type: "ORDER_STATUS_UPDATE",
-        email: returnData,
-      };
-      this.client.emit("notification", newEvent);
     }
   }
 }

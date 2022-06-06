@@ -37,12 +37,11 @@ export class OrdersService {
   }
 
   async updateStatus(orderId: any, status: string) {
-    const user = await this.ordersModel.findOne({ orderId });
-    const email = user.email;
-    await this.ordersModel
-      .updateOne({ orderId }, { $set: { status } })
-      .then(() => console.log("Status Added"))
-      .catch((err) => console.error(err));
+    const { email } = await this.ordersModel.findOneAndUpdate(
+      { orderId },
+      { $set: { status } },
+      { returnNewDocument: true },
+    );
 
     return email;
   }
