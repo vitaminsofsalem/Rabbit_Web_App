@@ -1,7 +1,5 @@
-import { IsNotEmpty, IsString } from "class-validator";
-
 export default class UserOrderResponseDto {
+  type: "GET_ORDER_RESPONSE";
   email: string;
   order: object;
-  type: "GET_ORDER_RESPONSE";
 }

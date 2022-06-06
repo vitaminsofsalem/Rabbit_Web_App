@@ -56,20 +56,8 @@ export class OrdersService {
     return result;
   }
 
-  async getUserOrder(email: string, orderId: any) {
-    const isValid = await this.ordersModel.findOne({ orderId });
-    const validEmail = await this.ordersModel.findOne({ email });
-    if (!isValid || !validEmail) {
-      console.error("Cannot get order, invalid data");
-      return;
-    } else {
-      const orderIS = {
-        email: isValid.email,
-        orderId: isValid.orderId,
-        address: isValid.address,
-        items: isValid.items,
-      };
-      return orderIS;
-    }
+  async getUserOrder(orderId: string) {
+    const order = await this.ordersModel.findOne({ orderId });
+    return order;
   }
 }
