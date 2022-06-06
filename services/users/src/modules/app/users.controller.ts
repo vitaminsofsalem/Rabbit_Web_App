@@ -1,11 +1,5 @@
 import { Controller, Inject } from "@nestjs/common";
-import {
-  ClientKafka,
-  Ctx,
-  MessagePattern,
-  NatsContext,
-  Payload,
-} from "@nestjs/microservices";
+import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
 import UserAddAddressEvent from "src/dto/address/user-add-address.dto";
 import { UserDeleteAddressEvent } from "src/dto/address/user-delete-address.dto";
 import UserGetAddressRequestEvent from "src/dto/address/user-get-address-request.dto";
@@ -18,7 +12,6 @@ import UserGetFavoriteProductRequestEvent from "src/dto/favorite/user-get-favori
 import UserGetFavoriteProductResponseEvent from "src/dto/favorite/user-get-favorite-product-response.dto";
 import UserRemoveFavoriteProductEvent from "src/dto/favorite/user-remove-favorite-product.dto";
 import EmailVerificationEvent from "src/dto/notification-email-verification.dto";
-import UserGetNameRequestEvent from "src/dto/profile-details/user-get-name-request.dto";
 import UserGetNameResponseEvent from "src/dto/profile-details/user-get-name-response.dto";
 import UserUpdateNameEvent from "src/dto/profile-details/user-update-name.dto";
 import UserAuthenticationEvent from "src/dto/user-authenticate.dto";
