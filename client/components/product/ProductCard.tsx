@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Product } from "../../model/Product";
 import styles from "../../styles/Home.module.scss";
+import ExternalImage from "../common/ExternalImage";
 import QuantiyItem from "./QuantityItem";
 
 export interface ProductCardProps extends Product {
@@ -43,10 +44,13 @@ const ProductCard = (props: ProductCardProps) => {
 
   return (
     <div className={styles.productCard}>
-      <div
+      <ExternalImage
+        width="100%"
+        height={130}
         className={styles.image}
-        style={{ backgroundImage: `url(${props.imageUrl})` }}
-      ></div>
+        src={props.imageUrl}
+        objectFit="contain"
+      />
       {quantityInStock > 0 && (
         <QuantiyItem
           onDecrement={decreaseQuantity}

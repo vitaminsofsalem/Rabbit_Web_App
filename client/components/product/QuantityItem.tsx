@@ -5,6 +5,7 @@ interface QuantityItemProps {
   quantityInStock: number;
   onDecrement: () => void;
   onIncrement: () => void;
+  additionalClassName?: string;
 }
 
 const QuantiyItem: React.FC<QuantityItemProps> = ({
@@ -12,12 +13,18 @@ const QuantiyItem: React.FC<QuantityItemProps> = ({
   quantityInStock,
   onIncrement,
   onDecrement,
+  additionalClassName = "",
 }) => {
   if (quantity == 0) {
-    return <div className={styles.addButton} onClick={onIncrement}></div>;
+    return (
+      <div
+        className={`${styles.addButton} ${additionalClassName}`}
+        onClick={onIncrement}
+      ></div>
+    );
   } else if (quantity < quantityInStock) {
     return (
-      <div className={styles.addRemoveButton}>
+      <div className={`${styles.addRemoveButton} ${additionalClassName}`}>
         <div className={styles.removeButton} onClick={onDecrement}>
           <div className={styles.quantity}>
             <p>{quantity}</p>
@@ -28,7 +35,7 @@ const QuantiyItem: React.FC<QuantityItemProps> = ({
     );
   } else {
     return (
-      <div className={styles.addRemoveButton}>
+      <div className={`${styles.addRemoveButton} ${additionalClassName}`}>
         <div className={styles.removeButton} onClick={onDecrement}>
           <div className={styles.quantity}>
             <p>{quantity}</p>
