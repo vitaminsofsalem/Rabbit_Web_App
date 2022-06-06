@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Product } from "../model/Product";
-import styles from "../styles/Home.module.scss";
+import { Product } from "../../model/Product";
+import styles from "../../styles/Home.module.scss";
+import ExternalImage from "../common/ExternalImage";
+import QuantiyItem from "./QuantityItem";
 
 export interface ProductCardProps extends Product {
-  name: string;
   onQuantityChange: (quantity: number) => any;
 }
 
@@ -39,45 +40,29 @@ const ProductCard = (props: ProductCardProps) => {
         <p>Out Of Stock</p>
       </div>
     );
-  } else if (quantity == 0) {
-    currentButton = (
-      <div className={styles.addButton} onClick={increaseQuantity}></div>
-    );
-  } else if (quantity < quantityInStock) {
-    currentButton = (
-      <div className={styles.addRemoveButton}>
-        <div className={styles.removeButton} onClick={decreaseQuantity}>
-          <div className={styles.quantity}>
-            <p>{quantity}</p>
-          </div>
-        </div>
-        <div className={styles.addButton2} onClick={increaseQuantity}></div>
-      </div>
-    );
-  } else {
-    currentButton = (
-      <div className={styles.addRemoveButton}>
-        <div className={styles.removeButton} onClick={decreaseQuantity}>
-          <div className={styles.quantity}>
-            <p>{quantity}</p>
-          </div>
-        </div>
-        <div className={styles.addButtonDisabled}></div>
-      </div>
-    );
   }
 
   return (
     <div className={styles.productCard}>
-      <div
+      <ExternalImage
+        width="100%"
+        height={130}
         className={styles.image}
-        style={{ backgroundImage: `url(${props.imageUrl})` }}
-      ></div>
-      {currentButton}
+        src={props.imageUrl}
+        objectFit="contain"
+      />
+      {quantityInStock > 0 && (
+        <QuantiyItem
+          onDecrement={decreaseQuantity}
+          onIncrement={increaseQuantity}
+          quantity={quantity}
+          quantityInStock={quantityInStock}
+        />
+      )}
       <div className={styles.descriptions}>
         <p className={styles.price}>
           {price}
-          <div className={styles.currency}>EGP</div>
+          <span className={styles.currency}>EGP</span>
         </p>
         {outOfStockMsg}
         <p className={styles.name}>{props.name}</p>
