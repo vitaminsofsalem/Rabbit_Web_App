@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Orders, OrdersDocument, OrdersSchema } from "src/schemas/order.schema";
+import { Order, OrderDocument, OrderSchema } from "src/schemas/order.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import CreateOrderDto from "src/dtos/CreateOrderDto";
@@ -10,7 +10,7 @@ import { BadRequestException } from "@nestjs/common";
 @Injectable()
 export class OrdersService {
   constructor(
-    @InjectModel(Orders.name) private ordersModel: Model<OrdersDocument>,
+    @InjectModel(Order.name) private ordersModel: Model<OrderDocument>,
   ) {}
 
   async createOrder(email: string, items: [], address: object, total: number) {
