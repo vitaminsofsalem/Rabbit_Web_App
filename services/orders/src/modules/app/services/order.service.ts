@@ -48,8 +48,12 @@ export class OrdersService {
 
   //get all orders for this email
   async getUserOrders(email: string) {
+    const result = [];
     const userOrders = await this.ordersModel.find({ email });
-    return userOrders;
+    userOrders.forEach((order) => {
+      result.push(order.orderId);
+    });
+    return result;
   }
 
   async getUserOrder(email: string, orderId: any) {

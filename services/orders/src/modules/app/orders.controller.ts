@@ -51,6 +51,15 @@ export class OrdersController {
         newStatus: event.status,
       };
       this.client.emit("notification", newEvent);
+    } else if (data.type === "GET_ORDERS_REQUEST") {
+      const event = data as UserOrdersDto;
+      const returnData = await this.ordersService.getUserOrders(event.email);
+      const newEvent: UserOrdersRespDto = {
+        type: "GET_ORDERS_RESPONSE",
+        email: event.email,
+        orders: returnData,
+      };
+      this.client.emit("order", newEvent);
     } else if (data.type === "GET_ORDER_REQUEST") {
       const event = data as UserOrderDto;
       const returnData = await this.ordersService.getUserOrder(
@@ -61,15 +70,6 @@ export class OrdersController {
         email: event.email,
         type: "GET_ORDER_RESPONSE",
         order: returnData,
-      };
-      this.client.emit("orders", newEvent);
-    } else if (data.type === "GET_ORDERS_REQUEST") {
-      const event = data as UserOrdersDto;
-      const returnData = await this.ordersService.getUserOrders(event.email);
-      const newEvent: UserOrdersRespDto = {
-        email: event.email,
-        type: "GET_ORDERS_RESPONSE",
-        orders: returnData as [],
       };
       this.client.emit("orders", newEvent);
     }

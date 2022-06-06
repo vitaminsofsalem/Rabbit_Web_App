@@ -1,4 +1,4 @@
 export default class UserOrderDto {
-  type: "GET_ORDERS_REQUEST";
+  type: "GET_ORDER_REQUEST";
   email: string;
 }
