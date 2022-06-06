@@ -22,7 +22,7 @@ export class AppController {
     @Inject("KAFKA_CLIENT") private client: ClientKafka,
   ) {}
 
-  @MessagePattern("orders")
+  @MessagePattern("order")
   async handleOrdersMessage(@Payload("value") data: any) {
     if (data.type === "NEW_ORDER") {
       const event = data as CreateOrderDto;
