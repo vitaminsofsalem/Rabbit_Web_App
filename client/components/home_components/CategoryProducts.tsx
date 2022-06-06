@@ -1,5 +1,5 @@
 import styles from "../../styles/Home.module.scss";
-import ProductCard from "../ProductCard";
+import ProductCard from "../product/ProductCard";
 import { Product } from "../../model/Product";
 
 interface CategoryProductsProps {
