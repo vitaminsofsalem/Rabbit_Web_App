@@ -13,33 +13,33 @@ import UserOrdersRespDto from "src/dtos/UserOrdersRespDto";
 @Controller()
 export class OrdersController {
   constructor(
-    private readonly OrdersService: OrdersService,
+    private readonly ordersService: OrdersService,
     @Inject("KAFKA_CLIENT") private client: ClientKafka,
   ) {}
 
   @MessagePattern("order")
   async handleOrdersMessage(@Payload("value") data: any) {
     if (data.type === "NEW_ORDER") {
+      const DELIVERY_FEES = 15;
       const event = data as CreateOrderDto;
-      const returnData = await this.OrdersService.createOrder(
+      const returnData = await this.ordersService.createOrder(
         event.email,
-        event.orderItems,
-        event.address,
         event.total,
+        event.address,
+        event.orderItems,
       );
-      if (returnData) {
-        const newEvent: OrderConfirmationDto = {
-          type: "ORDER_CONFIRMATION",
-          deliveryFees: 10,
-          email: event.email,
-          total: event.total,
-          orderId: returnData,
-        };
-        this.client.emit("notification", newEvent);
-      }
+
+      const newEvent: OrderConfirmationDto = {
+        type: "ORDER_CONFIRMATION",
+        orderId: returnData,
+        email: event.email,
+        total: event.total,
+        deliveryFees: DELIVERY_FEES,
+      };
+      this.client.emit("notification", newEvent);
     } else if (data.type === "GET_ORDER_REQUEST") {
       const event = data as UserOrderDto;
-      const returnData = await this.OrdersService.getUserOrder(
+      const returnData = await this.ordersService.getUserOrder(
         event.email,
         event.orderId,
       );
@@ -51,7 +51,7 @@ export class OrdersController {
       this.client.emit("orders", newEvent);
     } else if (data.type === "GET_ORDERS_REQUEST") {
       const event = data as UserOrdersDto;
-      const returnData = await this.OrdersService.getUserOrders(event.email);
+      const returnData = await this.ordersService.getUserOrders(event.email);
       const newEvent: UserOrdersRespDto = {
         email: event.email,
         type: "GET_ORDERS_RESPONSE",
@@ -60,7 +60,7 @@ export class OrdersController {
       this.client.emit("orders", newEvent);
     } else if (data.type === "UPDATE_STATUS") {
       const event = data as UpdateStatusDto;
-      const returnData = await this.OrdersService.updateStatus(
+      const returnData = await this.ordersService.updateStatus(
         event.status,
         event.orderId,
       );

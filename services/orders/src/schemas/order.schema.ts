@@ -6,16 +6,19 @@ export type OrderDocument = Order & Document;
 @Schema()
 export class Order {
   @Prop({ required: true })
+  orderId: string;
+
+  @Prop({ required: true })
   email: string;
+
+  @Prop()
+  total: object;
 
   @Prop()
   address: object;
 
   @Prop({ required: true })
-  items: [];
-
-  @Prop({ required: true })
-  orderId: any;
+  orderItems: [];
 
   @Prop()
   status: string;

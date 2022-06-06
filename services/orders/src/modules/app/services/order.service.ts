@@ -10,22 +10,27 @@ export class OrdersService {
     @InjectModel(Order.name) private ordersModel: Model<OrderDocument>,
   ) {}
 
-  async createOrder(email: string, items: [], address: object, total: number) {
-    const itemsLength = items.length;
+  async createOrder(
+    email: string,
+    total: number,
+    address: object,
+    orderItems: object,
+  ) {
     const orderId = uuidv4();
-    if (itemsLength < 1 || !email || !address) {
-      console.error("Cannot create order, missing data");
-      return;
-    } else {
-      const newOrder = new this.ordersModel(
-        { email: email, items: items, address: address, total: total },
-        { $set: { orderId: orderId } },
-      );
-      await newOrder
-        .save()
-        .then(() => console.log("new order is created"))
-        .catch((err) => console.error(err));
-    }
+
+    // order items array contains ids of items not the id of the order itself
+    const newOrder = new this.ordersModel({
+      orderId,
+      email,
+      total,
+      address,
+      orderItems,
+    });
+
+    await newOrder
+      .save()
+      .then(() => console.log("New order created"))
+      .catch((err) => console.error(err));
 
     //we need to return orderId
     return orderId;
