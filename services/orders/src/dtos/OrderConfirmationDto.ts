@@ -1,9 +1,7 @@
-import { IsNotEmpty, IsString } from "class-validator";
-
 export default class OrderConfirmationDto {
-  email: string;
   type: "ORDER_CONFIRMATION";
+  orderId: string;
+  email: string;
   total: number;
   deliveryFees: number;
-  orderId: string;
 }

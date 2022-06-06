@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import * as mongoose from "mongoose";
 
 export type OrderDocument = Order & Document;
 
@@ -12,10 +12,14 @@ export class Order {
   email: string;
 
   @Prop()
-  total: object;
+  total: number;
 
-  @Prop()
-  address: object;
+  @Prop({ type: Object })
+  address: {
+    street: string;
+    area: string;
+    city: string;
+  };
 
   @Prop({ required: true })
   orderItems: [];
