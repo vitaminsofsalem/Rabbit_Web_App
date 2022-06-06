@@ -77,7 +77,7 @@ const ProductCard = (props: ProductCardProps) => {
       <div className={styles.descriptions}>
         <p className={styles.price}>
           {price}
-          <div className={styles.currency}>EGP</div>
+          <span className={styles.currency}>EGP</span>
         </p>
         {outOfStockMsg}
         <p className={styles.name}>{props.name}</p>
