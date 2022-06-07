@@ -20,5 +20,5 @@ export class GetOrderRequestEvent {
 export class GetOrderResponseEvent {
   type: "GET_ORDER_RESPONSE";
   email: string;
-  order: Order;
+  order?: Order;
 }

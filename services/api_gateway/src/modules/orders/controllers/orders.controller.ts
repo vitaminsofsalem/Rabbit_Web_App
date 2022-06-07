@@ -7,6 +7,8 @@ import {
   Post,
   Body,
   Param,
+  HttpException,
+  HttpStatus,
 } from "@nestjs/common";
 import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
 import * as NodeCache from "node-cache";
@@ -133,6 +135,9 @@ export class OrdersController {
     this.client.emit("order", requestEvent);
 
     const order = await this.waitForOrderResponse(requestId);
+    if (!order) {
+      throw new HttpException("No order for given id", HttpStatus.NOT_FOUND);
+    }
 
     const requestShipmentStatusEvent: GetShipmentStatusRequestEvent = {
       type: "GET_STATUS_REQUEST",
@@ -174,7 +179,7 @@ export class OrdersController {
     });
   }
 
-  private waitForOrderResponse(requestId: string): Promise<Order> {
+  private waitForOrderResponse(requestId: string): Promise<Order | null> {
     return PendingRequestHolder.holdConnection<Order>((complete, abort) => {
       if (OrdersEventHandler.responseCache.has(requestId)) {
         const responseEvent = OrdersEventHandler.responseCache.get(
