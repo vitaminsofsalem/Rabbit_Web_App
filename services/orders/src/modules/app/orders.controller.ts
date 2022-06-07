@@ -62,7 +62,10 @@ export class OrdersController {
       this.client.emit("order", newEvent);
     } else if (data.type === "GET_ORDER_REQUEST") {
       const event = data as UserOrderDto;
-      const returnData = await this.ordersService.getUserOrder(event.orderId);
+      const returnData = await this.ordersService.getUserOrder(
+        event.email,
+        event.orderId,
+      );
       const newEvent: UserOrderResponseDto = {
         type: "GET_ORDER_RESPONSE",
         email: event.email,

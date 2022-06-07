@@ -56,8 +56,10 @@ export class OrdersService {
     return result;
   }
 
-  async getUserOrder(orderId: string) {
-    const order = await this.ordersModel.findOne({ orderId });
-    return order;
+  async getUserOrder(email: string, orderId: string) {
+    const order = await this.ordersModel.findOne({
+      $and: [{ email }, { orderId }],
+    });
+    return order ?? [];
   }
 }
