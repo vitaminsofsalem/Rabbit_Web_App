@@ -25,7 +25,6 @@ export class ProductsController {
   @MessagePattern("products")
   async handleProductsMessages(@Payload("value") data: any) {
     if (data.type === "SEARCH_REQUEST") {
-      console.log("PlacerHolder");
       const event = data as ProductSearchRequestEvent;
       const result = await this.productsService.searchProducts(
         event.searchQuery,
@@ -40,7 +39,6 @@ export class ProductsController {
     } else if (data.type === "GET_PRODUCTS_REQUEST") {
       const event = data as ProductGetProductsRequestEvent;
       const result = await this.productsService.getProducts(event.filter);
-      console.log("PlacerHolder");
       const newEvent: ProductGetProductsResponseEvent = {
         type: "GET_PRODUCTS_RESPONSE",
         filter: event.filter,
@@ -49,7 +47,6 @@ export class ProductsController {
       this.client.emit("products", newEvent);
     } else if (data.type === "GET_HOME_REQUEST") {
       const result = await this.productsService.getHomeProducts();
-      console.log("PlacerHolder");
       const newEvent: ProductGetHomeResponseEvent = {
         type: "GET_HOME_RESPONSE",
         items: result,
@@ -57,7 +54,6 @@ export class ProductsController {
       this.client.emit("products", newEvent);
     } else if (data.type === "GET_CATEGORIES_REQUEST") {
       const result = await this.productsService.getCategories();
-      console.log("PlacerHolder");
       const newEvent: ProductGetCategoriesResponseEvent = {
         type: "GET_CATEGORIES_RESPONSE",
         categories: result,

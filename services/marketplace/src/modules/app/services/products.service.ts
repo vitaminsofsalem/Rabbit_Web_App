@@ -10,21 +10,18 @@ export class ProductsService {
   ) {}
 
   async searchProducts(searchQuery: string) {
-    const result = await this.productModel.find(
-      {
-        $text: {
-          $search: searchQuery,
-        },
+    const result = await this.productModel.find({
+      $text: {
+        $search: searchQuery,
       },
-      { name: true },
-    );
+    });
 
     return result;
   }
 
   async getProducts(filter: any) {
     const result = await this.productModel.find({
-      categories: { $elemMatch: { $in: filter.category } },
+      categories: { $in: [filter.category] },
     });
 
     return result;
@@ -36,23 +33,21 @@ export class ProductsService {
    * ? @returns output Array[Objects]
    */
   async getHomeProducts() {
-    const result = await this.productModel.find({ categories: true });
+    const result = await this.productModel.find({}, { categories: true });
     const categories = [
       ...new Set([].concat(...result.map((o) => o.categories))),
     ]; // set for duplicates, map to loop, spread to flatten inner array values and concat.
-
     const output = [];
-    Promise.all(
+    await Promise.all(
       categories.map(async (category) => {
         const products = await this.productModel.find({
-          categories: { $elemMatch: { $in: category } },
+          categories: { $in: [category] },
         });
 
         const myObj = {
           category,
           products,
         };
-
         output.push(myObj);
       }),
     );
@@ -61,7 +56,7 @@ export class ProductsService {
   }
 
   async getCategories() {
-    const result = await this.productModel.find({ categories: true });
+    const result = await this.productModel.find({}, { categories: true });
     const output = [...new Set([].concat(...result.map((o) => o.categories)))]; // set for duplicates, map to loop, spread to flatten inner array values and concat.
 
     return output;
@@ -69,7 +64,7 @@ export class ProductsService {
 
   async getProductMetadata(products: any) {
     const result = [];
-    Promise.all(
+    await Promise.all(
       products.map(async (productId) => {
         result.push(await this.productModel.findOne({ id: productId }));
       }),
