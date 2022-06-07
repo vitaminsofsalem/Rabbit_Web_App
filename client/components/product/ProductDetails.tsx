@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { GlobalStateContext } from "../../model/GlobalState";
 import { Product } from "../../model/Product";
 import { getProductDetails } from "../../remote/product";
+import { addAddress, addFavorite } from "../../remote/user";
 import styles from "../../styles/Product.module.scss";
 import { useCartUpdater } from "../../util/CartUpdaterHook";
+import { useFavoriteUpdater } from "../../util/FavoriteUpdaterHook";
 import ExternalImage from "../common/ExternalImage";
 import QuantiyItem from "./QuantityItem";
 
@@ -32,7 +35,7 @@ const ProductDetails: React.FC<ProductDetailsPageProps> = ({ id }) => {
       });
   }, []);
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { toggleFavorite, getIsFavorite } = useFavoriteUpdater();
 
   return (
     <>
@@ -53,9 +56,11 @@ const ProductDetails: React.FC<ProductDetailsPageProps> = ({ id }) => {
             <div className={styles.productDetailsDivider} />
             <div className={styles.productDetailsBottom}>
               <div
-                onClick={() => setIsFavorite(!isFavorite)}
+                onClick={() => toggleFavorite(product)}
                 className={`${styles.productDetailsHeart} ${
-                  isFavorite ? styles.productDetailsHeartSelected : ""
+                  getIsFavorite(product)
+                    ? styles.productDetailsHeartSelected
+                    : ""
                 }`}
               />
               <div className={styles.productDetailsDivider} />

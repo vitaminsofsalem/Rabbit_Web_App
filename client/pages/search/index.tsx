@@ -6,6 +6,9 @@ import { PageWithNavBar } from "../../components/page_containers/PageWithNavBar"
 const SearchPage: NextPage = () => {
   return (
     <PageWithNavBar isLoginProtected={false}>
+      {/* Use this component to show the grid
+      <ProductGrid products={products} /> */}
+
       <div></div>
     </PageWithNavBar>
   );
