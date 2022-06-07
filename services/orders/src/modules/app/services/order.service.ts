@@ -60,6 +60,6 @@ export class OrdersService {
     const order = await this.ordersModel.findOne({
       $and: [{ email }, { orderId }],
     });
-    return order ?? [];
+    return order;
   }
 }
