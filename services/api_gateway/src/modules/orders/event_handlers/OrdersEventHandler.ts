@@ -6,6 +6,7 @@ import {
   GetOrderResponseEvent,
 } from "../dto/events/get-order.dto";
 import { GetShipmentStatusResponseEvent } from "../dto/events/get-shipment-status.dto";
+import { OrderConfirmationEvent } from "../dto/events/order-confirmation.dto";
 
 export class OrdersEventHandler {
   /* responseCache: Temporarily holds "RESPONSE" events. Active HTTP connections then check cache for required response
@@ -42,6 +43,17 @@ export class OrdersEventHandler {
       const event = data as GetMetadatResponseEvent;
       const id = RequestIdGenerator.generateMetaDataRequestId(
         event.products.map((val) => val.id),
+      );
+      this.responseCache.set(id, event);
+    }
+  }
+
+  static handleNotificationEvent(data: any) {
+    if (data.type === "ORDER_CONFIRMATION") {
+      const event = data as OrderConfirmationEvent;
+      const id = RequestIdGenerator.generateCreateOrderRequestId(
+        event.email,
+        event.total,
       );
       this.responseCache.set(id, event);
     }

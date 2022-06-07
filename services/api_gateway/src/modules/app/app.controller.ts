@@ -59,4 +59,9 @@ export class AppController {
   handlePaymentsEvent(@Payload("value") data: any) {
     PaymentsEventHandler.handlePaymentsEvent(data);
   }
+
+  @MessagePattern("notification")
+  handleNotificationsEvent(@Payload("value") data: any) {
+    OrdersEventHandler.handleNotificationEvent(data);
+  }
 }

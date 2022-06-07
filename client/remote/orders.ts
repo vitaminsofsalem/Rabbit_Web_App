@@ -2,12 +2,12 @@ import { Address } from "cluster";
 import { Order } from "../model/Order";
 import axios from "./axios";
 
-export function createOrder(
+export async function createOrder(
   address: Address,
   orderItems: { quantity: number; id: string }[],
   total: number
-): Promise<void> {
-  return axios.post("/orders", { address, orderItems, total });
+): Promise<{ orderId: string }> {
+  return (await axios.post("/orders", { address, orderItems, total })).data;
 }
 
 export async function getOrders(): Promise<{

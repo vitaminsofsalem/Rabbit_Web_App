@@ -39,3 +39,7 @@ export class CreateOrderRequestDto {
   @Min(1)
   total: number;
 }
+
+export class CreateOrderResponseDto {
+  orderId: string;
+}

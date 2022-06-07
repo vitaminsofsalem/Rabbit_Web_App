@@ -23,6 +23,10 @@ export class RequestIdGenerator {
     return `FAVORITES-${email}`;
   }
 
+  static generateCreateOrderRequestId(email: string, total: number) {
+    return `CREATE-ORDER-${email}-${total}`;
+  }
+
   static generateCartRequestId(email: string) {
     return `CART-${email}`;
   }
