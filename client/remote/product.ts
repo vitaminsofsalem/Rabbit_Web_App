@@ -1,12 +1,12 @@
 import { Product } from "../model/Product";
 import axios from "./axios";
 
-export async function getHomeProducts(): Promise<
-  {
+export async function getHomeProducts(): Promise<{
+  items: {
     category: string;
     products: Product[];
-  }[]
-> {
+  }[];
+}> {
   return (await axios.get("/products/home")).data;
 }
 

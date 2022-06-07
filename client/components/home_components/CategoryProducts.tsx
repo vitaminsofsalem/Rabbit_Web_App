@@ -6,6 +6,7 @@ interface CategoryProductsProps {
   title: string;
   color: string;
   products: Product[]; //kept 'any' until we agree on a common product objec structure
+  onProductClick: (id: string) => void;
 }
 const CategoryProducts = (props: CategoryProductsProps) => {
   return (
@@ -16,10 +17,11 @@ const CategoryProducts = (props: CategoryProductsProps) => {
       >
         <h2>{props.title}</h2>
         <div className={styles.arrow}></div>
-        <div className={styles.categoryImage}></div>
       </div>
-      {props.products.map((p: Product) => (
+      {props.products.map((p: Product, index) => (
         <ProductCard
+          onClick={() => props.onProductClick(p.id)}
+          key={p.id + index}
           id={p.id}
           name={p.name}
           subtext={p.subtext}

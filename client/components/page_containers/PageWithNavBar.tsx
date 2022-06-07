@@ -10,11 +10,13 @@ import { useRouter } from "next/router";
 interface PageWithNavBarProps {
   children: ReactNode;
   isLoginProtected?: boolean;
+  isFlex?: boolean;
 }
 
 export const PageWithNavBar: React.FC<PageWithNavBarProps> = ({
   isLoginProtected = true,
   children,
+  isFlex = true,
 }) => {
   const [addressSelectorVisible, setAddressSelectorVisible] = useState(false);
   const [globalState, setGlobalState] = useContext(GlobalStateContext);
@@ -32,7 +34,12 @@ export const PageWithNavBar: React.FC<PageWithNavBarProps> = ({
           setAddressSelectorVisible(true);
         }}
       />
-      <div className={styles.besideNavBarContainer}>{children}</div>
+      <div
+        className={styles.besideNavBarContainer}
+        style={!isFlex ? { display: "block" } : {}}
+      >
+        {children}
+      </div>
       <AddressSelector
         visible={addressSelectorVisible}
         onDismissRequest={() => setAddressSelectorVisible(false)}

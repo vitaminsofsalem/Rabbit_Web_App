@@ -1,15 +1,11 @@
 import styles from "../../styles/Home.module.scss";
-import { useEffect, useRef, useState } from "react";
-import dummyData from "../../dummyData/specialCategories.json";
-
-interface CategoryItem {
-  title: String;
-  imageUrl: String;
-  backgroundColor?: String;
-}
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import useWidth from "../../util/WidthHook";
+import { mapCategoryToLabel } from "../../util/CategoryMapper";
+import { useRouter } from "next/router";
 
 interface SpecialCategoriesProps {
-  items: CategoryItem[];
+  items: string[];
 }
 
 interface ArrowComponentProps {
@@ -18,37 +14,31 @@ interface ArrowComponentProps {
 }
 
 function divideToPages<T>(list: T[], maxEntries: number) {
+  const remainingItems = [...list];
   const numPages = Math.ceil(list.length / maxEntries);
   let pages: T[][] = [];
 
   for (let i = 0; i < numPages; i++) {
+    if (remainingItems.length === 0) break;
     pages.push([]);
     for (let j = 0; j < maxEntries; j++) {
-      if (i * numPages * j >= list.length) break;
-      pages[i].push(list[i * numPages + j]);
+      if (remainingItems.length === 0) break;
+
+      pages[i].push(remainingItems[0]);
+      remainingItems.splice(0, 1);
     }
   }
 
   return pages;
 }
 
-const loadDummyData: () => Promise<CategoryItem[]> = async () => {
-  let items: CategoryItem[] = [];
-
-  for (const item of dummyData) {
-    const res = await fetch(item.imageUrl);
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    items.push({ title: item.title, imageUrl: url });
-  }
-
-  return items;
-};
-
-const SpecialCategoriesPager = (props: { items: CategoryItem[] }) => {
+const SpecialCategoriesPager = (props: SpecialCategoriesProps) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const entriesContainerRef = useRef(null);
-  const maxEntries = 2; //it is set to a constant value for now
+  const entriesContainerRef = useRef<HTMLDivElement>(null);
+
+  const elementWidth = useWidth(entriesContainerRef);
+  const maxEntries = elementWidth / 190;
+  const router = useRouter();
 
   if (props.items.length == 0) {
     let entries = [];
@@ -68,10 +58,7 @@ const SpecialCategoriesPager = (props: { items: CategoryItem[] }) => {
   }
 
   const numPages = Math.ceil(props.items.length / maxEntries);
-  let pages: CategoryItem[][] = divideToPages<CategoryItem>(
-    props.items,
-    maxEntries
-  );
+  let pages: string[][] = divideToPages<string>(props.items, maxEntries);
 
   return (
     <>
@@ -79,13 +66,18 @@ const SpecialCategoriesPager = (props: { items: CategoryItem[] }) => {
         direction="prev"
         action={() => setCurrentPage(Math.max(currentPage - 1, 0))}
       />
-      <div className={styles.categoryPagerEntriesContainer}>
+      <div
+        ref={entriesContainerRef}
+        className={styles.categoryPagerEntriesContainer}
+      >
         {pages[currentPage].map((item) => (
           <div
+            onClick={() => {
+              router.push("/home/category/" + item);
+            }}
             className={styles.item}
-            style={{ backgroundImage: `url(${item.imageUrl})` }}
           >
-            <p>{item.title}</p>
+            <p>{mapCategoryToLabel(item)}</p>
           </div>
         ))}
       </div>
@@ -114,15 +106,10 @@ const CategoryPagerButton = (props: ArrowComponentProps) => {
   );
 };
 
-const SpecialCategories = () => {
-  const [items, setItems] = useState<CategoryItem[]>([]);
-
-  useEffect(() => {
-    loadDummyData().then((item) => setItems(item)); //simulate loading process, for UI Testing only
-  }, []);
+const SpecialCategories: React.FC<SpecialCategoriesProps> = (props) => {
   return (
     <div className={styles.specialCategories}>
-      <SpecialCategoriesPager items={items} />
+      <SpecialCategoriesPager items={props.items} />
     </div>
   );
 };

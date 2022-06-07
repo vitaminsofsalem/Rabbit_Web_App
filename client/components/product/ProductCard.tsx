@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { Product } from "../../model/Product";
 import styles from "../../styles/Home.module.scss";
@@ -7,6 +8,7 @@ import QuantiyItem from "./QuantityItem";
 
 export interface ProductCardProps extends Product {
   onQuantityChange: (quantity: number) => any;
+  onClick: () => void;
 }
 
 const ProductCard = (props: ProductCardProps) => {
@@ -52,7 +54,7 @@ const ProductCard = (props: ProductCardProps) => {
   }
 
   return (
-    <div className={styles.productCard}>
+    <div onClick={props.onClick} className={styles.productCard}>
       <ExternalImage
         width="100%"
         height={130}

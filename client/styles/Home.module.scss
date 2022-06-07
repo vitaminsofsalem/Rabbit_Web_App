@@ -14,7 +14,6 @@ $category-box-default-bg: #d4ede7;
   margin: 10px;
   padding: 3px 6px;
   width: 118px;
-  height: 133px;
   border-radius: 10px;
 }
 
@@ -77,7 +76,6 @@ $category-box-default-bg: #d4ede7;
   flex-direction: row;
   align-items: center;
   width: 100%;
-  height: 150px;
   margin: 30px 0px;
 
   .buttonContainer {
@@ -89,9 +87,9 @@ $category-box-default-bg: #d4ede7;
   .categoryPagerEntriesContainer {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     flex-grow: 0.8;
     width: 100%;
-    height: 100%;
 
     .itemLoading {
       @include specialCategoriesBox();
@@ -103,6 +101,8 @@ $category-box-default-bg: #d4ede7;
       background-color: $category-box-default-bg;
       background-size: cover;
       color: $primary-green;
+      border: 1px transparent solid;
+      cursor: pointer;
       p {
         font-style: normal;
         font-weight: 700;
@@ -111,6 +111,9 @@ $category-box-default-bg: #d4ede7;
         text-align: center;
       }
     }
+    .item:hover {
+      border-color: $primary-green;
+    }
   }
 }
 
@@ -118,19 +121,23 @@ $category-box-default-bg: #d4ede7;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  min-height: 245px;
   width: 100%;
-  height: 245px;
+  gap: 20px;
+  overflow-x: scroll;
+  padding-bottom: 5px;
 
   .productCard {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
-    width: 131px;
-    height: 100%;
+    min-width: 131px;
     background-color: white;
     border-radius: 10px;
-    margin: 0 20px;
     padding: 10px;
+    border: 1px transparent solid;
+    cursor: pointer;
 
     .image {
       padding: 10px;
@@ -162,7 +169,7 @@ $category-box-default-bg: #d4ede7;
           color: red;
           text-align: center;
           padding: 0;
-          matextrgin: 0;
+          margin: 0;
         }
       }
 
@@ -192,15 +199,20 @@ $category-box-default-bg: #d4ede7;
     }
   }
 
+  .productCard:hover {
+    border-color: $primary-green;
+  }
+
   .categoryCard {
     overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 120px;
-    height: 100%;
+    justify-content: center;
+    min-width: 131px;
     background-color: #208f5c;
     border-radius: 10px;
+    cursor: pointer;
 
     h2 {
       padding: 10px;
@@ -219,7 +231,6 @@ $category-box-default-bg: #d4ede7;
       background-color: white;
       width: 28px;
       height: 28px;
-      margin: auto;
     }
 
     .categoryImage {
@@ -235,8 +246,8 @@ $category-box-default-bg: #d4ede7;
 }
 
 .addRemoveButton {
+  position: absolute;
   display: grid;
-  position: fixed;
   transform: translate(10px, 100px);
   background-color: $primary-green;
   border-radius: 17px;
@@ -309,7 +320,7 @@ $category-box-default-bg: #d4ede7;
   }
 }
 .addButton {
-  position: fixed;
+  position: absolute;
   transform: translate(35px, 100px);
   background-color: $primary-yellow;
   border-radius: 18px;
@@ -323,9 +334,8 @@ $category-box-default-bg: #d4ede7;
 }
 
 .homeContainer {
-  padding: 10px;
-  width: 100%;
-  height: auto;
-  display: flex;
+  flex: 1;
   flex-direction: column;
+  display: flex;
+  gap: 20px;
 }

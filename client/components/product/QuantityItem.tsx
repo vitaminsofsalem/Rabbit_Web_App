@@ -19,24 +19,45 @@ const QuantiyItem: React.FC<QuantityItemProps> = ({
     return (
       <div
         className={`${styles.addButton} ${additionalClassName}`}
-        onClick={onIncrement}
+        onClick={(e) => {
+          e.stopPropagation();
+          onIncrement();
+        }}
       ></div>
     );
   } else if (quantity < quantityInStock) {
     return (
       <div className={`${styles.addRemoveButton} ${additionalClassName}`}>
-        <div className={styles.removeButton} onClick={onDecrement}>
+        <div
+          className={styles.removeButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDecrement();
+          }}
+        >
           <div className={styles.quantity}>
             <p>{quantity}</p>
           </div>
         </div>
-        <div className={styles.addButton2} onClick={onIncrement}></div>
+        <div
+          className={styles.addButton2}
+          onClick={(e) => {
+            e.stopPropagation();
+            onIncrement();
+          }}
+        ></div>
       </div>
     );
   } else {
     return (
       <div className={`${styles.addRemoveButton} ${additionalClassName}`}>
-        <div className={styles.removeButton} onClick={onDecrement}>
+        <div
+          className={styles.removeButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDecrement();
+          }}
+        >
           <div className={styles.quantity}>
             <p>{quantity}</p>
           </div>
