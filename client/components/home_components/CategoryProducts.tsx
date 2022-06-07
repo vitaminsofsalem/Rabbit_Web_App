@@ -1,6 +1,7 @@
 import styles from "../../styles/Home.module.scss";
 import ProductCard from "../product/ProductCard";
 import { Product } from "../../model/Product";
+import { mapCategoryToLabel } from "../../util/CategoryMapper";
 
 interface CategoryProductsProps {
   title: string;
@@ -15,7 +16,7 @@ const CategoryProducts = (props: CategoryProductsProps) => {
         className={styles.categoryCard}
         style={{ backgroundColor: props.color }}
       >
-        <h2>{props.title}</h2>
+        <h2>{mapCategoryToLabel(props.title)}</h2>
         <div className={styles.arrow}></div>
       </div>
       {props.products.map((p: Product, index) => (

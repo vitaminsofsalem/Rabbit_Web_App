@@ -3,7 +3,6 @@ import CategoryProducts from "../../components/home_components/CategoryProducts"
 import SpecialCategories from "../../components/home_components/SpecialCategories";
 import { PageWithNavBar } from "../../components/page_containers/PageWithNavBar";
 import styles from "../../styles/Home.module.scss";
-import { mapCategoryToLabel } from "../../util/CategoryMapper";
 import { useEffect, useState } from "react";
 import { Product } from "../../model/Product";
 import { getCategories, getHomeProducts } from "../../remote/product";
@@ -31,9 +30,7 @@ const HomePage: NextPage = () => {
         error: "Failed to get categories",
       })
       .then((categoriesResult) => {
-        setCategories(
-          categoriesResult.categories.map((item) => mapCategoryToLabel(item))
-        );
+        setCategories(categoriesResult.categories);
       });
   }, []);
 

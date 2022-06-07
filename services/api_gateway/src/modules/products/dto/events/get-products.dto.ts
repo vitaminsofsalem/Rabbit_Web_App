@@ -8,5 +8,5 @@ export class GetProductsRequestEvent {
 export class GetProductsResponseEvent {
   type: "GET_PRODUCTS_RESPONSE";
   filter: object;
-  products: Product[];
+  items: Product[];
 }

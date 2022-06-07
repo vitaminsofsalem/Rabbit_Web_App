@@ -19,7 +19,7 @@ export async function getCategories(): Promise<{
 export async function getCategoryProducts(category: string): Promise<{
   products: Product[];
 }> {
-  return (await axios.get("/products/categories/" + category)).data;
+  return (await axios.get("/products/category/" + category)).data;
 }
 
 export async function searchProducts(query: string): Promise<{

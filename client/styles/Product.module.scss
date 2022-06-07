@@ -108,6 +108,15 @@
   }
 }
 
+.productGridMainContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 20px;
+}
+
 @media screen and (max-width: 840px) {
   .productDetailsMainContainer {
     flex-direction: column;

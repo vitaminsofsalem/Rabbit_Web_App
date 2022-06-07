@@ -165,7 +165,7 @@ export class ProductsController {
           requestId,
         ) as GetProductsResponseEvent;
         ProductsEventhandler.responseCache.del(requestId);
-        complete(responseEvent.products);
+        complete(responseEvent.items);
       }
     });
   }
