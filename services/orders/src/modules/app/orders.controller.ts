@@ -70,6 +70,7 @@ export class OrdersController {
         type: "GET_ORDER_RESPONSE",
         email: event.email,
         order: returnData,
+        orderId: event.orderId,
       };
       this.client.emit("order", newEvent);
     }

@@ -22,7 +22,7 @@ export class OrdersEventHandler {
       const event = data as GetOrderResponseEvent;
       const id = RequestIdGenerator.generateOrderRequestId(
         event.email,
-        event.order.id,
+        event.orderId,
       );
       this.responseCache.set(id, event);
     }

@@ -45,6 +45,7 @@ const AccountPage: NextPage = () => {
               addresses: [],
               cart: [],
               selectedAddress: undefined,
+              favorites: [],
             });
           }}
           className={`${styles.ordersAddressButtonContainer} ${styles.signOutButtonContainer}`}
