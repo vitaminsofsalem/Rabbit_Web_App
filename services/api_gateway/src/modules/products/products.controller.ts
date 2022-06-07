@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Inject,
   Param,
   Post,
@@ -116,7 +118,11 @@ export class ProductsController {
     this.client.emit("products", metaDataRequestEvent);
     const requestId = RequestIdGenerator.generateMetaDataRequestId([id]);
 
-    return { product: (await this.waitForMetaDataResponse(requestId))[0] };
+    const result = await this.waitForMetaDataResponse(requestId);
+    if (result.length === 0) {
+      throw new HttpException("Product not found", HttpStatus.NOT_FOUND);
+    }
+    return { product: result[0] };
   }
 
   @UseGuards(AdminAuthGuard)
