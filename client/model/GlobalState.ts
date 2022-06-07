@@ -11,6 +11,7 @@ export const GlobalStateContext = React.createContext<
     selectedAddress: undefined,
     loggedInUserName: undefined,
     addresses: [],
+    favorites: [],
   },
   () => {},
 ]);
@@ -21,4 +22,5 @@ export interface GlobalState {
   isLoggedIn: boolean;
   loggedInUserName?: string;
   addresses: Address[];
+  favorites: string[];
 }

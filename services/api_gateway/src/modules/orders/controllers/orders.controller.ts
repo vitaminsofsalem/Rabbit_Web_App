@@ -21,7 +21,10 @@ import {
 } from "../../user/dto/events/metadata-event";
 import { PendingRequestHolder } from "src/util/PendingRequestHolder";
 import { RequestIdGenerator } from "src/util/RequestIdGenerator";
-import { CreateOrderRequestDto } from "../dto/create-order.dto";
+import {
+  CreateOrderRequestDto,
+  CreateOrderResponseDto,
+} from "../dto/create-order.dto";
 import {
   GetOrderRequestEvent,
   GetOrderResponseEvent,
@@ -41,6 +44,7 @@ import {
 import { UpdateOrderStatusRequestDto } from "../dto/order-status.dto";
 import { Product } from "src/model/Product";
 import { OrdersEventHandler } from "../event_handlers/OrdersEventHandler";
+import { OrderConfirmationEvent } from "../dto/events/order-confirmation.dto";
 
 @Controller("orders")
 export class OrdersController {
@@ -62,7 +66,10 @@ export class OrdersController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  createOrder(@Body() body: CreateOrderRequestDto, @Request() req: any) {
+  async createOrder(
+    @Body() body: CreateOrderRequestDto,
+    @Request() req: any,
+  ): Promise<CreateOrderResponseDto> {
     const userEmail = req.user.email as string;
     const { address, orderItems, total } = body;
 
@@ -75,6 +82,12 @@ export class OrdersController {
     };
 
     this.client.emit("order", newOrderEvent);
+    const requestId = RequestIdGenerator.generateCreateOrderRequestId(
+      userEmail,
+      total,
+    );
+    const orderId = await this.waitForOrderConfirmation(requestId);
+    return { orderId };
   }
 
   @Get()
@@ -179,14 +192,28 @@ export class OrdersController {
     });
   }
 
-  private waitForOrderResponse(requestId: string): Promise<Order | null> {
-    return PendingRequestHolder.holdConnection<Order>((complete, abort) => {
+  private waitForOrderResponse(requestId: string): Promise<Order> {
+    return PendingRequestHolder.holdConnection<Order | null>(
+      (complete, abort) => {
+        if (OrdersEventHandler.responseCache.has(requestId)) {
+          const responseEvent = OrdersEventHandler.responseCache.get(
+            requestId,
+          ) as GetOrderResponseEvent;
+          OrdersEventHandler.responseCache.del(requestId);
+          complete(responseEvent.order);
+        }
+      },
+    );
+  }
+
+  private waitForOrderConfirmation(requestId: string): Promise<string> {
+    return PendingRequestHolder.holdConnection<string>((complete, abort) => {
       if (OrdersEventHandler.responseCache.has(requestId)) {
         const responseEvent = OrdersEventHandler.responseCache.get(
           requestId,
-        ) as GetOrderResponseEvent;
+        ) as OrderConfirmationEvent;
         OrdersEventHandler.responseCache.del(requestId);
-        complete(responseEvent.order);
+        complete(responseEvent.orderId);
       }
     });
   }

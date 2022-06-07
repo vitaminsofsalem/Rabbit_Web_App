@@ -28,7 +28,7 @@ export async function getCart(): Promise<{
   return (await axios.get("/cart")).data;
 }
 
-export async function addCart(
+export async function updateCart(
   cart: { quantity: number; id: string }[]
 ): Promise<void> {
   return await axios.post("/cart", cart);
@@ -43,7 +43,7 @@ export async function deleteFavorite(productId: string): Promise<void> {
 }
 
 export async function getFavorites(): Promise<{
-  cart: Product[];
+  favorites: Product[];
 }> {
   return (await axios.get("/favorite")).data;
 }
