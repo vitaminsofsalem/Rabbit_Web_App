@@ -31,7 +31,7 @@ export async function getCart(): Promise<{
 export async function updateCart(
   cart: { quantity: number; id: string }[]
 ): Promise<void> {
-  return await axios.post("/cart", cart);
+  return await axios.post("/cart", { cart });
 }
 
 export async function addFavorite(productId: string): Promise<void> {

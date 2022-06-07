@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Product } from "../../model/Product";
 import styles from "../../styles/Product.module.scss";
+import { useCartUpdater } from "../../util/CartUpdaterHook";
 import ExternalImage from "../common/ExternalImage";
 import QuantiyItem from "./QuantityItem";
 
@@ -20,8 +21,14 @@ interface ProductDetailsPageProps {
 }
 
 const ProductDetails: React.FC<ProductDetailsPageProps> = ({ id }) => {
+  const {
+    incrementQuantity,
+    decrementQuantity,
+    getCurrentQuantity,
+    currentCart,
+  } = useCartUpdater();
+
   const [isFavorite, setIsFavorite] = useState(false);
-  const [quantity, setQuantity] = useState(0);
 
   return (
     <div className={styles.productDetailsMainContainer}>
@@ -53,9 +60,9 @@ const ProductDetails: React.FC<ProductDetailsPageProps> = ({ id }) => {
           {product.currentQuantity > 0 ? (
             <QuantiyItem
               additionalClassName={styles.addButton}
-              onDecrement={() => setQuantity(quantity - 1)}
-              onIncrement={() => setQuantity(quantity + 1)}
-              quantity={quantity}
+              onDecrement={() => decrementQuantity(product)}
+              onIncrement={() => incrementQuantity(product)}
+              quantity={getCurrentQuantity(product)}
               quantityInStock={product.currentQuantity}
             />
           ) : (

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Product } from "../../model/Product";
 import styles from "../../styles/Home.module.scss";
+import { useCartUpdater } from "../../util/CartUpdaterHook";
 import ExternalImage from "../common/ExternalImage";
 import QuantiyItem from "./QuantityItem";
 
@@ -9,7 +10,15 @@ export interface ProductCardProps extends Product {
 }
 
 const ProductCard = (props: ProductCardProps) => {
-  const [quantity, setQuanitty] = useState<number>(0);
+  const {
+    incrementQuantity,
+    decrementQuantity,
+    getCurrentQuantity,
+    currentCart,
+  } = useCartUpdater();
+
+  const product = props as Product;
+  const quantity = getCurrentQuantity(product);
 
   const quantityChangeDispatch = (
     parentCallback: (quantity: number) => any
@@ -18,13 +27,13 @@ const ProductCard = (props: ProductCardProps) => {
   };
 
   const decreaseQuantity = () => {
-    setQuanitty(quantity - 1);
+    decrementQuantity(product);
     quantityChangeDispatch(props.onQuantityChange);
   };
 
   const increaseQuantity = () => {
     if (quantity == props.currentQuantity) return;
-    setQuanitty(quantity + 1);
+    incrementQuantity(product);
     quantityChangeDispatch(props.onQuantityChange);
   };
 
