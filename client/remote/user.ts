@@ -43,7 +43,7 @@ export async function deleteFavorite(productId: string): Promise<void> {
 }
 
 export async function getFavorites(): Promise<{
-  cart: Product[];
+  favorites: Product[];
 }> {
   return (await axios.get("/favorite")).data;
 }

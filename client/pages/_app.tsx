@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import { useEffect, useState } from "react";
 import { GlobalState, GlobalStateContext } from "../model/GlobalState";
 import { ToastContainer } from "react-toastify";
-import { getAddresses, getCart, getName } from "../remote/user";
+import { getAddresses, getCart, getFavorites, getName } from "../remote/user";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [globalState, setGlobalState] = useState<GlobalState>({
@@ -13,6 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     selectedAddress: undefined,
     loggedInUserName: undefined,
     addresses: [],
+    favorites: [],
   });
 
   const fillInitialData = async () => {
@@ -33,6 +34,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       const addresses = await getAddresses().catch((e) =>
         console.error("Address failed to get")
       );
+
+      const favorites = await getFavorites().catch((e) =>
+        console.error("Favorites failed to get")
+      );
       setGlobalState({
         ...globalState,
         isLoggedIn,
@@ -41,6 +46,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         addresses: addresses ? addresses.addresses : [],
         selectedAddress:
           addresses && addresses.addresses ? addresses.addresses[0] : undefined,
+        favorites: favorites ? favorites.favorites.map((item) => item.id) : [],
       });
     }
   };
