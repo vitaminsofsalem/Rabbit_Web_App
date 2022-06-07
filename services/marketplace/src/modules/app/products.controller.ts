@@ -9,7 +9,6 @@ import ProductGetHomeResponseEvent from "src/dto/events/response/product-get-hom
 import ProductGetProductsResponseEvent from "src/dto/events/response/product-get-products-response-event.dto";
 import ProductSearchResponseEvent from "src/dto/events/response/product-search-response-event.dto";
 import ProductGetCategoriesResponseEvent from "src/dto/events/response/products-get-categories-response-event.dto";
-import ProductGetMetadataResponseEvent from "src/dto/events/response/products-get-metadata-response-event.dto";
 import { ProductsService } from "./services/products.service";
 
 @Controller()
