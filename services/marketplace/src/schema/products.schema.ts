@@ -5,13 +5,13 @@ export type ProductDocument = Product & Document;
 
 @Schema()
 export class Product {
-  @Prop()
+  @Prop({ index: true })
   name: string;
 
   @Prop()
   price: number;
 
-  @Prop()
+  @Prop({ index: true })
   subtext: string;
 
   @Prop()

@@ -9,6 +9,7 @@ import ProductGetHomeResponseEvent from "src/dto/events/response/product-get-hom
 import ProductGetProductsResponseEvent from "src/dto/events/response/product-get-products-response-event.dto";
 import ProductSearchResponseEvent from "src/dto/events/response/product-search-response-event.dto";
 import ProductGetCategoriesResponseEvent from "src/dto/events/response/products-get-categories-response-event.dto";
+import ProductGetMetadataResponseEvent from "src/dto/events/response/products-get-metadata-response-event.dto";
 import { ProductsService } from "./services/products.service";
 
 @Controller()
@@ -49,7 +50,6 @@ export class ProductsController {
       };
       this.client.emit("products", newEvent);
     } else if (data.type === "GET_HOME_REQUEST") {
-      const event = data as ProductGetHomeRequestEvent;
       const result = await this.productsService.getHomeProducts();
       console.log("PlacerHolder");
       const newEvent: ProductGetHomeResponseEvent = {
@@ -58,7 +58,6 @@ export class ProductsController {
       };
       this.client.emit("products", newEvent);
     } else if (data.type === "GET_CATEGORIES_REQUEST") {
-      const event = data as ProductGetCategoriesRequestEvent;
       const result = await this.productsService.getCategories();
       console.log("PlacerHolder");
       const newEvent: ProductGetCategoriesResponseEvent = {
@@ -71,7 +70,6 @@ export class ProductsController {
       const result = await this.productsService.getProductMetadata(
         event.products,
       );
-      console.log("PlacerHolder");
       const newEvent: ProductGetMetadataResponseEvent = {
         type: "GET_METADATA_RESPONSE",
         products: result,
