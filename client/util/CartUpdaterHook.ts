@@ -19,6 +19,7 @@ export function useCartUpdater(): CartUpdater {
   const incrementQuantity = (product: Product) => {
     if (!globalState.isLoggedIn) {
       router.replace("/home/auth/send");
+      return;
     }
     const newCart = [...currentCart];
     let handled = false;

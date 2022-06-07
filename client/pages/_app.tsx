@@ -18,10 +18,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const fillInitialData = async () => {
     const isLoggedIn = !!localStorage.getItem("token");
-    setGlobalState({
-      ...globalState,
-      isLoggedIn,
-    });
+    if (globalState.isLoggedIn != isLoggedIn) {
+      setGlobalState({
+        ...globalState,
+        isLoggedIn,
+      });
+    }
 
     if (isLoggedIn) {
       const name = await getName().catch((e) =>
@@ -53,7 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     fillInitialData();
-  }, []);
+  }, [globalState.isLoggedIn]);
 
   return (
     <GlobalStateContext.Provider value={[globalState, setGlobalState]}>

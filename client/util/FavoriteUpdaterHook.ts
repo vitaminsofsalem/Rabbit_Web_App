@@ -17,6 +17,7 @@ export function useFavoriteUpdater(): FavoriteUpdater {
   const toggleFavorite = (product: Product) => {
     if (!globalState.isLoggedIn) {
       router.replace("/home/auth/send");
+      return;
     }
     const newFavorites = [...currentFavorites];
     let handled = false;

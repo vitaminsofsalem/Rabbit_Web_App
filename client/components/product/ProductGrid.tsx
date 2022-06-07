@@ -5,6 +5,7 @@ import ProductCard from "./ProductCard";
 
 interface ProductGridProps {
   products: Product[];
+  source: "favorites" | "home" | "search";
 }
 
 const ProductGrid: React.FC<ProductGridProps> = (props) => {
@@ -18,7 +19,7 @@ const ProductGrid: React.FC<ProductGridProps> = (props) => {
           {...product}
           onQuantityChange={() => {}}
           onClick={() => {
-            router.push("/home/product/" + product.id);
+            router.push(`/${props.source}/product/${product.id}`);
           }}
         />
       ))}

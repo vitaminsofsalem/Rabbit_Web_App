@@ -54,7 +54,13 @@ const ProductCard = (props: ProductCardProps) => {
   }
 
   return (
-    <div onClick={props.onClick} className={styles.productCard}>
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        props.onClick();
+      }}
+      className={styles.productCard}
+    >
       <ExternalImage
         width="100%"
         height={130}

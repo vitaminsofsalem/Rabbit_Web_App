@@ -31,7 +31,7 @@ const CategoryDetailsPage: NextPage = () => {
       isLoginProtected={false}
       title={mapCategoryToLabel(category as string)}
     >
-      <ProductGrid products={products} />
+      <ProductGrid products={products} source="home" />
     </BackablePageWithNavBar>
   );
 };
