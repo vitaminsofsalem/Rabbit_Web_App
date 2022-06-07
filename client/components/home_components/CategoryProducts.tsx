@@ -2,6 +2,7 @@ import styles from "../../styles/Home.module.scss";
 import ProductCard from "../product/ProductCard";
 import { Product } from "../../model/Product";
 import { mapCategoryToLabel } from "../../util/CategoryMapper";
+import { useRouter } from "next/router";
 
 interface CategoryProductsProps {
   title: string;
@@ -10,8 +11,12 @@ interface CategoryProductsProps {
   onProductClick: (id: string) => void;
 }
 const CategoryProducts = (props: CategoryProductsProps) => {
+  const router = useRouter();
   return (
-    <div className={styles.categoryProducts}>
+    <div
+      onClick={() => router.push("/home/category/" + props.title)}
+      className={styles.categoryProducts}
+    >
       <div
         className={styles.categoryCard}
         style={{ backgroundColor: props.color }}
