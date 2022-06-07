@@ -6,5 +6,5 @@ export class GetCategoriesRequestEvent {
 
 export class GetCategoriesResponseEvent {
   type: "GET_CATEGORIES_RESPONSE";
-  categories: Category[];
+  categories: string[];
 }

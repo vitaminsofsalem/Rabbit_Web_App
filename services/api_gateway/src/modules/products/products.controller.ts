@@ -146,7 +146,7 @@ export class ProductsController {
       }
     });
   }
-  private waitForCategoriesResponse(requestId: string): Promise<Category[]> {
+  private waitForCategoriesResponse(requestId: string): Promise<string[]> {
     return PendingRequestHolder.holdConnection((complete, abort) => {
       if (ProductsEventhandler.responseCache.has(requestId)) {
         const responseEvent = ProductsEventhandler.responseCache.get(

@@ -4,5 +4,5 @@ export class Category {
 }
 
 export class GetCategoriesResponseDto {
-  categories: Category[];
+  categories: string[];
 }
