@@ -70,6 +70,7 @@ export class ProductsService {
       }),
     );
 
+    console.log(result);
     return result;
   }
 }
