@@ -1,9 +1,7 @@
 import { Controller, Inject } from "@nestjs/common";
 import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
-import ProductGetHomeRequestEvent from "src/dto/events/requests/product-get-home-request-event.dto";
 import ProductGetProductsRequestEvent from "src/dto/events/requests/product-get-products-request-event.dto";
 import ProductSearchRequestEvent from "src/dto/events/requests/product-search-request-event.dto";
-import ProductGetCategoriesRequestEvent from "src/dto/events/requests/products-get-categories-request-event.dto";
 import ProductGetMetadataRequestEvent from "src/dto/events/requests/products-get-metadata-request-event.dto";
 import ProductGetHomeResponseEvent from "src/dto/events/response/product-get-home-response-event.dto";
 import ProductGetProductsResponseEvent from "src/dto/events/response/product-get-products-response-event.dto";

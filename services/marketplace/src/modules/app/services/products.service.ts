@@ -30,8 +30,34 @@ export class ProductsService {
     return result;
   }
 
+  /**
+   * * Method fetches list of categories from the database as an array
+   * * iterates through it and returns array of documents in each respective category
+   * ? @returns output Array[Objects]
+   */
   async getHomeProducts() {
-    console.log("placeholder");
+    const result = await this.productModel.find({ categories: true });
+    const categories = [
+      ...new Set([].concat(...result.map((o) => o.categories))),
+    ]; // set for duplicates, map to loop, spread to flatten inner array values and concat.
+
+    const output = [];
+    Promise.all(
+      categories.map(async (category) => {
+        const products = await this.productModel.find({
+          categories: { $elemMatch: { $in: category } },
+        });
+
+        const myObj = {
+          category,
+          products,
+        };
+
+        output.push(myObj);
+      }),
+    );
+
+    return output;
   }
 
   async getCategories() {
