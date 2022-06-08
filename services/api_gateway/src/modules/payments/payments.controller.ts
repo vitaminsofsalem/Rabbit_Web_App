@@ -5,6 +5,7 @@ import {
   Post,
   UseGuards,
   Request,
+  Get,
 } from "@nestjs/common";
 import { ClientKafka } from "@nestjs/microservices";
 import { PendingRequestHolder } from "src/util/PendingRequestHolder";
@@ -34,7 +35,7 @@ export class PaymentsController {
     @Body() body: CreatePaymentRequestDto,
     @Request() req: any,
   ): Promise<CreatePaymentResponseDto> {
-    const userEmail = req.user.email as string;
+    const userEmail = req.body.email as string;
     const { orderId, orderTotal } = body;
 
     const requestEvent: CreatePaymentRequestEvent = {
@@ -68,6 +69,12 @@ export class PaymentsController {
       stripeData,
     };
     this.client.emit("payments", requestEvent);
+  }
+
+  @Get("/test")
+  async paymenttest() {
+    //just for testing
+    this.client.emit("payments", { type: "PAYMENT_REQUEST", amount: 1000 });
   }
 
   private waitForCreatePaymentResponseResponse(
