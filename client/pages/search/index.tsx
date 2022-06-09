@@ -33,7 +33,7 @@ const SearchPage: NextPage = () => {
             <input
               className={styles.searchBar}
               type="text"
-              placeholder="Enter Search Term"
+              placeholder="What are you craving now?"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               onKeyDown={(e) => {
