@@ -29,17 +29,19 @@ const SearchPage: NextPage = () => {
       <ProductGrid products={products} source="search" /> */}
       <div className={styles.searchContainer}>
         <div className={styles.header}>
-          <div className={styles.inputField}>
-            <input
-              className={styles.searchBar}
-              type="text"
-              placeholder="What are you craving now?"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onKeyDown={(e) => {
-                e.key === "Enter" && handleSearch();
-              }}
-            ></input>
+          <div className={styles.searchWithIcon}>
+            <div className={styles.inputField}>
+              <input
+                className={styles.searchBar}
+                type="text"
+                placeholder="What are you craving now?"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={(e) => {
+                  e.key === "Enter" && handleSearch();
+                }}
+              ></input>
+            </div>
           </div>
         </div>
         <div className={styles.itemGrid}>
