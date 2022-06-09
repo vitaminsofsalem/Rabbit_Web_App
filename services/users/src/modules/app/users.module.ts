@@ -3,7 +3,6 @@ import { ClientsModule, Transport } from "@nestjs/microservices";
 import { UsersController } from "./users.controller";
 import { UsersService } from "./services/users.service";
 import { User, UserSchema } from "../../schemas/users.schema";
-import { Code, CodeSchema } from "../../schemas/code.schema";
 import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
@@ -26,10 +25,7 @@ import { MongooseModule } from "@nestjs/mongoose";
     MongooseModule.forRoot(
       "mongodb+srv://root:c61bRi1t5l57P3ea@rabbitcluster.kcscswy.mongodb.net/rabbit-users?retryWrites=true&w=majority",
     ),
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: Code.name, schema: CodeSchema },
-    ]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [UsersController],
   providers: [UsersService],
