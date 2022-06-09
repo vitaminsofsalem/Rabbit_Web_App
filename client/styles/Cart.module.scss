@@ -1,0 +1,28 @@
+.parent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.text {
+  color: #00573f;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.button {
+  height: 44px;
+}
