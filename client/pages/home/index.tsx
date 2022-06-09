@@ -51,6 +51,7 @@ const HomePage: NextPage = () => {
         <SpecialCategories items={categories} />
         {homeItems?.map((item, index) => (
           <CategoryProducts
+            key={index}
             color={colors[index % 5]}
             products={item.products}
             title={item.category}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "../../styles/Common.module.scss";
 
 interface InputFieldProps {
@@ -21,6 +22,7 @@ const InputField: React.FC<InputFieldProps> = ({
       }`}
     >
       <label className={styles.inputLabel}>{props.label}</label>
+
       <input
         className={styles.input}
         type={type}

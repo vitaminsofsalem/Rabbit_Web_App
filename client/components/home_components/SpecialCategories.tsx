@@ -70,8 +70,9 @@ const SpecialCategoriesPager = (props: SpecialCategoriesProps) => {
         ref={entriesContainerRef}
         className={styles.categoryPagerEntriesContainer}
       >
-        {pages[currentPage].map((item) => (
+        {pages[currentPage].map((item, index) => (
           <div
+            key={index}
             onClick={() => {
               router.push("/home/category/" + item);
             }}
@@ -79,7 +80,7 @@ const SpecialCategoriesPager = (props: SpecialCategoriesProps) => {
           >
             <p>{mapCategoryToLabel(item)}</p>
           </div>
-        ))}
+        )) || <text>Array ran out</text>}
       </div>
       <CategoryPagerButton
         direction="next"
