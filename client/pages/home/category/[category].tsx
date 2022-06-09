@@ -15,21 +15,25 @@ const CategoryDetailsPage: NextPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const { category } = router.query;
 
+  console.log(category);
+
   useEffect(() => {
-    toast
-      .promise(getCategoryProducts(category as string), {
-        pending: "Getting products",
-        error: "Failed to get products",
-      })
-      .then((productsResult) => {
-        setProducts(productsResult.products);
-      });
-  }, []);
+    if (category) {
+      toast
+        .promise(getCategoryProducts(category as string), {
+          pending: "Getting products",
+          error: "Failed to get products",
+        })
+        .then((productsResult) => {
+          setProducts(productsResult.products);
+        });
+    }
+  }, [category]);
 
   return (
     <BackablePageWithNavBar
       isLoginProtected={false}
-      title={mapCategoryToLabel(category as string)}
+      title={category ? mapCategoryToLabel(category as string) : ""}
     >
       <ProductGrid products={products} source="home" />
     </BackablePageWithNavBar>

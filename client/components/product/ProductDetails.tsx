@@ -25,15 +25,17 @@ const ProductDetails: React.FC<ProductDetailsPageProps> = ({ id }) => {
   } = useCartUpdater();
 
   useEffect(() => {
-    toast
-      .promise(getProductDetails(id), {
-        pending: "Getting product",
-        error: "Failed to get product",
-      })
-      .then((productResult) => {
-        setProduct(productResult.product);
-      });
-  }, []);
+    if (id) {
+      toast
+        .promise(getProductDetails(id), {
+          pending: "Getting product",
+          error: "Failed to get product",
+        })
+        .then((productResult) => {
+          setProduct(productResult.product);
+        });
+    }
+  }, [id]);
 
   const { toggleFavorite, getIsFavorite } = useFavoriteUpdater();
 
