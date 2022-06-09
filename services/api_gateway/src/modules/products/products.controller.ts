@@ -130,7 +130,7 @@ export class ProductsController {
   async ingestCsv(@Body() body: IngestCsvRequestDto) {
     const requestEvent: IngestCsvEvent = {
       type: "INGEST",
-      file: body.file,
+      file: Buffer.from(body.fileBase64, "base64").toString(),
     };
     this.client.emit("products", requestEvent);
   }
