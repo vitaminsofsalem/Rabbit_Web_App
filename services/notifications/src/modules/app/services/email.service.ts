@@ -95,12 +95,12 @@ export class EmailService {
       subject = "";
 
     switch (status) {
-      case "PROCESSING":
-        subject = `Order ${orderId} Processed`;
-        title = "Your order is being processed";
-        statusText = "is currently being proccessed";
+      case "PENDING":
+        subject = `Order ${orderId} Pending`;
+        title = "Your order is pending";
+        statusText = "is currently pending, and awaiting payment";
         subtext =
-          "This email to confirm that your order has entered the processing stage and should be proccessed soon.";
+          "This email to confirm that your order has entered the pending stage and should be proccessed as soon as payment is complete.";
         break;
       case "FULFILLED":
         subject = `Order ${orderId} Fulfilled`;

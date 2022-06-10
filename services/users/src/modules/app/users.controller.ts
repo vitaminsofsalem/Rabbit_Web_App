@@ -24,13 +24,8 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     @Inject("KAFKA_CLIENT") private client: ClientKafka,
-  ) {
-    //Examples of emiting an event for the topic: messages
-    client.emit("messages", "some data");
-  }
+  ) {}
 
-  //Example of handling an event on the topic: messages
-  //data can be any type, as long as same as what is being sent above
   @MessagePattern("user")
   async handleUserMessages(@Payload("value") data: any) {
     if (data.type === "AUTHENTICATE") {

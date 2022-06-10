@@ -23,8 +23,10 @@ export class OrdersService {
       orderId,
       email,
       total,
-      address,
+      deliveryAddress: address,
       orderItems,
+      status: "PENDING",
+      dateTime: Date.now(),
     });
 
     await newOrder
@@ -51,7 +53,7 @@ export class OrdersService {
     const result = [];
     const userOrders = await this.ordersModel.find({ email });
     userOrders.forEach((order) => {
-      result.push(order.orderId);
+      result.push(order);
     });
     return result;
   }

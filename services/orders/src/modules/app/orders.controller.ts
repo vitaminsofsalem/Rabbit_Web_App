@@ -39,16 +39,17 @@ export class OrdersController {
       this.client.emit("notification", newEvent);
     } else if (data.type === "UPDATE_STATUS") {
       const event = data as UpdateStatusDto;
+
       const returnData = await this.ordersService.updateStatus(
         event.orderId,
-        event.status,
+        event.newStatus,
       );
 
       const newEvent: OrderStatusUpdateDto = {
         type: "ORDER_STATUS_UPDATE",
         orderId: event.orderId,
         email: returnData,
-        newStatus: event.status,
+        newStatus: event.newStatus,
       };
       this.client.emit("notification", newEvent);
     } else if (data.type === "GET_ORDERS_REQUEST") {

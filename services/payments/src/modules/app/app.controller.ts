@@ -1,13 +1,13 @@
 import { Controller, Get, Inject } from "@nestjs/common";
-import {
-  ClientKafka,
-  Ctx,
-  MessagePattern,
-  NatsContext,
-  Payload,
-} from "@nestjs/microservices";
+import { ClientKafka, MessagePattern, Payload } from "@nestjs/microservices";
 import { AppService } from "./services/app.service";
 import Stripe from "stripe";
+import {
+  CreatePaymentRequestEvent,
+  CreatePaymentResponseEvent,
+} from "src/dto/create-payment.dto";
+import { VerifyPaymentEvent } from "src/dto/verify-payment.dto";
+import { OrderStatusUpdateEvent } from "src/dto/order-status-update.dto";
 
 @Controller()
 export class AppController {
@@ -17,58 +17,70 @@ export class AppController {
     @Inject("STRIPE") private stripe: Stripe,
   ) {}
 
-  //Example of handling an event on the topic: messages
-  //data can be any type, as long as same as what is being sent above
-
   @MessagePattern("payments")
   async onPayment(
     @Payload("value")
-    data: {
-      orderTotal: number;
-      orderId: string;
-      requestId: string;
-      type: string;
-    },
+    data: any,
   ) {
-    switch (data.type) {
-      case "CREATE_PAYMENT_REQUEST":
-        try {
-          const session = await this.stripe.checkout.sessions.create({
-            line_items: [
-              {
-                price_data: {
-                  currency: "egp",
-                  product_data: {
-                    name: data.orderId,
-                  },
-                  unit_amount: data.orderTotal,
+    if (data.type === "CREATE_PAYMENT_REQUEST") {
+      const event = data as CreatePaymentRequestEvent;
+      try {
+        const session = await this.stripe.checkout.sessions.create({
+          line_items: [
+            {
+              price_data: {
+                currency: "egp",
+                product_data: {
+                  name: event.orderId,
                 },
-                quantity: 1,
+                unit_amount: event.orderTotal,
               },
-            ],
-            mode: "payment",
-            success_url: "https://example.com/success",
-            cancel_url: "https://example.com/cancel",
-          });
+              quantity: 1,
+            },
+          ],
+          mode: "payment",
+          success_url:
+            "http://localhost:3000/account/payment?session_id={CHECKOUT_SESSION_ID}&order_id=" +
+            event.orderId,
+          cancel_url:
+            "http://localhost:3000/account/payment?session_id={CHECKOUT_SESSION_ID}&order_id=" +
+            event.orderId,
+        });
 
-          this.client.emit("payments", {
-            ...data,
-            type: "PENDING_PAYMENT",
-            paymentUrl: session.url,
-          });
-        } catch (err) {
-          console.log(err);
-          this.client.emit("payments", {
-            ...data,
-            type: "PAYMENT_ERROR",
-          });
-        }
-
-      // const paymentIntent = await this.stripe.paymentIntents.create({
-      //   amount: data.amount,
-      //   currency: "egp",
-      //   payment_method_types: ["card"],
-      // });
+        const responseEvent: CreatePaymentResponseEvent = {
+          type: "CREATE_PAYMENT_RESPONSE",
+          stripeData: { paymentUrl: session.url },
+          orderTotal: event.orderTotal,
+          orderId: event.orderId,
+          email: event.email,
+        };
+        this.client.emit("payments", responseEvent);
+      } catch (err) {
+        console.log(err);
+      }
+    } else if (data.type === "VERIFY") {
+      const event = data as VerifyPaymentEvent;
+      const session = await this.stripe.checkout.sessions.retrieve(
+        (event.stripeData as any).paymentId,
+      );
+      if (session.status === "complete" && session.payment_status === "paid") {
+        const orderStatusEvent: OrderStatusUpdateEvent = {
+          type: "UPDATE_STATUS",
+          email: event.email,
+          newStatus: "FULFILLED",
+          orderId: event.orderId,
+        };
+        this.client.emit("order", orderStatusEvent);
+      } else {
+        this.stripe.checkout.sessions.expire(session.id);
+        const orderStatusEvent: OrderStatusUpdateEvent = {
+          type: "UPDATE_STATUS",
+          email: event.email,
+          newStatus: "CANCELLED",
+          orderId: event.orderId,
+        };
+        this.client.emit("order", orderStatusEvent);
+      }
     }
   }
 }

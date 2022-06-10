@@ -17,7 +17,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ order, onOrderClick }) => {
   return (
     <div onClick={onOrderClick} className={styles.orderItemContainer}>
       <div className={styles.orderItemTitlesContainer}>
-        <p className={styles.orderItemTitle}>#{order.id}</p>
+        <p className={styles.orderItemTitle}>#{order.orderId}</p>
         <p className={styles.orderItemSubtitle}>
           on {date.toLocaleDateString("en-GB")}{" "}
           {date.toLocaleTimeString("en-US")}

@@ -9,10 +9,10 @@ export class Shipment {
   email: string;
 
   @Prop()
-  address: [];
+  order: string;
 
   @Prop()
-  order: any[];
+  status: string;
 }
 
 export const ShipmentSchema = SchemaFactory.createForClass(Shipment);

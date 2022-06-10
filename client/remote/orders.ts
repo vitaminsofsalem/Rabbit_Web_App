@@ -1,4 +1,4 @@
-import { Address } from "cluster";
+import { Address } from "../model/Address";
 import { Order } from "../model/Order";
 import axios from "./axios";
 

@@ -9,8 +9,12 @@ export class ShippingService {
     @InjectModel(Shipment.name) private shippingModel: Model<ShipmentDocument>,
   ) {}
 
-  async createShipping(email: string, address: object, order: object) {
-    const shipment = new this.shippingModel({ email, address, order });
+  async createShipping(email: string, order: string) {
+    const shipment = new this.shippingModel({
+      email,
+      order,
+      status: "CREATED",
+    });
     shipment
       .save()
       .then(() => console.log("Shipment created"))
@@ -19,24 +23,22 @@ export class ShippingService {
   async updateStatus(orderId: string, status: string) {
     const result = await this.shippingModel.findOneAndUpdate(
       { order: { $elemMatch: { orderId } } },
-      { $set: { "order.$.status": status } },
+      { $set: { status: status } },
       { returnNewDocument: true },
     );
 
     return result;
   }
   async getStatus(orders: any) {
-    const result = [];
+    const output = [];
     await Promise.all(
       orders.map(async (order) => {
-        const {
-          order: [item],
-        } = await this.shippingModel.findOne({
-          order: { $elemMatch: { orderId: order } },
+        const result = await this.shippingModel.findOne({
+          order: order,
         });
-        result.push(item);
+        output.push({ orderId: order, status: result.status });
       }),
     );
-    return result;
+    return output;
   }
 }

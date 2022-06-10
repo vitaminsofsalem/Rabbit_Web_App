@@ -11,17 +11,17 @@ export interface OrderProductDetailed extends Product {
 }
 
 export interface Order {
-  id: string;
+  orderId: string;
   total: number;
   deliveryFees: number;
   grandTotal: number;
   dateTime: number; //in millis
   status: OrderStatus;
-  products: OrderProduct[];
+  orderItems: OrderProduct[];
   deliveryAddress: Address;
 }
 
-export type OrderStatus = "PROCESSING" | "FULFILLED" | "CANCELED";
+export type OrderStatus = "PENDING" | "FULFILLED" | "CANCELED";
 
 export type ShipmentStatus =
   | "CREATED"

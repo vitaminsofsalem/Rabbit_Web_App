@@ -16,6 +16,7 @@
   gap: 20px;
   overflow-x: scroll;
   align-items: flex-start;
+  align-content: flex-start;
 }
 
 .container {
@@ -31,6 +32,8 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 30px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .checkoutContainer {
@@ -72,4 +75,11 @@
 
 .checkBtn {
   justify-content: center;
+}
+
+.button {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
 }

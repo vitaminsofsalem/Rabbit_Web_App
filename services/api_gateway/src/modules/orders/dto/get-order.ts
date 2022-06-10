@@ -15,13 +15,13 @@ export interface OrderWithShipment extends Order {
 }
 
 interface DetailedOrder {
-  id: string;
+  orderId: string;
   total: number;
   deliveryFees: number;
   grandTotal: number;
   dateTime: number; //in millis
   status: OrderStatus;
-  products: OrderProductDetailed[];
+  orderItems: OrderProductDetailed[];
   shipmentStatus: ShipmentStatus;
   deliveryAddress: Address;
 }

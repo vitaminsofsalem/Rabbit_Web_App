@@ -104,7 +104,7 @@ export class OrdersController {
 
     const orders = await this.waitForOrdersResponse(requestId);
 
-    const orderIds = orders.map((item) => item.id);
+    const orderIds = orders.map((item) => item.orderId);
     const requestShipmentStatusEvent: GetShipmentStatusRequestEvent = {
       type: "GET_STATUS_REQUEST",
       orders: orderIds,
@@ -120,11 +120,16 @@ export class OrdersController {
 
     const ordersWithShipmentStatus = orders.map((order) => {
       const statusItem = shipmentStatuses.find(
-        (item) => item.orderId === order.id,
+        (item) => item.orderId === order.orderId,
       );
+
+      const grandTotal = order.total + 15;
+
       return {
         ...order,
         shipmentStatus: statusItem.status,
+        grandTotal,
+        deliveryFees: 15,
       };
     });
 
@@ -154,30 +159,38 @@ export class OrdersController {
 
     const requestShipmentStatusEvent: GetShipmentStatusRequestEvent = {
       type: "GET_STATUS_REQUEST",
-      orders: [order.id],
+      orders: [order.orderId],
     };
 
     this.client.emit("shipping", requestShipmentStatusEvent);
     const shipmentStatusId =
-      RequestIdGenerator.generateOrderShipmentStatusRquestId([order.id]);
+      RequestIdGenerator.generateOrderShipmentStatusRquestId([order.orderId]);
 
-    const orderProducts = order.products.map((item) => item.id);
+    const orderProducts = order.orderItems.map((item) => item.id);
     const metaDataRequestId = this.sendGetMetaDataRequestEvent(orderProducts);
 
-    const shipmentStatus = await this.waitForShipmentStatuses(
-      shipmentStatusId,
-    )[0];
+    const shipmentStatus = await this.waitForShipmentStatuses(shipmentStatusId);
+
     const metaData = await this.waitForMetaDataResponse(metaDataRequestId);
 
     const detailedProducts: OrderProductDetailed[] = [];
-    for (const item of order.products) {
+    for (const item of order.orderItems) {
       const correspondingMetaData = metaData.find(
         (meta) => meta.id === item.id,
       );
       detailedProducts.push({ ...item, ...correspondingMetaData });
     }
+    const grandTotal = order.total + 15;
 
-    return { order: { ...order, shipmentStatus, products: detailedProducts } };
+    return {
+      order: {
+        ...order,
+        shipmentStatus: shipmentStatus[0].status,
+        orderItems: detailedProducts,
+        grandTotal,
+        deliveryFees: 15,
+      },
+    };
   }
 
   private waitForOrdersResponse(requestId: string): Promise<Order[]> {

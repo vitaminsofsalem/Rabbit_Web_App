@@ -2,18 +2,18 @@ import { Address } from "./Address";
 import { OrderCartProduct } from "./Product";
 
 export interface Order {
-  id: string;
+  orderId: string;
   total: number;
   deliveryFees: number;
   grandTotal: number;
   dateTime: number; //in millis
   status: OrderStatus;
   shipmentStatus: ShipmentStatus;
-  products: OrderCartProduct[];
+  orderItems: OrderCartProduct[];
   deliveryAddress: Address;
 }
 
-export type OrderStatus = "PROCESSING" | "FULFILLED" | "CANCELED";
+export type OrderStatus = "PENDING" | "FULFILLED" | "CANCELED";
 
 export type ShipmentStatus =
   | "CREATED"

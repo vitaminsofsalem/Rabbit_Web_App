@@ -1,13 +1,7 @@
-export default class ShippingNewOrderEvent {
-  type: "NEW_ORDER";
+export class OrderConfirmationEvent {
+  type: "ORDER_CONFIRMATION";
+  orderId: string;
   email: string;
-  address: {
-    street: string;
-    area: string;
-    city: string;
-  };
-  order: {
-    orderId: string;
-    status: string;
-  };
+  total: number;
+  deliveryFees: number;
 }

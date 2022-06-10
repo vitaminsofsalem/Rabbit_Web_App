@@ -66,7 +66,7 @@ const OrderDetailsPage: NextPage = () => {
                   styles.orderedItemsSection
                 }
               >
-                {order.products.map((product) => (
+                {order.orderItems.map((product) => (
                   <OrderedItem product={product} />
                 ))}
               </div>

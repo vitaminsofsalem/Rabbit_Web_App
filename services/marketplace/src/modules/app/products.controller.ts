@@ -15,13 +15,8 @@ export class ProductsController {
   constructor(
     private readonly productsService: ProductsService,
     @Inject("KAFKA_CLIENT") private client: ClientKafka,
-  ) {
-    //Examples of emiting an event for the topic: messages
-    client.emit("messages", "some data");
-  }
+  ) {}
 
-  //Example of handling an event on the topic: messages
-  //data can be any type, as long as same as what is being sent above
   @MessagePattern("products")
   async handleProductsMessages(@Payload("value") data: any) {
     if (data.type === "SEARCH_REQUEST") {

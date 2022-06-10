@@ -32,7 +32,7 @@ const OrdersPage: NextPage = () => {
           <OrderItem
             order={order}
             onOrderClick={() => {
-              router.push("/account/orders/" + order.id);
+              router.push("/account/orders/" + order.orderId);
             }}
           />
         ))}

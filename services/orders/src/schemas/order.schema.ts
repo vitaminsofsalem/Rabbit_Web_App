@@ -15,7 +15,7 @@ export class Order {
   total: number;
 
   @Prop({ type: Object })
-  address: {
+  deliveryAddress: {
     street: string;
     area: string;
     city: string;
@@ -26,6 +26,9 @@ export class Order {
 
   @Prop()
   status: string;
+
+  @Prop()
+  dateTime: number;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
