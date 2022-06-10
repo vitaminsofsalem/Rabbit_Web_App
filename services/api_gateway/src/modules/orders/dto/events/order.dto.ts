@@ -12,5 +12,5 @@ export class NewOrderEvent {
 export class UpdateOrderStatusEvent {
   type: "UPDATE_STATUS";
   orderId: string;
-  status: OrderStatus;
+  newStatus: OrderStatus;
 }

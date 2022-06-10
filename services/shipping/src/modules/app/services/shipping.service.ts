@@ -22,7 +22,7 @@ export class ShippingService {
   }
   async updateStatus(orderId: string, status: string) {
     const result = await this.shippingModel.findOneAndUpdate(
-      { order: { $elemMatch: { orderId } } },
+      { order: orderId },
       { $set: { status: status } },
       { returnNewDocument: true },
     );

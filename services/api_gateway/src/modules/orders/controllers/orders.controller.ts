@@ -58,7 +58,7 @@ export class OrdersController {
     const orderStatusEvent: UpdateOrderStatusEvent = {
       type: "UPDATE_STATUS",
       orderId: orderId,
-      status: orderStatus,
+      newStatus: orderStatus,
     };
 
     this.client.emit("order", orderStatusEvent);
