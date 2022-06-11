@@ -24,6 +24,7 @@ export class AppController {
   ) {
     if (data.type === "CREATE_PAYMENT_REQUEST") {
       const event = data as CreatePaymentRequestEvent;
+      const clientUrl = process.env.CLIENT_URL;
       try {
         const session = await this.stripe.checkout.sessions.create({
           line_items: [
@@ -39,12 +40,8 @@ export class AppController {
             },
           ],
           mode: "payment",
-          success_url:
-            "http://localhost:3000/account/payment?session_id={CHECKOUT_SESSION_ID}&order_id=" +
-            event.orderId,
-          cancel_url:
-            "http://localhost:3000/account/payment?session_id={CHECKOUT_SESSION_ID}&order_id=" +
-            event.orderId,
+          success_url: `${clientUrl}/account/payment?session_id={CHECKOUT_SESSION_ID}&order_id=${event.orderId}`,
+          cancel_url: `${clientUrl}/account/payment?session_id={CHECKOUT_SESSION_ID}&order_id=${event.orderId}`,
         });
 
         const responseEvent: CreatePaymentResponseEvent = {

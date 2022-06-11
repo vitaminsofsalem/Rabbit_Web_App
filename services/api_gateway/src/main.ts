@@ -13,6 +13,7 @@ async function bootstrap() {
   const KAFKA_BROKER = configService.get<string>("KAFKA_BROKER");
   const KAFKA_API_KEY = configService.get<string>("KAFKA_API_KEY");
   const KAFKA_API_SECRET = configService.get<string>("KAFKA_API_SECRET");
+  const CLIENT_URL = configService.get<string>("CLIENT_URL");
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
@@ -33,7 +34,7 @@ async function bootstrap() {
     },
   });
   await app.startAllMicroservices();
-  app.enableCors({ origin: "http://localhost:3000" });
+  app.enableCors({ origin: CLIENT_URL });
   await app.listen(3001);
 }
 bootstrap();
