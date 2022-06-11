@@ -4,9 +4,11 @@ import { ProductsController } from "./products.controller";
 import { ProductsService } from "./services/products.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Product, ProductSchema } from "src/schema/products.schema";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ClientsModule.register([
       {
         name: "KAFKA_CLIENT",
@@ -14,7 +16,13 @@ import { Product, ProductSchema } from "src/schema/products.schema";
         options: {
           client: {
             clientId: "marketplace",
-            brokers: ["localhost:9092"],
+            brokers: [process.env.KAFKA_BROKER],
+            sasl: {
+              mechanism: "plain",
+              username: process.env.KAFKA_API_KEY,
+              password: process.env.KAFKA_API_SECRET,
+            },
+            ssl: true,
           },
           consumer: {
             groupId: "marketplace-consumer",

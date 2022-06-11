@@ -14,7 +14,13 @@ import { ConfigModule } from "@nestjs/config";
         options: {
           client: {
             clientId: "notifications",
-            brokers: ["localhost:9092"],
+            brokers: [process.env.KAFKA_BROKER],
+            sasl: {
+              mechanism: "plain",
+              username: process.env.KAFKA_API_KEY,
+              password: process.env.KAFKA_API_SECRET,
+            },
+            ssl: true,
           },
           consumer: {
             groupId: "notifications-consumer",

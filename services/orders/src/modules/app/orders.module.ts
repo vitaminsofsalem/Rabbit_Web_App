@@ -4,9 +4,11 @@ import { OrdersController } from "./orders.controller";
 import { OrdersService } from "./services/order.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { Order, OrderSchema } from "src/schemas/order.schema";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ClientsModule.register([
       {
         name: "KAFKA_CLIENT",
@@ -14,7 +16,13 @@ import { Order, OrderSchema } from "src/schemas/order.schema";
         options: {
           client: {
             clientId: "orders",
-            brokers: ["localhost:9092"],
+            brokers: [process.env.KAFKA_BROKER],
+            sasl: {
+              mechanism: "plain",
+              username: process.env.KAFKA_API_KEY,
+              password: process.env.KAFKA_API_SECRET,
+            },
+            ssl: true,
           },
           consumer: {
             groupId: "orders-consumer",

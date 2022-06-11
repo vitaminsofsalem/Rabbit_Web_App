@@ -1,4 +1,5 @@
 import { Global, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import {
   ClientProviderOptions,
   ClientsModule,
@@ -17,7 +18,13 @@ const kafkaClient: ClientProviderOptions = {
   options: {
     client: {
       clientId: "api",
-      brokers: ["localhost:9092"],
+      brokers: [process.env.KAFKA_BROKER],
+      sasl: {
+        mechanism: "plain",
+        username: process.env.KAFKA_API_KEY,
+        password: process.env.KAFKA_API_SECRET,
+      },
+      ssl: true,
     },
     consumer: {
       groupId: "api-consumer",
@@ -28,6 +35,7 @@ const kafkaClient: ClientProviderOptions = {
 @Global()
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ClientsModule.register([kafkaClient]),
     AuthModule,
     OrdersModule,
