@@ -91,8 +91,9 @@ const AddressSelector: React.FC<AddressSelectorProps> = (props) => {
             className={styles.addressSelectorCloseIcon}
           />
         </div>
-        {globalState.addresses.map((address) => (
+        {globalState.addresses.map((address, index) => (
           <AddressItem
+            key={index}
             address={address}
             isSelected={isSameAddress(globalState.selectedAddress, address)}
             onSelectAddressClick={() => onSelectAddressClick(address)}

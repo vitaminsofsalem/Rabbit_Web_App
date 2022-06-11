@@ -28,8 +28,9 @@ const OrdersPage: NextPage = () => {
   return (
     <BackablePageWithNavBar title="My Orders">
       <div className={styles.parentContainer}>
-        {orders.map((order) => (
+        {orders.map((order, index) => (
           <OrderItem
+            key={index}
             order={order}
             onOrderClick={() => {
               router.push("/account/orders/" + order.orderId);

@@ -98,7 +98,7 @@ const AuthVerifyCodePage: NextPage = () => {
           Verify
         </Button>
         <p className={styles.resendText}>
-          Didn't receive a code?{" "}
+          Didn&apos;t receive a code?{" "}
           <span onClick={sendEmail} className={styles.resendButton}>
             Resend it
           </span>

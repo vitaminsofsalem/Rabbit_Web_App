@@ -77,8 +77,9 @@ const AddressPage: NextPage = () => {
   return (
     <BackablePageWithNavBar title="My Addresses">
       <div className={styles.parentContainer}>
-        {addresses.map((address) => (
+        {addresses.map((address, index) => (
           <AddressItem
+            key={index}
             address={address}
             isSelected={isSameAddress(globalState.selectedAddress, address)}
             onDeleteClick={() => onAddressDeleteClick(address)}

@@ -117,7 +117,7 @@ const CartPage: NextPage = () => {
             <Image
               height={140}
               width={140}
-              src={require("/../client/assets/Icons/cart.svg")}
+              src={require("../../assets/Icons/cart.svg")}
               alt="Shopping_Cart_Logo"
             />
             <text className={styles.text}>
